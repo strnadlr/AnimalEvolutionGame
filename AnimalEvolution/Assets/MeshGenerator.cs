@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("UnitTestMeshGenrator")]
 [RequireComponent(typeof(MeshFilter))]
 
 public class MeshGenerator : MonoBehaviour
@@ -14,6 +13,7 @@ public class MeshGenerator : MonoBehaviour
     int xsize=5;
     int zsize=4;
     int yheight=0;
+    float[,] heightMap;
 
     // Start is called before the first frame update
     void Start()
@@ -21,64 +21,59 @@ public class MeshGenerator : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
-        mesh = prepareMeshFromHeightMap(xsize, newHeightMap(xsize,yheight,zsize), zsize);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        heightMap = newHeightMap(xsize, yheight, zsize);
+        mesh.vertices = prepareVertices(xsize, heightMap, zsize);
+        mesh.triangles = prepareTriangles(xsize, zsize);
     }
     
-    Mesh prepareMeshFromHeightMap(int xSize, float[,] heightMap, int zSize)
+    Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)
     {
-        vertices = new Vector3[xSize*zSize];
+        Vector3[] result = new Vector3[xSize * zSize];
         int currentVertice = 0;
-        for (int i = 0; i < xSize; i++)
+        for (int j = 0; j < zSize; j++)
         {
-            for (int j = 0; j < zSize; j++)
+            for (int i = 0; i < xSize; i++)
             {
-                vertices[currentVertice] = new Vector3(i, heightMap[i, j], j);
+                result[currentVertice] = new Vector3(i, heightMap[i, j], j);
                 currentVertice++;
             }
         }
+        return result;
+    }
 
-        triangles = new int[6*(xSize-1)*(zSize-1)];
+    int[] prepareTriangles(int xSize, int zSize)
+    {
+        int[] result = new int[6*(xSize-1)*(zSize-1)];
         int currentTrianglePoint = 0;
         int startVertice = 0;
-        while (currentTrianglePoint < triangles.Length)
+        while (currentTrianglePoint < result.Length)
         {
-            triangles[currentTrianglePoint++] = startVertice;
-            triangles[currentTrianglePoint++] = startVertice + 1;
-            triangles[currentTrianglePoint++] = startVertice + xSize;
-
+            result[currentTrianglePoint++] = startVertice;
+            result[currentTrianglePoint++] = startVertice + xSize;
+            result[currentTrianglePoint++] = startVertice + 1;
             startVertice++;
-            triangles[currentTrianglePoint++] = startVertice;
-            triangles[currentTrianglePoint++] = startVertice + xSize;
-            triangles[currentTrianglePoint++] = startVertice + xSize - 1;
+            result[currentTrianglePoint++] = startVertice;
+            result[currentTrianglePoint++] = startVertice + xSize - 1;
+            result[currentTrianglePoint++] = startVertice + xSize;
 
-            if ((startVertice % xSize) == (xSize - 1))
+            if ((startVertice % xSize) == (xSize-1))
             {
                 startVertice++;
             }
         }
-
-        Mesh result = new Mesh();
-        result.vertices = vertices;
-        result.triangles = triangles;
         return result;
     }
 
     float[,] newHeightMap(int xSize, int yHeight, int zSize)
     {
-        float[,] heightMap = new float[xSize, zSize];
-        for (int i = 0; i < xSize; i++)
+        float[,] result = new float[xSize, zSize];
+        for (int j = 0; j < zSize; j++)
         {
-            for (int j = 0; j < zSize; j++)
+            for (int i = 0; i < xSize; i++)
             {
-                heightMap[i, j] = 0;
+                result[i, j] = 0;
             }
         }
-        return (heightMap);
+        return (result);
     }
 }
