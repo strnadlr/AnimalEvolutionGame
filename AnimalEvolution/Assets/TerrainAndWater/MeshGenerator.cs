@@ -8,15 +8,15 @@ using UnityEngine.UI;
 public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
-    public int xsize=10;
-    public int zsize=10;
-    public int yheight=5;
+    public int xsize=100;
+    public int zsize=100;
+    public int yheight=20;
     float[,] heightMap;
-    public float scale=0.124f;
+    public float scale= 205.23f;
     public int seed = 502;
     public int octaves=4;
     public float persistence=0.5f;
-    public float lacunarity=1.87f;
+    public float lacunarity=2f;
     public Button redraw;
 
     // Start is called before the first frame update
@@ -149,6 +149,11 @@ public class MeshGenerator : MonoBehaviour
     float[,] newHeightMap(int seed, int xSize, int yHeight, int zSize, float scale, int octaves, float persistence, float lacunarity)
     {
         System.Random random = new System.Random(seed);
+        float[] rands = new float[2*octaves];
+        for (int i = 0; i < 2*octaves; i++)
+        {
+            rands[i] = random.Next(-10000,10000);
+        }
         float[,] result = new float[xSize, zSize];
         float max = float.MinValue;
         float min = float.MaxValue;
@@ -161,15 +166,15 @@ public class MeshGenerator : MonoBehaviour
                     float frequency = 1;
                     float noiseHeight = 0;
 
-                    for (int k = 0; k < octaves; k++)
-                    {
-                        float x = (float)(i / scale * frequency);
-                        float z = (float)(j / scale * frequency);
-                        float perlin = Mathf.PerlinNoise(x, z) * 2 - 1;
-                        noiseHeight += (perlin * amplitude);
-                        amplitude *= persistence;
-                        frequency *= lacunarity;
-                    }
+                for (int k = 0; k < octaves; k++)
+                {
+                    float x = i / scale * frequency + rands[2*k];
+                    float z = j / scale * frequency + rands[2*k+1];
+                    float perlin = Mathf.PerlinNoise(x, z) * 2 - 1;
+                    noiseHeight += (perlin * amplitude);
+                    amplitude *= persistence;
+                    frequency *= lacunarity;
+                }
                     result[i, j] = noiseHeight;
                     if (noiseHeight > max) max = noiseHeight;
                     else if (noiseHeight < min) min = noiseHeight;
