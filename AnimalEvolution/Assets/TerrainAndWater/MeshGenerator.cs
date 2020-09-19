@@ -8,16 +8,17 @@ using UnityEngine.UI;
 public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
+    public WaterGeneration water;
     public int xsize=100;
     public int zsize=100;
-    public int yheight=20;
+    public int yheight=40;
+    public int sizeMultiplier=4;
     float[,] heightMap;
     public float scale= 205.23f;
     public int seed = 502;
     public int octaves=4;
     public float persistence=0.5f;
     public float lacunarity=2f;
-    public Button redraw;
 
     // Start is called before the first frame update
     void Start()
@@ -29,45 +30,50 @@ public class MeshGenerator : MonoBehaviour
         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
         mesh.triangles = prepareTriangles(xsize, zsize);
         mesh.RecalculateNormals();
+        water.Generate(xsize, yheight, zsize, sizeMultiplier);
     }
 
     public void Redraw()
     {
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+
         heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
         mesh.triangles = prepareTriangles(xsize, zsize);
         mesh.RecalculateNormals();
+        water.Generate(xsize, yheight, zsize, sizeMultiplier);
     }
-    
+
     Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)
     {
-        Vector3[] result = new Vector3[(xSize * zSize)+2*(xSize+zSize)];
+        Vector3[] result = new Vector3[(xSize * zSize) + 2 * (xSize + zSize)];
         int currentVertice = 0;
         for (int j = 0; j < zSize; j++)
         {
             for (int i = 0; i < xSize; i++)
             {
-                result[currentVertice] = new Vector3(i, heightMap[i, j], j);
+                result[currentVertice] = new Vector3(sizeMultiplier * i, sizeMultiplier * heightMap[i, j], sizeMultiplier * j);
                 currentVertice++;
             }
         }
         for (int i = 0; i < xSize; i++)
         {
-            result[currentVertice++] = new Vector3(i, 0, 0); //First xSize
+            result[currentVertice++] = new Vector3(sizeMultiplier * i, 0, 0); //First xSize
         }
         for (int i = 0; i < zSize; i++)
         {
-            result[currentVertice++] = new Vector3(0, 0, i); //every xSize-th
+            result[currentVertice++] = new Vector3(0, 0, sizeMultiplier * i); //every xSize-th
         }
-       
+
         for (int i = 0; i < xSize; i++)
         {
-            result[currentVertice++] = new Vector3(i, 0, zSize-1); //Last xSize
+            result[currentVertice++] = new Vector3(sizeMultiplier * i, 0, sizeMultiplier * (zSize - 1)); //Last xSize
         }
         for (int i = 0; i < zSize; i++)
         {
-            result[currentVertice++] = new Vector3(xSize-1, 0, i); //every 2xSize-1th
-        }        
+            result[currentVertice++] = new Vector3(sizeMultiplier * (xSize - 1), 0, sizeMultiplier * i); //every 2xSize-1th
+        }
         return result;
     }
 

@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraAndMenu\CameraController.cs" />
+    <Compile Include="Assets\TerrainAndWater\MeshEditorScript.cs" />
     <Compile Include="Assets\TerrainAndWater\MeshGenerator.cs" />
     <Compile Include="Assets\TerrainAndWater\WaterGeneration.cs" />
     <Reference Include="UnityEngine">

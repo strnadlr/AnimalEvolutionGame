@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
 {
 
     public float panSpeed = 20f;
-    Vector3 basePosition = new Vector3(45, 100, -5);
+    Vector3 basePosition = new Vector3(200, 400, -20);
     Quaternion baseRotation = Quaternion.Euler(60, 0, 0);
 
 
