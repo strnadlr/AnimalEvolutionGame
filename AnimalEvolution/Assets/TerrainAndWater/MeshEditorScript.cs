@@ -1,19 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 
-[CustomEditor(typeof(MeshGenerator))]
+[CustomEditor(typeof(TerrainGenerator))]
 public class MeshEditorScript : Editor {
 
     public override void OnInspectorGUI()
     {
-        MeshGenerator meshGen = (MeshGenerator)target;
+        TerrainGenerator meshGen = (TerrainGenerator)target;
         DrawDefaultInspector();
         if (GUILayout.Button("Regenerate"))
         {
-            meshGen.Redraw();
+            meshGen.Regenerate();
         }
 
     }

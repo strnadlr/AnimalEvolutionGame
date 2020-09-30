@@ -204,7 +204,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1513478201}
   m_Direction: 0
   m_MinValue: 100
-  m_MaxValue: 300
+  m_MaxValue: 250
   m_WholeNumbers: 1
   m_Value: 100
   m_OnValueChanged:
@@ -1924,12 +1924,8 @@ MonoBehaviour:
   xsize: 100
   zsize: 100
   yheight: 40
-  sizeMultiplier: 4
-  scale: 205.23
+  waterheight: 50
   seed: 1005001
-  octaves: 4
-  persistence: 0.5
-  lacunarity: 2
 --- !u!23 &1463548442
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3020,7 +3016,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1868161351}
   m_Direction: 0
   m_MinValue: 100
-  m_MaxValue: 300
+  m_MaxValue: 250
   m_WholeNumbers: 1
   m_Value: 100
   m_OnValueChanged:

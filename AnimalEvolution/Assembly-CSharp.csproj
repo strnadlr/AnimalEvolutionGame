@@ -64,8 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraAndMenu\CameraController.cs" />
+    <Compile Include="Assets\Controller.cs" />
     <Compile Include="Assets\TerrainAndWater\MeshEditorScript.cs" />
-    <Compile Include="Assets\TerrainAndWater\MeshGenerator.cs" />
+    <Compile Include="Assets\TerrainAndWater\TerrainGenerator.cs" />
+    <Compile Include="Assets\TerrainAndWater\UITerrainAndWater.cs" />
     <Compile Include="Assets\TerrainAndWater\WaterGeneration.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.8f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

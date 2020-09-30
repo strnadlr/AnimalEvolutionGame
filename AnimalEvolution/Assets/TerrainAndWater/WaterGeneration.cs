@@ -7,19 +7,19 @@ using UnityEngine;
 public class WaterGeneration : MonoBehaviour
 {
     Mesh mesh;
-    public void Generate(float xsize, float yheight, float zsize, int sizeMultiplier)
+    public void Generate(float xsize, float waterheight, float zsize, int sizeMultiplier)
     {
         xsize *= sizeMultiplier;
-        yheight *= sizeMultiplier;
+        waterheight *= sizeMultiplier;
         zsize *= sizeMultiplier;
         float sn = 0.1f;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         mesh.vertices = new Vector3[] {
-        new Vector3(0+sn, yheight/2, 0+sn),
-        new Vector3(xsize-1-sn, yheight/2, 0+sn),
-        new Vector3(xsize-1-sn, yheight/2, zsize-1-sn),
-        new Vector3(0+sn, yheight/2, zsize-1-sn),
+        new Vector3(0+sn, waterheight, 0+sn),
+        new Vector3(xsize-1-sn, waterheight, 0+sn),
+        new Vector3(xsize-1-sn, waterheight, zsize-1-sn),
+        new Vector3(0+sn, waterheight, zsize-1-sn),
         new Vector3(0+sn, 0+sn, 0+sn),
         new Vector3(xsize-1-sn,  0+sn, 0+sn),
         new Vector3(xsize-1-sn,  0+sn, zsize-1-sn),

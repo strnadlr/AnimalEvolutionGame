@@ -28,11 +28,13 @@ public class CameraController : MonoBehaviour
 
             if (Input.GetKey("w"))
             {
-                position += transform.forward * panSpeed * Time.deltaTime;
+                Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
+                position += where * panSpeed * Time.deltaTime;
             }
             if (Input.GetKey("s"))
             {
-                position -= transform.forward * panSpeed * Time.deltaTime;
+                Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
+                position -= where * panSpeed * Time.deltaTime;
             }
             if (Input.GetKey("d"))
             {
@@ -44,11 +46,19 @@ public class CameraController : MonoBehaviour
             }
             if (Input.GetKey("q"))
             {
-                rotation.y += panSpeed * Time.deltaTime;
+                rotation.y += panSpeed*0.5f * Time.deltaTime;
             }
             if (Input.GetKey("e"))
             {
-                rotation.y -= panSpeed * Time.deltaTime;
+                rotation.y -= panSpeed*0.5f * Time.deltaTime;
+            }
+            if (Input.GetKey("r"))
+            {
+                position += transform.forward * panSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey("f"))
+            {
+                position -= transform.forward * panSpeed * Time.deltaTime;
             }
 
             transform.position = position;
