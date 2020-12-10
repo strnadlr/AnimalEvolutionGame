@@ -8,23 +8,23 @@ using UnityEngine.UI;
 public class TerrainGenerator : MonoBehaviour
 {
     Mesh mesh;
+    public MeshCollider meshCollider;
     public WaterGeneration water;
     public int xsize=100;
     public int zsize=100;
     public int yheight=40;
-    public int waterheight = 20;
+    public int waterheight = 50;
+    public int seed = 502;
     int sizeMultiplier=4;
     float[,] heightMap;
-    float scale= 205.23f;
-    public int seed = 502;
-    int octaves=4;
-    float persistence=0.5f;
-    float lacunarity=2f;
+    float scale= 50f;
+    
+    int octaves=8;
+    float persistence=0.2f;
+    float lacunarity=1.6f;
 
-    public bool SetValues(WaterGeneration water, int xsize, int zsize, int yheight, int waterheight)
+    public bool SetValues(int xsize, int zsize, int yheight, int waterheight, int seed)
     {
-        if (water == null) return false;
-        this.water = water;
         if (xsize < 0 || xsize > 250) return false;
         this.xsize = xsize;
         if (zsize < 0 || zsize > 250) return false;
@@ -33,20 +33,27 @@ public class TerrainGenerator : MonoBehaviour
         this.yheight = yheight;
         if (waterheight < 0 || waterheight > 100) return false;
         this.waterheight = waterheight;
+        this.seed = seed;
+        return true;
+    }
+    public bool SetWater(WaterGeneration water)
+    {
+        if (water == null) return false;
+        this.water = water;
         return true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        mesh = new Mesh();
+       /* mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
         heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
         mesh.triangles = prepareTriangles(xsize, zsize);
         mesh.RecalculateNormals();
-        water.Generate(xsize, yheight*waterheight/100, zsize, sizeMultiplier);
+        water.Generate(xsize, yheight*waterheight/100, zsize, sizeMultiplier);*/
     }
 
     public void Regenerate()
@@ -54,11 +61,23 @@ public class TerrainGenerator : MonoBehaviour
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
-        heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
+        heightMap = Noise.GenerateNoiseMap(xsize, zsize, seed, scale, octaves, persistence, lacunarity, new Vector2(0,0));
+        for (int i = 0; i < xsize; i++)
+        {
+            for (int j = 0; j < zsize; j++)
+            {
+                heightMap[i, j] *= yheight;
+            }
+        }
         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
         mesh.triangles = prepareTriangles(xsize, zsize);
         mesh.RecalculateNormals();
         water.Generate(xsize, yheight * waterheight / 100, zsize, sizeMultiplier);
+
+        meshCollider = GetComponent<MeshCollider>();
+        //meshCollider.gameObject.AddComponent<MeshCollider>();
+        meshCollider.sharedMesh = mesh;
+
     }
 
     Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)
@@ -168,49 +187,4 @@ public class TerrainGenerator : MonoBehaviour
         return result;
     }
 
-    float[,] newHeightMap(int seed, int xSize, int yHeight, int zSize, float scale, int octaves, float persistence, float lacunarity)
-    {
-        System.Random random = new System.Random(seed);
-        float[] rands = new float[2*octaves];
-        for (int i = 0; i < 2*octaves; i++)
-        {
-            rands[i] = random.Next(-10000,10000);
-        }
-        float[,] result = new float[xSize, zSize];
-        float max = float.MinValue;
-        float min = float.MaxValue;
-        if (scale <= 0) scale = 0.0001f;
-            for (int j = 0; j < zSize; j++)
-            {
-                for (int i = 0; i < xSize; i++)
-                {
-                    float amplitude = 1;
-                    float frequency = 1;
-                    float noiseHeight = 0;
-
-                for (int k = 0; k < octaves; k++)
-                {
-                    float x = i / scale * frequency + rands[2*k];
-                    float z = j / scale * frequency + rands[2*k+1];
-                    float perlin = Mathf.PerlinNoise(x, z) * 2 - 1;
-                    noiseHeight += (perlin * amplitude);
-                    amplitude *= persistence;
-                    frequency *= lacunarity;
-                }
-                    result[i, j] = noiseHeight;
-                    if (noiseHeight > max) max = noiseHeight;
-                    else if (noiseHeight < min) min = noiseHeight;
-                    
-                }
-            }
-        
-        for (int j = 0; j < zSize; j++)
-        {
-            for (int i = 0; i < xSize; i++)
-            {
-                result[i, j] = Mathf.InverseLerp(min, max, result[i, j]) * yHeight;
-            }
-        }
-        return result;
-    }
 }
