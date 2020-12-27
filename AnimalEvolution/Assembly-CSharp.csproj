@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\CameraAndMenu\CameraController.cs" />
     <Compile Include="Assets\Controller.cs" />
+    <Compile Include="Assets\Plants\PlantObject.cs" />
     <Compile Include="Assets\Plants\PlantScript.cs" />
     <Compile Include="Assets\TerrainAndWater\MeshEditorScript.cs" />
     <Compile Include="Assets\TerrainAndWater\Noise.cs" />

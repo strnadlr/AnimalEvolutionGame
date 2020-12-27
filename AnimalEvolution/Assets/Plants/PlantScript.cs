@@ -10,6 +10,7 @@ public class PlantScript : MonoBehaviour
     int i = 0;
     static MeshCollider ground;
     bool initialized = false;
+    static Vector3 down = new Vector3(0, -1, 0);
 
     // Start is called before the first frame update
     void Start()
@@ -33,15 +34,24 @@ public class PlantScript : MonoBehaviour
         }
         i++;
         System.Random r = new System.Random();
-        if (Input.GetKey("x")&& i>1000)
+        if (Input.GetKey("x")&& i>10)
         {
             GameObject newPlant = Instantiate(plantPrototype);
             GameObject parent = plants[r.Next(plants.Count)];
-            newPlant.transform.position = new Vector3(parent.transform.position.x+r.Next(-50,50), parent.transform.position.y, parent.transform.position.z+ r.Next(-50,50));
-            Vector3 newPos = ground.ClosestPoint(newPlant.transform.position);
-            newPlant.transform.position = newPos;
-            newPlant.GetComponent<Renderer>().enabled = true;
-            plants.Add(newPlant);
+            newPlant.transform.position= new Vector3(parent.transform.position.x+r.Next(-50,50),300, parent.transform.position.z+ r.Next(-50,50));
+            Ray ray = new Ray(newPlant.transform.position, -newPlant.transform.up);
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit))
+            {
+                newPlant.transform.position = new Vector3(newPlant.transform.position.x, hit.point.y, newPlant.transform.position.z);
+                newPlant.GetComponent<Renderer>().enabled = true;
+                plants.Add(newPlant);
+            }
+            else
+            {
+               Destroy(newPlant);
+            }
+            
         }
         /*
         
@@ -51,4 +61,5 @@ public class PlantScript : MonoBehaviour
 
         }*/
     }
+
 }

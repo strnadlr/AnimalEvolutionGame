@@ -12,7 +12,7 @@ public class TerrainGenerator : MonoBehaviour
     public WaterGeneration water;
     public int xsize=100;
     public int zsize=100;
-    public int yheight=40;
+    public int yheight=20;
     public int waterheight = 50;
     public int seed = 502;
     int sizeMultiplier=4;
@@ -26,14 +26,17 @@ public class TerrainGenerator : MonoBehaviour
     public bool SetValues(int xsize, int zsize, int yheight, int waterheight, int seed)
     {
         if (xsize < 0 || xsize > 250) return false;
-        this.xsize = xsize;
         if (zsize < 0 || zsize > 250) return false;
-        this.zsize = zsize;
         if (yheight < 0 || yheight > 200) return false;
-        this.yheight = yheight;
         if (waterheight < 0 || waterheight > 100) return false;
+
+        this.xsize = xsize;
+        this.zsize = zsize;
+        this.yheight = yheight;
         this.waterheight = waterheight;
         this.seed = seed;
+
+        
         return true;
     }
     public bool SetWater(WaterGeneration water)
@@ -46,20 +49,22 @@ public class TerrainGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       /* mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
+        /* mesh = new Mesh();
+         GetComponent<MeshFilter>().mesh = mesh;
 
-        heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
-        mesh.vertices = prepareVertices(xsize, heightMap, zsize);
-        mesh.triangles = prepareTriangles(xsize, zsize);
-        mesh.RecalculateNormals();
-        water.Generate(xsize, yheight*waterheight/100, zsize, sizeMultiplier);*/
+         heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
+         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
+         mesh.triangles = prepareTriangles(xsize, zsize);
+         mesh.RecalculateNormals();
+         water.Generate(xsize, yheight*waterheight/100, zsize, sizeMultiplier);*/
     }
 
     public void Regenerate()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        meshCollider = GetComponent<MeshCollider>();
+        meshCollider.enabled = false;
 
         heightMap = Noise.GenerateNoiseMap(xsize, zsize, seed, scale, octaves, persistence, lacunarity, new Vector2(0,0));
         for (int i = 0; i < xsize; i++)
@@ -72,12 +77,12 @@ public class TerrainGenerator : MonoBehaviour
         mesh.vertices = prepareVertices(xsize, heightMap, zsize);
         mesh.triangles = prepareTriangles(xsize, zsize);
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+        mesh.RecalculateTangents();
         water.Generate(xsize, yheight * waterheight / 100, zsize, sizeMultiplier);
 
-        meshCollider = GetComponent<MeshCollider>();
-        //meshCollider.gameObject.AddComponent<MeshCollider>();
         meshCollider.sharedMesh = mesh;
-
+        meshCollider.enabled = true;
     }
 
     Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)

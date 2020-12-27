@@ -14,10 +14,10 @@ public class UITerrainAndWater : MonoBehaviour
     public Slider waterSlider;
     public Text waterText;
     public InputField seedField;
-    public Button qenerationButton;
-
+    public Text seedText;
     public setupTerrainDelegate setupTerrainDelegate;
     public terrainRegenerate terrainRegenerate;
+    public GameObject panel;
 
     public int width = 100;
     public int length = 100;
@@ -26,8 +26,11 @@ public class UITerrainAndWater : MonoBehaviour
     public int seed = 0;
     bool seedset = false;
 
-
-    public void GenerationButtonClicked()
+    void Start()
+    {
+        panel.SetActive(true);
+    }
+        public void GenerationButtonClicked()
     {
         if (setupTerrainDelegate != null)
         {
@@ -36,9 +39,15 @@ public class UITerrainAndWater : MonoBehaviour
                 System.Random r = new System.Random();
                 seed = r.Next(0, 1000);
             }
+            seedText.text = seed.ToString();
             setupTerrainDelegate(width, length, height, water, seed);
             terrainRegenerate();
         }
+    }
+
+    public void ContinueButtonClicked()
+    {
+        panel.SetActive(false);
     }
 
     public void WidthSliderChanged(float newwidth)
