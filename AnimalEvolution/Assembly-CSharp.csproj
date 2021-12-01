@@ -47,6 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Unity/VSTU</UnityProjectGenerator>
+    <UnityProjectGeneratorVersion>4.11.4.0</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>2019.4.8f1</UnityVersion>
@@ -65,8 +66,9 @@
   <ItemGroup>
     <Compile Include="Assets\CameraAndMenu\CameraController.cs" />
     <Compile Include="Assets\Controller.cs" />
-    <Compile Include="Assets\Plants\PlantObject.cs" />
-    <Compile Include="Assets\Plants\PlantScript.cs" />
+    <Compile Include="Assets\Entities\PlantEntity.cs" />
+    <Compile Include="Assets\Entities\PlantScript.cs" />
+    <Compile Include="Assets\Entities\UIEntityCreation.cs" />
     <Compile Include="Assets\TerrainAndWater\MeshEditorScript.cs" />
     <Compile Include="Assets\TerrainAndWater\Noise.cs" />
     <Compile Include="Assets\TerrainAndWater\PerlinNoiseDumy.cs" />

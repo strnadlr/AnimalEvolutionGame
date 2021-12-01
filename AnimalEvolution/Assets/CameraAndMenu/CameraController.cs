@@ -2,69 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Camera))]
-public class CameraController : MonoBehaviour
+namespace AnimalEvolution
 {
-
-    public float panSpeed = 20f;
-    Vector3 basePosition = new Vector3(200, 400, -20);
-    Quaternion baseRotation = Quaternion.Euler(60, 0, 0);
-
-
-    // Update is called once per frame
-    void Update()
+    [RequireComponent(typeof(Camera))]
+    public class CameraController : MonoBehaviour
     {
 
+        public float panSpeed = 20f;
+        Vector3 basePosition = new Vector3(200, 400, -20);
+        Quaternion baseRotation = Quaternion.Euler(60, 0, 0);
 
-        if (Input.GetKey("h"))
+
+        // Update is called once per frame
+        void Update()
         {
-            transform.position = basePosition;
-            transform.rotation = baseRotation;
+
+
+            if (Input.GetKey("h"))
+            {
+                transform.position = basePosition;
+                transform.rotation = baseRotation;
+            }
+            else
+            {
+                Vector3 position = transform.position;
+                Vector3 rotation = transform.rotation.eulerAngles;
+
+                if (Input.GetKey("w"))
+                {
+                    Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
+                    position += where * panSpeed * Time.deltaTime;
+                }
+                if (Input.GetKey("s"))
+                {
+                    Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
+                    position -= where * panSpeed * Time.deltaTime;
+                }
+                if (Input.GetKey("d"))
+                {
+                    position += transform.right * panSpeed * Time.deltaTime;
+                }
+                if (Input.GetKey("a"))
+                {
+                    position -= transform.right * panSpeed * Time.deltaTime;
+                }
+                if (Input.GetKey("q"))
+                {
+                    rotation.y += panSpeed * 0.5f * Time.deltaTime;
+                }
+                if (Input.GetKey("e"))
+                {
+                    rotation.y -= panSpeed * 0.5f * Time.deltaTime;
+                }
+                if (Input.GetKey("r"))
+                {
+                    position += transform.forward * panSpeed * Time.deltaTime;
+                }
+                if (Input.GetKey("f"))
+                {
+                    position -= transform.forward * panSpeed * Time.deltaTime;
+                }
+
+                transform.position = position;
+                transform.rotation = Quaternion.Euler(rotation);
+            }
+
+
         }
-        else
-        {
-            Vector3 position = transform.position;
-            Vector3 rotation = transform.rotation.eulerAngles;
-
-            if (Input.GetKey("w"))
-            {
-                Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
-                position += where * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey("s"))
-            {
-                Vector3 where = new Vector3(transform.forward.x, 0, transform.forward.z);
-                position -= where * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey("d"))
-            {
-                position += transform.right * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey("a"))
-            {
-                position -= transform.right * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey("q"))
-            {
-                rotation.y += panSpeed*0.5f * Time.deltaTime;
-            }
-            if (Input.GetKey("e"))
-            {
-                rotation.y -= panSpeed*0.5f * Time.deltaTime;
-            }
-            if (Input.GetKey("r"))
-            {
-                position += transform.forward * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey("f"))
-            {
-                position -= transform.forward * panSpeed * Time.deltaTime;
-            }
-
-            transform.position = position;
-            transform.rotation = Quaternion.Euler(rotation);
-        }
-
-
     }
 }
