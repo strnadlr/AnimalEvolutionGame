@@ -16,7 +16,7 @@ namespace AnimalEvolution
         public int zsize = 100;
         public int yheight = 20;
         public int waterheight = 50;
-        public int seed = 502;
+        public int seed = 1005001;
         int sizeMultiplier = 4;
         float[,] heightMap;
         float scale = 50f;
@@ -51,7 +51,7 @@ namespace AnimalEvolution
         // Start is called before the first frame update
         void Start()
         {
-            /* mesh = new Mesh();
+             /*mesh = new Mesh();
              GetComponent<MeshFilter>().mesh = mesh;
 
              heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
@@ -63,10 +63,7 @@ namespace AnimalEvolution
 
         public void Regenerate()
         {
-            mesh = new Mesh();
-            GetComponent<MeshFilter>().mesh = mesh;
-            meshCollider = GetComponent<MeshCollider>();
-            meshCollider.enabled = false;
+            mesh = GetComponent<MeshFilter>().mesh;
 
             heightMap = Noise.GenerateNoiseMap(xsize, zsize, seed, scale, octaves, persistence, lacunarity, new Vector2(0, 0));
             for (int i = 0; i < xsize; i++)
@@ -83,8 +80,15 @@ namespace AnimalEvolution
             mesh.RecalculateTangents();
             water.Generate(xsize, yheight * waterheight / 100, zsize, sizeMultiplier);
 
-            meshCollider.sharedMesh = mesh;
-            meshCollider.enabled = true;
+            
+            meshCollider = GetComponent<MeshCollider>();
+            Destroy(meshCollider);
+            MeshCollider mC = this.gameObject.AddComponent<MeshCollider>() as MeshCollider;
+            mC.sharedMesh = GetComponent<MeshFilter>().mesh;
+            /*meshCollider.sharedMesh.RecalculateNormals();
+            meshCollider.sharedMesh.RecalculateBounds();
+            meshCollider.sharedMesh.RecalculateTangents();*/
+            mC.enabled = true;
         }
 
         Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)

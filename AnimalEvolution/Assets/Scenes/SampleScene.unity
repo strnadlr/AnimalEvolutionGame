@@ -941,15 +941,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ac3685f5f82994aa96c4b2564d7a34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  widthSlider: {fileID: 498586114}
   widthText: {fileID: 127256799}
-  lengthSlider: {fileID: 1320827117}
   lengthText: {fileID: 1350307746}
-  heightSlider: {fileID: 2069918826}
   heightText: {fileID: 973712728}
-  waterSlider: {fileID: 1816011246}
   waterText: {fileID: 191892443}
-  seedField: {fileID: 1533984142}
   seedText: {fileID: 1619919734}
   panel: {fileID: 237512069}
   width: 100
@@ -6192,12 +6187,12 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1463548440}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 365844c2336bd3346963e6517a49c138, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 30
+  m_CookingOptions: -1
   m_Mesh: {fileID: 1356095050}
 --- !u!1 &1486553022
 GameObject:

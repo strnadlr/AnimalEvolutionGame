@@ -7,15 +7,10 @@ namespace AnimalEvolution
 {
     public class UITerrainAndWater : MonoBehaviour
     {
-        public Slider widthSlider;
         public Text widthText;
-        public Slider lengthSlider;
         public Text lengthText;
-        public Slider heightSlider;
         public Text heightText;
-        public Slider waterSlider;
         public Text waterText;
-        public InputField seedField;
         public Text seedText;
         public setupTerrainDelegate setupTerrainDelegate;
         public terrainRegenerate terrainRegenerate;
@@ -25,8 +20,9 @@ namespace AnimalEvolution
         public int length = 100;
         public int height = 40;
         public int water = 20;
-        public int seed = 0;
+        public int seed = 1005001;
         bool seedset = false;
+        bool generated = false;
 
         void Start()
         {
@@ -39,16 +35,28 @@ namespace AnimalEvolution
                 if (!seedset)
                 {
                     System.Random r = new System.Random();
-                    seed = r.Next(0, 1000);
+                    seed = r.Next(0, int.MaxValue);
                 }
                 seedText.text = seed.ToString();
                 setupTerrainDelegate(width, length, height, water, seed);
                 terrainRegenerate();
+                generated = true;
             }
         }
 
         public void ContinueButtonClicked()
         {
+            /*
+            if (!generated)
+            {
+                width = 100;
+                length = 100;
+                height = 40;
+                water = 20;
+                seed = 1005001;
+                seedset = true;
+                GenerationButtonClicked();
+            }*/
             panel.SetActive(false);
         }
 
