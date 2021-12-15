@@ -31,6 +31,19 @@ namespace AnimalEvolution
             initialized = true;
         }
 
+        public void PlacePlantAt(Vector3 where)
+        {
+            System.Random r = new System.Random();
+            GameObject newPlant = Instantiate(plantPrototype);
+            GameObject parent = plants[r.Next(plants.Count)];
+            PlantEntity pE = parent.GetComponent<PlantEntity>();
+            PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
+            nPE.SetFrom(pE, newPlant);
+
+            newPlant.transform.position = where;
+        }
+
+
         // Update is called once per frame
         void Update()
         {
