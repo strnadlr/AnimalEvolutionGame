@@ -41,6 +41,8 @@ namespace AnimalEvolution
             nPE.SetFrom(pE, newPlant);
 
             newPlant.transform.position = where;
+            newPlant.GetComponent<Renderer>().enabled = true;
+            plants.Add(newPlant);
         }
 
 
@@ -68,7 +70,7 @@ namespace AnimalEvolution
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    newPlant.transform.position = new Vector3(newPlant.transform.position.x, hit.point.y, newPlant.transform.position.z);
+                    newPlant.transform.position = hit.point;
                     newPlant.GetComponent<Renderer>().enabled = true;
                     plants.Add(newPlant);
                 }

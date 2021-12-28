@@ -15,8 +15,8 @@ namespace AnimalEvolution
         public RawImage saturationColorRawImage;
         public RawImage valueColorRawImage;
         public RawImage BWSaturationColorRawImage;
-        public Camera camera;
         public plantPlacer plantPlacer;
+        public BoolSwitch cameraSwitch;
 
         private string name = "New Species";
         private int nutriValue = 50;
@@ -27,7 +27,7 @@ namespace AnimalEvolution
         public float saturation = 77 / 100;
         public float value = 90 / 100;
         private Color color;
-        private bool placing = false;
+        public bool placing = false;
 
         public GameObject panel;
         private bool active = false;
@@ -42,6 +42,7 @@ namespace AnimalEvolution
         {
             active = !active;
             panel.SetActive(active);
+            cameraSwitch(!active);
         }
 
         public void NameFieldChanged(string newname)
@@ -101,23 +102,12 @@ namespace AnimalEvolution
 
         public void CreateAncestorButtonClicked()
         {
-            EntityUIButtonClicked();
             placing = true;
-            
+            EntityUIButtonClicked();
         }
         private void Update()
         {
-            if (placing)
-            {
-                RaycastHit hit;
-                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    plantPlacer(hit.transform.position);
-                }
-                placing = false;
-            }
+        
         }
 
     }

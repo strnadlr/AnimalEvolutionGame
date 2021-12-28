@@ -15,6 +15,7 @@ namespace AnimalEvolution
         public setupTerrainDelegate setupTerrainDelegate;
         public terrainRegenerate terrainRegenerate;
         public GameObject panel;
+        public BoolSwitch cameraSwitch;
 
         public int width = 100;
         public int length = 100;
@@ -58,6 +59,7 @@ namespace AnimalEvolution
                 GenerationButtonClicked();
             }*/
             panel.SetActive(false);
+            cameraSwitch(true);
         }
 
         public void WidthSliderChanged(float newwidth)
