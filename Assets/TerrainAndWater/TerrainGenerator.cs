@@ -12,7 +12,6 @@ namespace AnimalEvolution
         Mesh mesh;
         public MeshCollider meshCollider;
         public WaterGeneration water;
-        public Terrain newTerrain;
         public int xsize = 100;
         public int zsize = 100;
         public int yheight = 20;
@@ -67,8 +66,6 @@ namespace AnimalEvolution
             mesh = GetComponent<MeshFilter>().mesh;
 
             heightMap = Noise.GenerateNoiseMap(xsize, zsize, seed, scale, octaves, persistence, lacunarity, new Vector2(0, 0));
-            
-            newTerrain.terrainData.SetHeights(0, 0, heightMap);
 
             for (int i = 0; i < xsize; i++)
             {

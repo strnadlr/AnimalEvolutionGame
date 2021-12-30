@@ -46,8 +46,7 @@ namespace AnimalEvolution
         }
 
         public void ContinueButtonClicked()
-        {
-            /*
+        { 
             if (!generated)
             {
                 width = 100;
@@ -57,7 +56,7 @@ namespace AnimalEvolution
                 seed = 1005001;
                 seedset = true;
                 GenerationButtonClicked();
-            }*/
+            }
             panel.SetActive(false);
             cameraSwitch(true);
         }

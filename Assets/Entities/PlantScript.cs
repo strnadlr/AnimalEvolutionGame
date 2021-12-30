@@ -90,5 +90,11 @@ namespace AnimalEvolution
             }*/
         }
 
+        bool Validate (GameObject plantToValidate)
+        {
+            Vector3 closestPoint = ground.ClosestPoint(plantToValidate.transform.position);
+
+        }
+
     }
 }
