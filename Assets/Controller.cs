@@ -6,9 +6,10 @@ using UnityEngine.UI;
 namespace AnimalEvolution
 {
     public delegate bool setupTerrainDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
-    public delegate void terrainRegenerate();
-    public delegate void plantPlacer(Vector3 where);
-    public delegate void BoolSwitch(bool target);
+    public delegate void terrainRegenerateDelegate();
+    public delegate void plantPlacerDelegate(Vector3 where);
+    public delegate void BoolSwitchDelegate(bool target);
+    public delegate void requestOffspringDelegate(GameObject parent);
 
     public class Controller : MonoBehaviour
     {

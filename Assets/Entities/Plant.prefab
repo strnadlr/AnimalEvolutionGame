@@ -106,11 +106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b677671eb5af74e4f83910ca0808ac74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  species: 
-  nutritionalValue: 0
-  ticksWithoutChild: 0
+  nutritionalValue: 20
+  ticksWithoutChild: 500
   currentTicksWithoutChild: 0
-  size: 0
+  childrenToLive: 5
+  currentChildren: 0
+  size: 1
   mutationStrength: 20
   color: {r: 0, g: 1, b: 0, a: 1}
-  plant: {fileID: 0}
+  gObject: {fileID: 6419991730987647814}

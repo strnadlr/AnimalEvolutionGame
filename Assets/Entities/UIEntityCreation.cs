@@ -15,10 +15,10 @@ namespace AnimalEvolution
         public RawImage saturationColorRawImage;
         public RawImage valueColorRawImage;
         public RawImage BWSaturationColorRawImage;
-        public plantPlacer plantPlacer;
-        public BoolSwitch cameraSwitch;
+        public plantPlacerDelegate plantPlacer;
+        public BoolSwitchDelegate cameraSwitch;
 
-        private string name = "New Species";
+        private string newName = "New Species";
         private int nutriValue = 50;
         private int timeBeOf = 25;
         private int size = 25;

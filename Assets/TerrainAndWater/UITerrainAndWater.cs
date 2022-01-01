@@ -13,9 +13,9 @@ namespace AnimalEvolution
         public Text waterText;
         public Text seedText;
         public setupTerrainDelegate setupTerrainDelegate;
-        public terrainRegenerate terrainRegenerate;
+        public terrainRegenerateDelegate terrainRegenerate;
         public GameObject panel;
-        public BoolSwitch cameraSwitch;
+        public BoolSwitchDelegate cameraSwitch;
 
         public int width = 100;
         public int length = 100;
