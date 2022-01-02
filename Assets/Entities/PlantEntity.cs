@@ -19,6 +19,7 @@ namespace AnimalEvolution
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
         public static bool populate;
+        public bool valid = false;
 
         public void SetFrom(PlantEntity parent, GameObject targetGObject)
         {
@@ -32,22 +33,42 @@ namespace AnimalEvolution
             size = Mathf.Max(0.1f,parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
             mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
             color = new Color(
-                parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
-                parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
-                parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
+                parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
+                parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300);
             if (mpb == null) mpb = new MaterialPropertyBlock();
             Renderer renderer = GetComponentInChildren<Renderer>();
             mpb.SetColor("_Color", color);
             gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
             renderer.SetPropertyBlock(mpb);
+            valid = true;
+            gObject.SetActive(true);
         }
 
-
+        public void Set(string _name, float _nutritionalValue, int _ticksWithoutChild, int _childrenToLive, float _size, int _mutationStrength, Color _color)
+        {
+            name = _name;
+            nutritionalValue = _nutritionalValue;
+            ticksWithoutChild = _ticksWithoutChild;
+            currentTicksWithoutChild = 0;
+            childrenToLive = _childrenToLive;
+            currentChildren = 0;
+            size = _size;
+            mutationStrength = _mutationStrength;
+            color = _color;
+            if (mpb == null) mpb = new MaterialPropertyBlock();
+            Renderer renderer = GetComponentInChildren<Renderer>();
+            mpb.SetColor("_Color", color);
+            gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
+            renderer.SetPropertyBlock(mpb);
+            valid = true;
+            gObject.SetActive(true);
+        }
 
         // Update is called once per frame
         void Update()
         {
-            if (populate)
+            if (populate&&valid)
             {
                 if (currentTicksWithoutChild < ticksWithoutChild)
                 {

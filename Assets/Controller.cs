@@ -7,10 +7,10 @@ namespace AnimalEvolution
 {
     public delegate bool setupTerrainDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
     public delegate void terrainRegenerateDelegate();
-    public delegate void plantPlacerDelegate(Vector3 where);
+    public delegate PlantEntity plantPlacerDelegate(Vector3 where);
     public delegate void BoolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
-
+    public delegate void plantSetterDelegate(string _name, float _nutritionalValue, int _ticksWithoutChild, int _childrenToLive, float _size, int _mutationStrength, Color _color);
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
@@ -46,7 +46,9 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    plantScript.PlacePlantAt(hit.point);
+                    PlantEntity newPlant = plantScript.PlacePlantAt(hit.point);
+                    entityCreationUI.plantSetterDelegate = newPlant.Set;
+                    entityCreationUI.propagatePlantInfo();
                 }
                 entityCreationUI.placing = false;
             }

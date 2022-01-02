@@ -17,11 +17,12 @@ namespace AnimalEvolution
         public RawImage BWSaturationColorRawImage;
         public plantPlacerDelegate plantPlacer;
         public BoolSwitchDelegate cameraSwitch;
+        public plantSetterDelegate plantSetterDelegate;
 
         private string newName = "New Species";
         private int nutriValue = 50;
-        private int timeBeOf = 25;
-        private int size = 25;
+        private int timeBeOf = 500;
+        private int size = 10;
         private int mutationStr = 25;
         public float hue = 138 / 360;
         public float saturation = 77 / 100;
@@ -47,7 +48,7 @@ namespace AnimalEvolution
 
         public void NameFieldChanged(string newname)
         {
-            name = newname;
+            newName = newname;
         }
 
         public void NutriValueSliderChanged(float newnutriValue)
@@ -58,7 +59,7 @@ namespace AnimalEvolution
 
         public void TimeBeOfSliderChanged(float newtimeBeOf)
         {
-            timeBeOf = (int)newtimeBeOf;
+            timeBeOf = 5*(int)newtimeBeOf;
             timeBeOfText.text = timeBeOf.ToString();
         }
 
@@ -77,7 +78,7 @@ namespace AnimalEvolution
         public void HueSliderChanged(float newhue)
         {
             hue = newhue / 360f;
-            color = Color.HSVToRGB(hue, saturation, value); ;
+            color = Color.HSVToRGB(hue, saturation, value);
             colorRawImage.color = color;
             valueColorRawImage.color = Color.HSVToRGB(hue, saturation, 1);
             saturationColorRawImage.color = Color.HSVToRGB(hue, 1, value);
@@ -103,8 +104,15 @@ namespace AnimalEvolution
         public void CreateAncestorButtonClicked()
         {
             placing = true;
+            color = Color.HSVToRGB(hue, saturation, value);
             EntityUIButtonClicked();
         }
+
+        public void propagatePlantInfo()
+        {
+            plantSetterDelegate(newName, nutriValue, timeBeOf, 5, size/10, mutationStr, color);
+        }
+
         private void Update()
         {
         

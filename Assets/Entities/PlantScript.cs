@@ -21,16 +21,9 @@ namespace AnimalEvolution
             plants = new List<GameObject>();
             plants.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
-            pE.nutritionalValue = 20f;
-            pE.name = "DefaultPlant";
-            pE.ticksWithoutChild = 500;
-            pE.currentTicksWithoutChild = 0;
-            pE.childrenToLive = 5;
-            pE.currentChildren = 0;
-            pE.size = 1f;
-            pE.mutationStrength = 20;
-            pE.color = Color.green;
+            pE.Set("DefaultPlant", 20f, 1000, 5, 1, 20, Color.green);
             pE.gObject = plantPrototype;
+            pE.valid = false;
             PlantEntity.requestOffspring = MakeOffspring;
         }
 
@@ -41,19 +34,31 @@ namespace AnimalEvolution
             PlantEntity.populate = true;
         }
 
-        public void PlacePlantAt(Vector3 where)
+        public PlantEntity PlacePlantAt(Vector3 where)
         {
-            System.Random r = new System.Random();
             GameObject newPlant = Instantiate(plantPrototype);
-            GameObject parent = plants[r.Next(plants.Count)];
-            PlantEntity pE = parent.GetComponent<PlantEntity>();
             PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
-            nPE.SetFrom(pE, newPlant);
 
             newPlant.transform.position = where;
             newPlant.GetComponent<Renderer>().enabled = true;
             plants.Add(newPlant);
+            return nPE;
         }
+
+        /*
+        public void PlacePlantAt(Vector3 where, string name, float nutritionalValue, int ticksWithoutChild, int childrenToLive, float size , int mutationStrength, Color color)
+        {
+            System.Random r = new System.Random();
+            GameObject newPlant = Instantiate(plantPrototype);
+            PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
+
+            nPE.Set(name, nutritionalValue, ticksWithoutChild, childrenToLive, size, mutationStrength, color);
+            nPE.gObject = newPlant;
+
+            newPlant.transform.position = where;
+            newPlant.GetComponent<Renderer>().enabled = true;
+            plants.Add(newPlant);
+        }*/
 
         public static void MakeOffspring(GameObject parent)
         {
