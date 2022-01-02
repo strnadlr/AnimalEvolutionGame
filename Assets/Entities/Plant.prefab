@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 6419991730987647814}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 50, y: 60.1, z: 198}
-  m_LocalScale: {x: 1, y: 5, z: 1}
+  m_LocalScale: {x: 2, y: 10, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nutritionalValue: 20
-  ticksWithoutChild: 500
+  ticksWithoutChild: 1000
   currentTicksWithoutChild: 0
   childrenToLive: 5
   currentChildren: 0
@@ -115,3 +115,4 @@ MonoBehaviour:
   mutationStrength: 20
   color: {r: 0, g: 1, b: 0, a: 1}
   gObject: {fileID: 6419991730987647814}
+  valid: 0

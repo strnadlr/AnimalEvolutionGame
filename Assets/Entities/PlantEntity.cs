@@ -79,7 +79,7 @@ namespace AnimalEvolution
                     currentTicksWithoutChild = 0;
                     currentChildren += 1;
                     requestOffspring(gObject);
-                    if (currentChildren > childrenToLive)
+                    if (currentChildren >= childrenToLive)
                     {
                         Destroy(gObject);
                         Destroy(this);
