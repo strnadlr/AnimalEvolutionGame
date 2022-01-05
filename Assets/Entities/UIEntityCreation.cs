@@ -7,6 +7,8 @@ namespace AnimalEvolution
 {
     public class UIEntityCreation : MonoBehaviour
     {
+        public Button plantButton;
+        public Button animalButton;
         public Text nutriValueText;
         public Text timeBeOfText;
         public Text maxOfText;
@@ -31,6 +33,7 @@ namespace AnimalEvolution
         public float value = 90 / 100;
         private Color color;
         public bool placing = false;
+        public bool isPlant = true;
 
         public GameObject panel;
         private bool active = false;
@@ -46,6 +49,20 @@ namespace AnimalEvolution
             active = !active;
             panel.SetActive(active);
             cameraSwitch(!active);
+        }
+
+        public void plantButtonClicked()
+        {
+            isPlant = true;
+            plantButton.GetComponent<Image>().color = Color.green;
+            animalButton.GetComponent<Image>().color = Color.red;
+        }
+
+        public void animalButtonClicked()
+        {
+            isPlant = false;
+            animalButton.GetComponent<Image>().color = Color.green;
+            plantButton.GetComponent<Image>().color = Color.red;
         }
 
         public void NameFieldChanged(string newname)
@@ -116,9 +133,13 @@ namespace AnimalEvolution
             EntityUIButtonClicked();
         }
 
-        public void propagatePlantInfo()
+        public void propagateEntityInfo()
         {
-            plantSetterDelegate(newName, nutriValue, timeBeOf, maxOf, size/10, mutationStr, color);
+            if (isPlant)
+            {
+                plantSetterDelegate(newName, nutriValue, timeBeOf, maxOf, size / 10, mutationStr, color);
+            }
+            
         }
 
         private void Update()

@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class UIEntityInfo : MonoBehaviour
+namespace AnimalEvolution
 {
-    public GameObject panel;
-    public Text entityInfoText;
-    public void EntityInfoUIButtonClicked()
+    public class UIEntityInfo : MonoBehaviour
     {
-        panel.SetActive(false);
-    }
+        public GameObject panel;
+        public Text entityInfoText;
+        public void EntityInfoUIButtonClicked()
+        {
+            panel.SetActive(false);
+        }
 
-    public void displayText(string text)
-    {
-        entityInfoText.text = text;
-        panel.SetActive(true);
-    }
+        public void displayText(string text)
+        {
+            entityInfoText.text = text;
+            panel.SetActive(true);
+        }
 
+    }
 }

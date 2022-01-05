@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AnimalEvolution
 {
-    public class PlantEntity : MonoBehaviour
+    public class PlantEntity : MonoBehaviour, Entity
     {
         public float nutritionalValue;
         public int ticksWithoutChild;
@@ -21,8 +21,11 @@ namespace AnimalEvolution
         public static bool populate;
         public bool valid = false;
 
-        public void SetFrom(PlantEntity parent, GameObject targetGObject)
+        public void SetFrom(Entity parentEntity, GameObject targetGObject)
         {
+            if (parentEntity is PlantEntity)
+            {
+            PlantEntity parent = (PlantEntity)parentEntity;
             gObject = targetGObject;
             name = parent.name;
             nutritionalValue = Mathf.Max(1f,(float)parent.nutritionalValue * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
@@ -43,6 +46,7 @@ namespace AnimalEvolution
             renderer.SetPropertyBlock(mpb);
             valid = true;
             gObject.SetActive(true);
+            }
         }
 
         public void Set(string _name, float _nutritionalValue, int _ticksWithoutChild, int _childrenToLive, float _size, int _mutationStrength, Color _color)

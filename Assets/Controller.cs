@@ -17,7 +17,7 @@ namespace AnimalEvolution
         public WaterGeneration waterGeneration;
         public UITerrainAndWater terrainAndWateUI;
         public UIEntityCreation entityCreationUI;
-        public PlantScript plantScript;
+        public EntityScript plantScript;
         public CameraController cameraController;
         public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
@@ -48,9 +48,12 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    PlantEntity newPlant = plantScript.PlacePlantAt(hit.point);
-                    entityCreationUI.plantSetterDelegate = newPlant.Set;
-                    entityCreationUI.propagatePlantInfo();
+                    if (entityCreationUI.isPlant)
+                    {
+                        PlantEntity newPlant = plantScript.PlacePlantAt(hit.point);
+                        entityCreationUI.plantSetterDelegate = newPlant.Set;
+                        entityCreationUI.propagateEntityInfo();
+                    }
                 }
                 entityCreationUI.placing = false;
             }
@@ -61,10 +64,10 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    PlantEntity plantEntity = hit.collider.gameObject.GetComponent<PlantEntity>();
-                    if (plantEntity != null)
+                    Entity entity = hit.collider.gameObject.GetComponent<PlantEntity>();
+                    if (entity != null)
                     {
-                        entityInfoUI.displayText(plantEntity.ToString());
+                        entityInfoUI.displayText(entity.ToString());
                     }
                     else
                     {

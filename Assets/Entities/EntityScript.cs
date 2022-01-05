@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace AnimalEvolution
 {
-    public class PlantScript : MonoBehaviour
+    public class EntityScript : MonoBehaviour
     {
 
         public GameObject plantPrototype;
-        static List<GameObject> plants;
+        static List<GameObject> entities;
         int i = 0;
-        static MeshCollider ground;
+        public static MeshCollider ground;
         bool initialized = false;
         static Vector3 down = new Vector3(0, -1, 0);
         static private System.Random r = new System.Random();
@@ -18,8 +18,8 @@ namespace AnimalEvolution
         // Start is called before the first frame update
         void Start()
         {
-            plants = new List<GameObject>();
-            plants.Add(plantPrototype);
+            entities = new List<GameObject>();
+            entities.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
             pE.Set("DefaultPlant", 20f, 1000, 5, 1, 20, Color.green);
             pE.gObject = plantPrototype;
@@ -41,7 +41,7 @@ namespace AnimalEvolution
 
             newPlant.transform.position = where;
             newPlant.GetComponent<Renderer>().enabled = true;
-            plants.Add(newPlant);
+            entities.Add(newPlant);
             return nPE;
         }
 
@@ -62,29 +62,37 @@ namespace AnimalEvolution
 
         public static void MakeOffspring(GameObject parent)
         {
-            GameObject newPlant = Instantiate(parent);
-            PlantEntity pE = parent.GetComponent<PlantEntity>();
-            PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
-            nPE.SetFrom(pE, newPlant);
+            GameObject newEntity = Instantiate(parent);
+            Entity pE = parent.GetComponent<Entity>();
+            Entity nE = newEntity.GetComponent<Entity>();
+            nE.SetFrom(pE, newEntity);
 
-            newPlant.transform.position = new Vector3(parent.transform.position.x + r.Next(-50, 50), 300, parent.transform.position.z + r.Next(-50, 50));
+            newEntity.transform.position = new Vector3(parent.transform.position.x + r.Next(-50, 50), 300, parent.transform.position.z + r.Next(-50, 50));
 
 
-            Ray ray = new Ray(newPlant.transform.position, -newPlant.transform.up);
+            Ray ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
             RaycastHit hit;
             for (int i = 0; i < 20; i++)
             {
                 if (Physics.Raycast(ray, out hit))
                 {
-                    newPlant.transform.position = hit.point;
-                    newPlant.GetComponent<Renderer>().enabled = true;
-                    plants.Add(newPlant);
-                    break;
+                    newEntity.transform.position = hit.point;
+                    if (hit.collider.gameObject.tag=="Ground")
+                    {
+                        newEntity.GetComponent<Renderer>().enabled = true;
+                        entities.Add(newEntity);
+                        break;
+                    }
+                    else
+                    {
+                        Destroy(newEntity);
+                        Destroy((Object)nE);
+                    }
                 }
                 else
                 {
-                    Destroy(newPlant);
-                    Destroy(nPE);
+                    Destroy(newEntity);
+                    Destroy((Object)nE);
                 }
             }
 
