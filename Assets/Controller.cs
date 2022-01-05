@@ -19,7 +19,12 @@ namespace AnimalEvolution
         public UIEntityCreation entityCreationUI;
         public PlantScript plantScript;
         public CameraController cameraController;
-        public Camera camera;
+        public Camera mainCamera;
+        public UIEntityInfo entityInfoUI;
+
+        RaycastHit hit;
+        Vector3 mouse;
+        Ray ray;
 
         // Start is called before the first frame update
         void Start()
@@ -38,11 +43,8 @@ namespace AnimalEvolution
         {
             if (entityCreationUI.placing && (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)))
             {
-                RaycastHit hit;
-                Vector3 mouse = Input.mousePosition;
-                Ray ray = camera.ScreenPointToRay(mouse);
-
-                Debug.DrawRay(ray.origin, ray.direction);
+                mouse = Input.mousePosition;
+                ray = mainCamera.ScreenPointToRay(mouse);
 
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -52,8 +54,24 @@ namespace AnimalEvolution
                 }
                 entityCreationUI.placing = false;
             }
+            else if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
+            {
+                mouse = Input.mousePosition;
+                ray = mainCamera.ScreenPointToRay(mouse);
 
-
+                if (Physics.Raycast(ray, out hit))
+                {
+                    PlantEntity plantEntity = hit.collider.gameObject.GetComponent<PlantEntity>();
+                    if (plantEntity != null)
+                    {
+                        entityInfoUI.displayText(plantEntity.ToString());
+                    }
+                    else
+                    {
+                        entityInfoUI.EntityInfoUIButtonClicked();
+                    }
+                }
+            }
         }
     }
 }

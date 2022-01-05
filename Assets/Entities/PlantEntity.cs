@@ -88,7 +88,6 @@ namespace AnimalEvolution
             }
         }
 
-
         private void OnValidate()
         {
             if (mpb == null) mpb = new MaterialPropertyBlock();
@@ -98,5 +97,31 @@ namespace AnimalEvolution
             //apply propertyBlock to renderer
             renderer.SetPropertyBlock(mpb);
         }
+
+        public override string ToString()
+        {
+            System.Text.StringBuilder sB = new System.Text.StringBuilder();
+            sB.Append("Name: ");
+            sB.Append(name);
+            sB.Append('\n');
+            sB.Append("Nutritional Value: ");
+            sB.Append(nutritionalValue);
+            sB.Append('\n');
+            sB.Append("Time between children: ");
+            sB.Append(ticksWithoutChild);
+            sB.Append('\n');
+            sB.Append("Children: ");
+            sB.Append(currentChildren);
+            sB.Append(" / ");
+            sB.Append(childrenToLive);
+            sB.Append('\n');
+            sB.Append("Size: ");
+            sB.Append(size);
+            sB.Append('\n');
+            sB.Append("Mutation Strength: ");
+            sB.Append(mutationStrength);
+            return sB.ToString();
+        }
+
     }
 }
