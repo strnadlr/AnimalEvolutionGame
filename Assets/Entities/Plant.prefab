@@ -106,13 +106,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b677671eb5af74e4f83910ca0808ac74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nutritionalValue: 20
-  ticksWithoutChild: 1000
-  currentTicksWithoutChild: 0
-  childrenToLive: 5
-  currentChildren: 0
-  size: 1
-  mutationStrength: 20
-  color: {r: 0, g: 1, b: 0, a: 1}
   gObject: {fileID: 6419991730987647814}
   valid: 0

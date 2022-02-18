@@ -10,7 +10,7 @@ namespace AnimalEvolution
     public delegate PlantEntity plantPlacerDelegate(Vector3 where);
     public delegate void BoolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
-    public delegate void plantSetterDelegate(string _name, float _nutritionalValue, int _ticksWithoutChild, int _childrenToLive, float _size, int _mutationStrength, Color _color);
+    public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
@@ -36,6 +36,7 @@ namespace AnimalEvolution
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
             plantScript.Initialize(terrainGenerator.meshCollider);
+            entityInfoUI.EntityInfoUIXButtonClicked();
         }
 
         // Update is called once per frame
@@ -71,7 +72,7 @@ namespace AnimalEvolution
                     }
                     else
                     {
-                        entityInfoUI.EntityInfoUIButtonClicked();
+                        entityInfoUI.EntityInfoUIXButtonClicked();
                     }
                 }
             }

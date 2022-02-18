@@ -9,9 +9,7 @@ namespace AnimalEvolution
 
         public GameObject plantPrototype;
         static List<GameObject> entities;
-        int i = 0;
         public static MeshCollider ground;
-        bool initialized = false;
         static Vector3 down = new Vector3(0, -1, 0);
         static private System.Random r = new System.Random();
 
@@ -30,7 +28,6 @@ namespace AnimalEvolution
         public void Initialize(MeshCollider setground)
         {
             ground = setground;
-            initialized = true;
             PlantEntity.populate = true;
         }
 

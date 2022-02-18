@@ -1741,7 +1741,7 @@ GameObject:
   - component: {fileID: 366084855}
   - component: {fileID: 366084854}
   m_Layer: 5
-  m_Name: MAXIMUM OFFSPRINGS
+  m_Name: TIME TO LIVE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1763,8 +1763,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 25, y: -238}
-  m_SizeDelta: {x: 225, y: 75}
+  m_AnchoredPosition: {x: 25, y: -250}
+  m_SizeDelta: {x: 225, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &366084854
 MonoBehaviour:
@@ -1798,9 +1798,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'MAXIMUM
-
-    OFFSPRINGS'
+  m_Text: TIME TO LIVE
 --- !u!222 &366084855
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2455,7 +2453,7 @@ GameObject:
   - component: {fileID: 564604303}
   - component: {fileID: 564604304}
   m_Layer: 5
-  m_Name: Maximum Offsprings Slider
+  m_Name: Time To Live Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2527,14 +2525,14 @@ MonoBehaviour:
   m_HandleRect: {fileID: 583351201}
   m_Direction: 0
   m_MinValue: 1
-  m_MaxValue: 10
+  m_MaxValue: 60
   m_WholeNumbers: 1
-  m_Value: 5
+  m_Value: 12
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 898410276}
-        m_MethodName: MaxOfChanged
+        m_MethodName: MaxLifeChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4167,7 +4165,7 @@ MonoBehaviour:
   animalButton: {fileID: 1911904800}
   nutriValueText: {fileID: 2021071127}
   timeBeOfText: {fileID: 2127006135}
-  maxOfText: {fileID: 1338285039}
+  lifeMaxText: {fileID: 1338285039}
   sizeText: {fileID: 1489333696}
   mutationStrText: {fileID: 1724696237}
   colorRawImage: {fileID: 789553162}
@@ -5484,7 +5482,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1534832630}
-        m_MethodName: EntityInfoUIButtonClicked
+        m_MethodName: EntityInfoUIXButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6176,7 +6174,7 @@ GameObject:
   - component: {fileID: 1338285038}
   - component: {fileID: 1338285039}
   m_Layer: 5
-  m_Name: Maximum Offsprings Text
+  m_Name: Time To Live Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6241,7 +6239,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 5
+  m_Text: 120
 --- !u!1 &1350307744
 GameObject:
   m_ObjectHideFlags: 0
@@ -8563,9 +8561,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 324037329}
   m_Direction: 0
   m_MinValue: 5
-  m_MaxValue: 20
+  m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 10
+  m_Value: 30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -9208,8 +9206,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1904946714}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.006131662}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1137254706}
@@ -9218,7 +9216,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -698, y: -25}
+  m_AnchoredPosition: {x: -698, y: -24.997421}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904946716
@@ -10182,7 +10180,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 3.0
 --- !u!222 &2127006136
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10262,6 +10260,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735595413686554761, guid: 4ceae31e1c61d5c40aabc8c4b0025bb6,
+        type: 3}
+      propertyPath: valid
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735595413686554761, guid: 4ceae31e1c61d5c40aabc8c4b0025bb6,
+        type: 3}
+      propertyPath: gObject
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ceae31e1c61d5c40aabc8c4b0025bb6, type: 3}

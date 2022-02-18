@@ -11,7 +11,7 @@ namespace AnimalEvolution
         public Button animalButton;
         public Text nutriValueText;
         public Text timeBeOfText;
-        public Text maxOfText;
+        public Text lifeMaxText;
         public Text sizeText;
         public Text mutationStrText;
         public RawImage colorRawImage;
@@ -24,8 +24,8 @@ namespace AnimalEvolution
 
         private string newName = "New Species";
         private int nutriValue = 50;
-        private int timeBeOf = 50;
-        private int maxOf = 5;
+        private float timeBeOf = 3;
+        private float lifeMax = 60;
         private int size = 10;
         private int mutationStr = 25;
         public float hue = 138 / 360;
@@ -78,14 +78,14 @@ namespace AnimalEvolution
 
         public void TimeBeOfSliderChanged(float newtimeBeOf)
         {
-            timeBeOf = 5*(int)newtimeBeOf;
-            timeBeOfText.text = timeBeOf.ToString();
+            timeBeOf = newtimeBeOf/10;
+            timeBeOfText.text = timeBeOf.ToString("F");
         }
 
-        public void MaxOfChanged(float newmaxOf)
+        public void MaxLifeChanged(float newlifeMax)
         {
-            maxOf = (int)newmaxOf;
-            maxOfText.text = maxOf.ToString();
+            lifeMax = newlifeMax*10;
+            lifeMaxText.text = lifeMax.ToString();
         }
 
         public void SizeSliderChanged(float newsize)
@@ -137,7 +137,7 @@ namespace AnimalEvolution
         {
             if (isPlant)
             {
-                plantSetterDelegate(newName, nutriValue, timeBeOf, maxOf, size / 10, mutationStr, color);
+                plantSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, color);
             }
             
         }

@@ -8,7 +8,7 @@ namespace AnimalEvolution
     {
         public GameObject panel;
         public Text entityInfoText;
-        public void EntityInfoUIButtonClicked()
+        public void EntityInfoUIXButtonClicked()
         {
             panel.SetActive(false);
         }

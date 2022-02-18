@@ -6,15 +6,15 @@ namespace AnimalEvolution
 {
     public class PlantEntity : MonoBehaviour, Entity
     {
-        public float nutritionalValue;
-        public int ticksWithoutChild;
-        public int currentTicksWithoutChild;
-        public int childrenToLive;
-        public int currentChildren;
-        public float size;
-        public int mutationStrength;
-        public Color color;
+        public float nutritionalValue { get; set; }
+        public float lifeMax { get; set; }
+        public float lifeRemaining { get; set; }
+        public float timeWithoutChildren { get; set; }
+        public float currentTimeWithoutChild { get; set; }
+        public float size { get; set; }
+        public int mutationStrength { get; set; }
         public GameObject gObject;
+        public Color color { get; set; }
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
@@ -28,11 +28,11 @@ namespace AnimalEvolution
             PlantEntity parent = (PlantEntity)parentEntity;
             gObject = targetGObject;
             name = parent.name;
-            nutritionalValue = Mathf.Max(1f,(float)parent.nutritionalValue * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
-            ticksWithoutChild = Mathf.Max(200,(int)((float)parent.ticksWithoutChild * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
-            currentTicksWithoutChild = 0;
-            childrenToLive = parent.childrenToLive;
-            currentChildren = 0;
+            nutritionalValue = Mathf.Max(1f,parent.nutritionalValue * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
+            timeWithoutChildren = Mathf.Max(0.5f,(parent.timeWithoutChildren * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
+            currentTimeWithoutChild = timeWithoutChildren;
+            lifeMax = parent.lifeMax;
+            lifeRemaining = lifeMax;
             size = Mathf.Max(0.1f,parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
             mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
             color = new Color(
@@ -49,14 +49,14 @@ namespace AnimalEvolution
             }
         }
 
-        public void Set(string _name, float _nutritionalValue, int _ticksWithoutChild, int _childrenToLive, float _size, int _mutationStrength, Color _color)
+        public void Set(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color)
         {
             name = _name;
             nutritionalValue = _nutritionalValue;
-            ticksWithoutChild = _ticksWithoutChild;
-            currentTicksWithoutChild = 0;
-            childrenToLive = _childrenToLive;
-            currentChildren = 0;
+            timeWithoutChildren = _ticksWithoutChild;
+            currentTimeWithoutChild = timeWithoutChildren;
+            lifeMax = _lifeMax;
+            lifeRemaining = _lifeMax;
             size = _size;
             mutationStrength = _mutationStrength;
             color = _color;
@@ -72,22 +72,19 @@ namespace AnimalEvolution
         // Update is called once per frame
         void Update()
         {
-            if (populate&&valid)
+            lifeRemaining -= Time.deltaTime;
+            currentTimeWithoutChild -= Time.deltaTime;
+            if (lifeRemaining < 0)
             {
-                if (currentTicksWithoutChild < ticksWithoutChild)
+                Destroy(gObject);
+                Destroy(this);
+            }
+            else if (populate&&valid)
+            {
+                if (currentTimeWithoutChild < 0)
                 {
-                    currentTicksWithoutChild++;
-                }
-                else
-                {
-                    currentTicksWithoutChild = 0;
-                    currentChildren += 1;
+                    currentTimeWithoutChild = timeWithoutChildren;
                     requestOffspring(gObject);
-                    if (currentChildren >= childrenToLive)
-                    {
-                        Destroy(gObject);
-                        Destroy(this);
-                    }
                 }
             }
         }
@@ -108,17 +105,15 @@ namespace AnimalEvolution
             sB.Append("Name: ");
             sB.Append(name);
             sB.Append('\n');
+            sB.Append("Life remaining: ");
+            sB.Append((lifeRemaining/lifeMax).ToString("F"));
+            sB.Append("%\n");
             sB.Append("Nutritional Value: ");
             sB.Append(nutritionalValue);
             sB.Append('\n');
             sB.Append("Time between children: ");
-            sB.Append(ticksWithoutChild);
-            sB.Append('\n');
-            sB.Append("Children: ");
-            sB.Append(currentChildren);
-            sB.Append(" / ");
-            sB.Append(childrenToLive);
-            sB.Append('\n');
+            sB.Append((currentTimeWithoutChild/timeWithoutChildren).ToString("F"));
+            sB.Append("%\n");
             sB.Append("Size: ");
             sB.Append(size);
             sB.Append('\n');
