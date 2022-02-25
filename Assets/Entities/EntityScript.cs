@@ -8,6 +8,7 @@ namespace AnimalEvolution
     {
 
         public GameObject plantPrototype;
+        public GameObject animalPrototype;
         static List<GameObject> entities;
         public static MeshCollider ground;
         static Vector3 down = new Vector3(0, -1, 0);
@@ -19,16 +20,24 @@ namespace AnimalEvolution
             entities = new List<GameObject>();
             entities.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
-            pE.Set("DefaultPlant", 20f, 1000, 5, 1, 20, Color.green);
+            pE.Set("DefaultPlant", 20f, 3, 60, 1, 25, Color.green);
             pE.gObject = plantPrototype;
             pE.valid = false;
             PlantEntity.requestOffspring = MakeOffspring;
+
+            entities.Add(animalPrototype);
+            AnimalEntity aE = animalPrototype.GetComponent<AnimalEntity>();
+            aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, Color.red);
+            aE.gObject = animalPrototype;
+            aE.valid = false;
+            AnimalEntity.requestOffspring = MakeOffspring;
         }
 
         public void Initialize(MeshCollider setground)
         {
             ground = setground;
             PlantEntity.populate = true;
+            AnimalEntity.populate = true;
         }
 
         public PlantEntity PlacePlantAt(Vector3 where)
@@ -40,6 +49,19 @@ namespace AnimalEvolution
             newPlant.GetComponent<Renderer>().enabled = true;
             entities.Add(newPlant);
             return nPE;
+        }
+
+        public AnimalEntity PlaceAnimalAt(Vector3 where, Vector3 orientation)
+        {
+            GameObject newAnimal = Instantiate(animalPrototype);
+            AnimalEntity nAE = newAnimal.GetComponent<AnimalEntity>();
+
+            newAnimal.transform.position = where;
+            newAnimal.transform.up = orientation;
+            newAnimal.transform.position += orientation * newAnimal.transform.localScale.y / 2;
+            newAnimal.GetComponent<Renderer>().enabled = true;
+            entities.Add(newAnimal);
+            return nAE;
         }
 
         /*
@@ -64,7 +86,7 @@ namespace AnimalEvolution
             Entity nE = newEntity.GetComponent<Entity>();
             nE.SetFrom(pE, newEntity);
 
-            newEntity.transform.position = new Vector3(parent.transform.position.x + r.Next(-50, 50), 300, parent.transform.position.z + r.Next(-50, 50));
+            newEntity.transform.position = new Vector3(parent.transform.position.x + r.Next(-(int)pE.size*50, (int)pE.size * 50), 300, parent.transform.position.z + r.Next(-(int)pE.size * 50, (int)pE.size * 50));
 
 
             Ray ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
@@ -74,6 +96,11 @@ namespace AnimalEvolution
                 if (Physics.Raycast(ray, out hit))
                 {
                     newEntity.transform.position = hit.point;
+                    if (nE is AnimalEntity)
+                    {
+                        newEntity.transform.up = hit.normal;
+                        newEntity.transform.position += hit.normal * newEntity.transform.localScale.y / 2;
+                    }
                     if (hit.collider.gameObject.tag=="Ground")
                     {
                         newEntity.GetComponent<Renderer>().enabled = true;
@@ -102,6 +129,7 @@ namespace AnimalEvolution
             if (Input.GetKey("x"))
             {
                 PlantEntity.populate = !PlantEntity.populate;
+                AnimalEntity.populate = !AnimalEntity.populate;
             }
         }
 

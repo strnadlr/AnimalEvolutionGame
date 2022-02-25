@@ -21,6 +21,7 @@ namespace AnimalEvolution
         public plantPlacerDelegate plantPlacer;
         public BoolSwitchDelegate cameraSwitch;
         public plantSetterDelegate plantSetterDelegate;
+        public animalSetterDelegate animalSetterDelegate;
 
         private string newName = "New Species";
         private int nutriValue = 50;
@@ -138,6 +139,10 @@ namespace AnimalEvolution
             if (isPlant)
             {
                 plantSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, color);
+            }
+            else
+            {
+                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, color);
             }
             
         }
