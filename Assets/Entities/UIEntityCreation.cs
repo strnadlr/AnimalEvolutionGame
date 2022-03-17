@@ -14,6 +14,7 @@ namespace AnimalEvolution
         public Text lifeMaxText;
         public Text sizeText;
         public Text mutationStrText;
+        public Text sencesText;
         public RawImage colorRawImage;
         public RawImage saturationColorRawImage;
         public RawImage valueColorRawImage;
@@ -29,6 +30,7 @@ namespace AnimalEvolution
         private float lifeMax = 60;
         private int size = 10;
         private int mutationStr = 25;
+        private float sences = 50;
         public float hue = 138 / 360;
         public float saturation = 77 / 100;
         public float value = 90 / 100;
@@ -101,6 +103,12 @@ namespace AnimalEvolution
             mutationStrText.text = mutationStr.ToString();
         }
 
+        public void SencesSliderChanged(float newsences)
+        {
+            sences = newsences*5;
+            sencesText.text = sences.ToString();
+        }
+
         public void HueSliderChanged(float newhue)
         {
             hue = newhue / 360f;
@@ -142,7 +150,7 @@ namespace AnimalEvolution
             }
             else
             {
-                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, color);
+                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, sences, color);
             }
             
         }

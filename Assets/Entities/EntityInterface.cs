@@ -16,8 +16,6 @@ namespace AnimalEvolution
         int mutationStrength { get; set; }
         Color color { get; set; }
 
-
-        void Set(string _name, float _nutritionalValue, float _timeWithoutChildren, float _lifeMax, float _size, int _mutationStrength, Color _color);
         void SetFrom(Entity parentEntity, GameObject targetGObject);
     }
     

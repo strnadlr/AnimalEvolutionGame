@@ -73,7 +73,7 @@ namespace AnimalEvolution
         void Update()
         {
             Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
-            lifeRemaining -= Time.deltaTime*((nearbyPlants.Length)*5+1);
+            lifeRemaining -= Time.deltaTime*((nearbyPlants.Length)*3+1);
             currentTimeWithoutChild -= Time.deltaTime;
             if (lifeRemaining < 0)
             {

@@ -11,7 +11,7 @@ namespace AnimalEvolution
     public delegate void BoolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
-    public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
+    public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color);
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
