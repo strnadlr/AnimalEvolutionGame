@@ -27,7 +27,7 @@ namespace AnimalEvolution
 
             entities.Add(animalPrototype);
             AnimalEntity aE = animalPrototype.GetComponent<AnimalEntity>();
-            aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red);
+            aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
             aE.gObject = animalPrototype;
             aE.valid = false;
             AnimalEntity.requestOffspring = MakeOffspring;

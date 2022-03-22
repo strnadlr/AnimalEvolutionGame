@@ -11,7 +11,7 @@ namespace AnimalEvolution
     public delegate void BoolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
-    public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color);
+    public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator);
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
@@ -22,6 +22,8 @@ namespace AnimalEvolution
         public CameraController cameraController;
         public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
+        private Entity currentInfoEntity;
+        private float waitTime;
 
         RaycastHit hit;
         Vector3 mouse;
@@ -43,6 +45,7 @@ namespace AnimalEvolution
         // Update is called once per frame
         void Update()
         {
+            waitTime += Time.deltaTime;
             if (entityCreationUI.placing && (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)))
             {
                 mouse = Input.mousePosition;
@@ -72,17 +75,17 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    Entity entity = hit.collider.gameObject.GetComponent<PlantEntity>();
-                    if (entity != null)
+                    currentInfoEntity = hit.collider.gameObject.GetComponent<PlantEntity>();
+                    if (currentInfoEntity != null)
                     {
-                        entityInfoUI.displayText(entity.ToString());
+                        entityInfoUI.displayText(currentInfoEntity.ToString());
                     }
                     else
                     {
-                        entity = hit.collider.gameObject.GetComponent<AnimalEntity>();
-                        if (entity != null)
+                        currentInfoEntity = hit.collider.gameObject.GetComponent<AnimalEntity>();
+                        if (currentInfoEntity != null)
                         {
-                            entityInfoUI.displayText(entity.ToString());
+                            entityInfoUI.displayText(currentInfoEntity.ToString());
                         }
                         else
                         {
@@ -92,6 +95,19 @@ namespace AnimalEvolution
                     
                 }
             }
+            if (entityInfoUI.isActiveAndEnabled && waitTime > 0.2)
+            {
+                if (currentInfoEntity != null)
+                {
+                    entityInfoUI.displayText(currentInfoEntity.ToString());
+                    waitTime = 0;
+                }
+                else
+                {
+                    entityInfoUI.EntityInfoUIXButtonClicked();
+                }
+            }
+
         }
     }
 }

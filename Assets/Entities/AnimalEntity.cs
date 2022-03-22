@@ -14,6 +14,10 @@ namespace AnimalEvolution {
         public int mutationStrength { get; set; }
         public float sences { get; set; }
         public float speed { get; set; }
+        public float food { get; set; }
+        public float foodCapacity { get; set; }
+        private float foodToBreed { get; set; }
+        private bool isPredator { get; set; }
         public GameObject gObject;
         public Color color { get; set; }
         private static System.Random rand = new System.Random();
@@ -28,7 +32,7 @@ namespace AnimalEvolution {
         private Vector3 direction;
 
 
-        public void Set(string _name, float _nutritionalValue, float _timeWithoutChildren, float _lifeMax, float _size, int _mutationStrength, float _sences, Color _color)
+        public void Set(string _name, float _nutritionalValue, float _timeWithoutChildren, float _lifeMax, float _size, int _mutationStrength, float _sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator)
         {
             name = _name;
             nutritionalValue = _nutritionalValue;
@@ -43,12 +47,17 @@ namespace AnimalEvolution {
             if (mpb == null) mpb = new MaterialPropertyBlock();
             Renderer renderer = GetComponentInChildren<Renderer>();
             mpb.SetColor("_Color", color);
+            speed = _speed;
+            foodCapacity = _foodCapacity;
+            foodToBreed = _foodToBreed;
+            food = foodToBreed / 2f;
+            isPredator = _isPredator;
             gObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
             renderer.SetPropertyBlock(mpb);
             valid = true;
             gObject.SetActive(true);
             targetSet = false;
-        }
+        } 
         public void SetFrom(Entity parentEntity, GameObject targetGObject)
         {
             if (parentEntity is AnimalEntity)
@@ -68,6 +77,11 @@ namespace AnimalEvolution {
                     parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
                     parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
                     parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300);
+                speed = Mathf.Max(0.1f, parent.speed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                foodCapacity= Mathf.Max(0.1f, parent.foodCapacity + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                foodToBreed = Mathf.Max(0.1f, parent.foodToBreed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                food = foodToBreed / 2f;
+                isPredator = parent.isPredator;
                 if (mpb == null) mpb = new MaterialPropertyBlock();
                 Renderer renderer = GetComponentInChildren<Renderer>();
                 mpb.SetColor("_Color", color);
@@ -83,14 +97,16 @@ namespace AnimalEvolution {
             lifeRemaining -= Time.deltaTime;
             currentTimeWithoutChild -= Time.deltaTime;
             allignIn += Time.deltaTime;
-            if (lifeRemaining < 0)
+            food -= Time.deltaTime;
+
+            if (lifeRemaining < 0 || food<0)
             {
                 Destroy(gObject);
                 Destroy(this);
                 return;
             }
 
-            if (!targetSet)
+            if (!targetSet && wentStraightfor > 0.2)
             {
                 Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, sences, 0b100000000);
                 if (nearbyPlants.Length > 0)
@@ -119,6 +135,7 @@ namespace AnimalEvolution {
                     gObject.transform.forward = direction;
                     if (Vector3.Distance(gObject.transform.position, target.transform.position) < this.size*2)
                     {
+                        this.food = Mathf.Min(foodCapacity, this.food + target.GetComponent<Entity>().nutritionalValue);
                         Destroy(target.gameObject.GetComponent<PlantEntity>());
                         Destroy(target.gameObject);
                         targetSet = false;
@@ -142,39 +159,21 @@ namespace AnimalEvolution {
             }
             
 
-            gObject.transform.position += gObject.transform.forward * Time.deltaTime * 10;
+            gObject.transform.position += gObject.transform.forward * Time.deltaTime * speed;
             wentStraightfor += Time.deltaTime;
 
 
 
 
-            if (populate && valid && currentTimeWithoutChild < 0)
+            if (populate && valid && food>foodToBreed && currentTimeWithoutChild < 0)
             {
                 currentTimeWithoutChild = timeWithoutChildren;
                 requestOffspring(gObject);
+                food -= foodToBreed / 2f;
             }
 
         }
-/*
-       private void OnCollisionEnter(Collision collision)
-        {
-            if(collision.collider.gameObject.layer==8)
-            {
-                Destroy(collision.collider.gameObject.GetComponent<PlantEntity>());
-                Destroy(collision.collider.gameObject);
-            }
-        }*/
-        
-        void OnTriggerEnter(Collider other)
-        {
-            transform.position = transform.position + transform.up * 3;
-            if (other.gameObject.layer == 8)
-            {
-                Destroy(other.gameObject.GetComponent<PlantEntity>());
-                Destroy(other.gameObject);
-                targetSet = false;
-            }
-        }
+
 
         private void OnValidate()
         {

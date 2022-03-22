@@ -9,12 +9,21 @@ namespace AnimalEvolution
     {
         public Button plantButton;
         public Button animalButton;
+        public Button predatorButton;
+        public Button preyButton;
         public Text nutriValueText;
         public Text timeBeOfText;
         public Text lifeMaxText;
         public Text sizeText;
         public Text mutationStrText;
-        public Text sencesText;
+        public Text sensesText;
+        public Text speedText;
+        public Text foodCapacityText;
+        public Text foodToBreedText;
+        public Slider sensesSlider;
+        public Slider speedSlider;
+        public Slider foodCapacitySlider;
+        public Slider foodToBreedSlider;
         public RawImage colorRawImage;
         public RawImage saturationColorRawImage;
         public RawImage valueColorRawImage;
@@ -30,11 +39,15 @@ namespace AnimalEvolution
         private float lifeMax = 60;
         private int size = 10;
         private int mutationStr = 25;
-        private float sences = 50;
+        private float senses = 50;
         public float hue = 138 / 360;
         public float saturation = 77 / 100;
         public float value = 90 / 100;
         private Color color;
+        private float speed = 10;
+        private float foodCapacity = 100;
+        private float foodToBreed = 50;
+        private bool isPredator = false;
         public bool placing = false;
         public bool isPlant = true;
 
@@ -59,6 +72,12 @@ namespace AnimalEvolution
             isPlant = true;
             plantButton.GetComponent<Image>().color = Color.green;
             animalButton.GetComponent<Image>().color = Color.red;
+            sensesSlider.interactable = false;
+            speedSlider.interactable = false;
+            foodCapacitySlider.interactable = false;
+            foodToBreedSlider.interactable = false;
+            predatorButton.interactable = false;
+            preyButton.interactable = false;
         }
 
         public void animalButtonClicked()
@@ -66,6 +85,12 @@ namespace AnimalEvolution
             isPlant = false;
             animalButton.GetComponent<Image>().color = Color.green;
             plantButton.GetComponent<Image>().color = Color.red;
+            sensesSlider.interactable = true;
+            speedSlider.interactable = true;
+            foodCapacitySlider.interactable = true;
+            foodToBreedSlider.interactable = true;
+            predatorButton.interactable = true;
+            preyButton.interactable = true;
         }
 
         public void NameFieldChanged(string newname)
@@ -103,12 +128,6 @@ namespace AnimalEvolution
             mutationStrText.text = mutationStr.ToString();
         }
 
-        public void SencesSliderChanged(float newsences)
-        {
-            sences = newsences*5;
-            sencesText.text = sences.ToString();
-        }
-
         public void HueSliderChanged(float newhue)
         {
             hue = newhue / 360f;
@@ -135,6 +154,40 @@ namespace AnimalEvolution
             BWSaturationColorRawImage.color = Color.HSVToRGB(hue, 0, value);
         }
 
+        public void SensesSliderChanged(float newsenses)
+        {
+            senses = (int)newsenses*5;
+            sensesText.text = senses.ToString();
+        }
+
+        public void SpeedSliderChanged(float newspeed)
+        {
+            speed = (int)newspeed;
+            speedText.text = speed.ToString();
+        }
+
+        public void FoodCapacitySliderChanged(float newfoodCapacity)
+        {
+            foodCapacity = (int)newfoodCapacity*5;
+            foodCapacityText.text = foodCapacity.ToString();
+        }
+
+        public void FoodToBreedSliderChanged(float newfoodToBreed)
+        {
+            foodToBreed = (int)newfoodToBreed*5;
+            foodToBreedText.text = foodToBreed.ToString();
+        }
+
+        public void predatorButtonClicked()
+        {
+            isPredator = true;
+        }
+
+        public void preyButtonClicked()
+        {
+            isPredator = false;
+        }
+
         public void CreateAncestorButtonClicked()
         {
             placing = true;
@@ -150,7 +203,7 @@ namespace AnimalEvolution
             }
             else
             {
-                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, sences, color);
+                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, senses, color, speed, foodCapacity,foodToBreed, isPredator);
             }
             
         }
