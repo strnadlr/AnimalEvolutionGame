@@ -22,7 +22,7 @@ namespace AnimalEvolution
         public CameraController cameraController;
         public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
-        private Entity currentInfoEntity;
+        private GameObject currentInfoEntity;
         private float waitTime;
 
         RaycastHit hit;
@@ -40,6 +40,8 @@ namespace AnimalEvolution
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
+            AnimalEntity.xBoundary = (terrainGenerator.xsize - 1) * 4;
+            AnimalEntity.zBoundary = (terrainGenerator.zsize - 1) * 4;
         }
 
         // Update is called once per frame
@@ -75,14 +77,14 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit))
                 {
-                    currentInfoEntity = hit.collider.gameObject.GetComponent<PlantEntity>();
+                    currentInfoEntity = hit.collider.gameObject;
                     if (currentInfoEntity != null)
                     {
                         entityInfoUI.displayText(currentInfoEntity.ToString());
                     }
                     else
                     {
-                        currentInfoEntity = hit.collider.gameObject.GetComponent<AnimalEntity>();
+                        currentInfoEntity = hit.collider.gameObject;
                         if (currentInfoEntity != null)
                         {
                             entityInfoUI.displayText(currentInfoEntity.ToString());
@@ -92,15 +94,19 @@ namespace AnimalEvolution
                             entityInfoUI.EntityInfoUIXButtonClicked();
                         }
                     }
-                    
+
                 }
             }
             if (entityInfoUI.isActiveAndEnabled && waitTime > 0.2)
             {
                 if (currentInfoEntity != null)
                 {
-                    entityInfoUI.displayText(currentInfoEntity.ToString());
-                    waitTime = 0;
+                    Entity e = currentInfoEntity.GetComponent<Entity>();
+                    if (e != null)
+                    {
+                        entityInfoUI.displayText(e.ToString());
+                        waitTime = 0;
+                    }
                 }
                 else
                 {

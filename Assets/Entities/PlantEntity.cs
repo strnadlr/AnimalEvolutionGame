@@ -21,31 +21,31 @@ namespace AnimalEvolution
         public static bool populate { get; set; }
         public bool valid;
 
-    public void SetFrom(Entity parentEntity, GameObject targetGObject)
+        public void SetFrom(Entity parentEntity, GameObject targetGObject)
         {
             if (parentEntity is PlantEntity)
             {
-            PlantEntity parent = (PlantEntity)parentEntity;
-            gObject = targetGObject;
-            name = parent.name;
-            nutritionalValue = Mathf.Max(1f,parent.nutritionalValue * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
-            timeWithoutChildren = Mathf.Max(0.5f,(parent.timeWithoutChildren * (1+(float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
-            currentTimeWithoutChild = timeWithoutChildren;
-            lifeMax = parent.lifeMax;
-            lifeRemaining = lifeMax;
-            size = Mathf.Max(0.1f,parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
-            mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
-            color = new Color(
-                parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
-                parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300,
-                parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 300);
-            if (mpb == null) mpb = new MaterialPropertyBlock();
-            Renderer renderer = GetComponentInChildren<Renderer>();
-            mpb.SetColor("_Color", color);
-            gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
-            renderer.SetPropertyBlock(mpb);
-            valid = true;
-            gObject.SetActive(true);
+                PlantEntity parent = (PlantEntity)parentEntity;
+                gObject = targetGObject;
+                name = parent.name;
+                nutritionalValue = Mathf.Max(1f, parent.nutritionalValue * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
+                timeWithoutChildren = Mathf.Max(0.5f, (parent.timeWithoutChildren * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
+                currentTimeWithoutChild = timeWithoutChildren;
+                lifeMax = parent.lifeMax;
+                lifeRemaining = lifeMax;
+                size = Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
+                color = new Color(
+                    parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
+                    parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
+                    parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                if (mpb == null) mpb = new MaterialPropertyBlock();
+                Renderer renderer = GetComponentInChildren<Renderer>();
+                mpb.SetColor("_Color", color);
+                gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
+                renderer.SetPropertyBlock(mpb);
+                valid = true;
+                gObject.SetActive(true);
             }
         }
 
@@ -73,20 +73,17 @@ namespace AnimalEvolution
         void Update()
         {
             Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
-            lifeRemaining -= Time.deltaTime*((nearbyPlants.Length)*3+1);
+            lifeRemaining -= Time.deltaTime * ((nearbyPlants.Length) + 1);
             currentTimeWithoutChild -= Time.deltaTime;
             if (lifeRemaining < 0)
             {
-                Destroy(gObject);
                 Destroy(this);
+                Destroy(gObject);
             }
-            else if (populate&&valid)
+            else if (populate && valid && nearbyPlants.Length < 5 && currentTimeWithoutChild < 0)
             {
-                if (currentTimeWithoutChild < 0)
-                {
-                    currentTimeWithoutChild = timeWithoutChildren;
-                    requestOffspring(gObject);
-                }
+                currentTimeWithoutChild = timeWithoutChildren;
+                requestOffspring(gObject);
             }
         }
 
@@ -102,28 +99,8 @@ namespace AnimalEvolution
 
         public override string ToString()
         {
-            System.Text.StringBuilder sB = new System.Text.StringBuilder();
-            sB.Append("Name: ");
-            sB.Append(name);
-            sB.Append('\n');
-            sB.Append("Life remaining: ");
-            sB.Append((lifeRemaining/lifeMax).ToString("F"));
-            sB.Append("%\n");
-            sB.Append("Nutritional Value: ");
-            sB.Append(nutritionalValue);
-            sB.Append('\n');
-            sB.Append("Time between children: ");
-            sB.Append((currentTimeWithoutChild/timeWithoutChildren).ToString("F"));
-            sB.Append("%\n");
-            sB.Append("Size: ");
-            sB.Append(size);
-            sB.Append('\n');
-            sB.Append("Mutation Strength: ");
-            sB.Append(mutationStrength);
-            Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size*20, 0b100000000);
-            sB.Append("\n Plants Nearby: ");
-            sB.Append(nearbyPlants.Length);
-            return sB.ToString();
+            return $"Name: {name}\nLife remaining: {(lifeRemaining / lifeMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
+                $" {(currentTimeWithoutChild / timeWithoutChildren).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
 
     }

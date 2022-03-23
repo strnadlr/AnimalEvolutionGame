@@ -181,11 +181,15 @@ namespace AnimalEvolution
         public void predatorButtonClicked()
         {
             isPredator = true;
+            predatorButton.GetComponent<Image>().color = Color.green;
+            preyButton.GetComponent<Image>().color = Color.red;
         }
 
         public void preyButtonClicked()
         {
             isPredator = false;
+            preyButton.GetComponent<Image>().color = Color.green;
+            predatorButton.GetComponent<Image>().color = Color.red;
         }
 
         public void CreateAncestorButtonClicked()
