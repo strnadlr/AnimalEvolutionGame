@@ -9,8 +9,7 @@ namespace AnimalEvolution
     {
         public Text currentSpeedText;
         public Text pauseButtonText;
-        public Button decreaseSpeedButton;
-        public Button increaseSpeedButton;
+        public Slider speedSlider;
         public Button pauseButton;
         public Button entityCreationButton;
 
@@ -35,21 +34,10 @@ namespace AnimalEvolution
             entityCreationButton.interactable = entityCreationActive;
         }
 
-        public void DecreaseSpeedButtonClicked()
+        public void SpeedSliderChanged(float speedSliderValue)
         {
-            if (Controller.speedField >= 1)
-            {
-                Controller.speedField -= 1;
-                currentSpeedText.text = Controller.speed.ToString("F1");
-            }
-        }
-        public void IncreaseSpeedButtonClicked()
-        {
-            if (Controller.speedField <= 39)
-            {
-                Controller.speedField += 1;
-                currentSpeedText.text = Controller.speed.ToString("F1");
-            }
+            Controller.speed = speedSliderValue / 10f;
+            currentSpeedText.text = Controller.speed.ToString("F1");
         }
 
         public void PauseButtonClicked()
@@ -58,14 +46,12 @@ namespace AnimalEvolution
             if (Controller.paused)
             {
             pauseButtonText.text = ">";
-            decreaseSpeedButton.interactable = false;
-            increaseSpeedButton.interactable = false;
+            speedSlider.interactable = false;
             }
             else
             {
                 pauseButtonText.text = "| |";
-                decreaseSpeedButton.interactable = true;
-                increaseSpeedButton.interactable = true;
+                speedSlider.interactable = true;
             }
 
         }

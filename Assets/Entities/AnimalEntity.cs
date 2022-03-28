@@ -28,11 +28,13 @@ namespace AnimalEvolution {
         public bool valid;
         private Collider target;
         private bool targetSet;
+        private bool recalculate;
         private float wentStraightfor;
         private float allignIn;
-        private Vector3 direction;
+        private Vector3 targetposORrandDir;
         public static float xBoundary;
         public static float zBoundary;
+        private int layerMask = ~((1 << 8) | (1 << 9));
 
         /// <summary>
         /// Set used when creating a new species of AnimalEntity.
@@ -123,7 +125,7 @@ namespace AnimalEvolution {
             lifeCurrent -= Time.deltaTime * Controller.speed;
             timeToBreedCurrent -= Time.deltaTime * Controller.speed;
             allignIn += Time.deltaTime * Controller.speed;
-            foodCurrent -= Time.deltaTime* 2 * Controller.speed;
+            foodCurrent -= Time.deltaTime * 2 * Controller.speed;
 
             if (lifeCurrent < 0 || foodCurrent < 0)
             {
@@ -135,9 +137,9 @@ namespace AnimalEvolution {
                 return;
             }
 
-            if (!targetSet && wentStraightfor > 0.2)
+            if (!targetSet && wentStraightfor > 0.2) //I don't have a target.
             {
-                Collider[] nearbyEntities=null;
+                Collider[] nearbyEntities = null;
                 if (isPredator)
                 {
                     //searches for nearby animals
@@ -153,31 +155,25 @@ namespace AnimalEvolution {
                     target = selectTarget(nearbyEntities);
                     if (target != null)
                     {
-                    direction = target.transform.position - gObject.transform.position;
-                    gObject.transform.forward = direction;
-                    targetSet = true;
+                        targetSet = true;
+                        targetposORrandDir = target.transform.position;
+                        //recalculate = true;
+                        gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
                     }
+
                 }
                 /*
                  * Went straight for too long?
                 */
                 else if (wentStraightfor > 5)
                 {
-                    direction = (new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f)).normalized;/*
-                    nearbyEntities = Physics.OverlapSphere(gObject.transform.position, sences, 0b1000000000);
-                    if (nearbyEntities.Length > 0)
-                    {
-                        Collider threat = selectThreat(nearbyEntities);
-                        if (threat != null)
-                        {
-                            direction = -(threat.transform.position - gObject.transform.position).normalized;
-                        }
-                    }*/
-                    gObject.transform.forward = direction;
+                    targetposORrandDir = gObject.transform.position + 200*(new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f));
                     wentStraightfor = 0;
+                    //recalculate = true;
+                    gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
                 }
             }
-            else
+            else //I do have a target.
             {
                 if (target == null)
                 {
@@ -188,9 +184,8 @@ namespace AnimalEvolution {
                     /*
                      * Checking if I can eat my target.
                     */
-                    direction=target.transform.position - gObject.transform.position;
-                    gObject.transform.forward = direction;
-                    if (Vector3.Distance(gObject.transform.position, target.transform.position) < size*2)
+
+                    if (Vector3.Distance(gObject.transform.position, target.transform.position) < size * 3)
                     {
                         foodCurrent = Mathf.Min(foodMax, foodCurrent + target.GetComponent<Entity>().nutritionalValue);
                         tastyColor = tastyColor.Average(target.GetComponent<Entity>().color);
@@ -206,32 +201,39 @@ namespace AnimalEvolution {
             }
 
 
-            // Fix rotation with respect to surface.
-            if (allignIn>0.5 && wentStraightfor>0.2)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(gObject.transform.position + gObject.transform.up, -gObject.transform.up, out hit, 0b10000000000))
-                {
-                    direction = gameObject.transform.forward;
-                    gObject.transform.up = hit.normal;
-                    gObject.transform.position = hit.point + hit.normal * gObject.transform.localScale.y / 2;
-                    gObject.transform.forward = direction;
-                }
-                allignIn = 0;
-            }
-            
             // Move forward.
             gObject.transform.position += gObject.transform.forward * Time.deltaTime * speed * Controller.speed;
-            wentStraightfor += Time.deltaTime;
-            if (gObject.transform.position.x < 0 || gObject.transform.position.z < 0 || gObject.transform.position.x > xBoundary || gObject.transform.position.z > zBoundary)
+            wentStraightfor += Time.deltaTime * Controller.speed;
+            if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
             {
                 Vector3 directionToCenter = (new Vector3(xBoundary / 2, 0, zBoundary / 2) - gameObject.transform.position).normalized;
                 gObject.transform.position += (directionToCenter * Time.deltaTime * speed);
-                direction = (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
-                gObject.transform.forward = direction;
+                targetposORrandDir = gObject.transform.position + 3 * (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
+                recalculate = true;
+                if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
+                {
+                    Destroy(gObject);
+                    Destroy(this);
+                }
             }
 
-            if (populate && valid && foodCurrent>foodToBreed && timeToBreedCurrent < 0)
+
+            // Fix rotation with respect to surface.
+            if (recalculate || (wentStraightfor > 0.1 && allignIn > 0.3))
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(gObject.transform.position + 128 * gObject.transform.up, -gObject.transform.up, out hit, Mathf.Infinity, layerMask))
+                {
+                    Debug.DrawRay(gObject.transform.position + 128 * gObject.transform.up, hit.point-(gObject.transform.position + 128 * gObject.transform.up), Color.green, 1f, false);
+                    gObject.transform.up = hit.normal;
+                    gObject.transform.position = hit.point + hit.normal * gObject.transform.localScale.y / 2;
+                    gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, hit.normal);
+                }
+                recalculate = false;
+                allignIn = 0;
+                if (targetSet) wentStraightfor = 0;
+            }
+            if (populate && valid && foodCurrent > foodToBreed && timeToBreedCurrent < 0)
             {
                 timeToBreedCurrent = timeToBreedMin;
                 requestOffspring(gObject);
@@ -251,7 +253,7 @@ namespace AnimalEvolution {
             renderer.SetPropertyBlock(mpb);
         }
 
-        Collider selectTarget(Collider[] colliders)
+        private Collider selectTarget(Collider[] colliders)
         {
             Collider res = null;
             float minDistance = float.MaxValue;
@@ -284,7 +286,7 @@ namespace AnimalEvolution {
         /// </summary>
         /// <param name="colliders">Input array of colliders to check.</param>
         /// <returns>closest larger collider</returns>
-        Collider selectThreat(Collider[] colliders)
+        private Collider selectThreat(Collider[] colliders)
         {
             Collider res = null;
             float minDistance = float.MaxValue;
@@ -299,6 +301,15 @@ namespace AnimalEvolution {
                 }
             }
             return res;
+        }
+
+        private Vector3 calculateDirection(Vector3 position, Vector3 target, Vector3 normal)
+        {
+            //return target - position;
+            Plane surface = new Plane(normal, position);
+            Vector3 normalOfCrossplane = Vector3.Cross((target - position).normalized, normal);
+            Vector3 result = Vector3.Cross(normal, normalOfCrossplane);
+            return result;
         }
 
         public override string ToString()

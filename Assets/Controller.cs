@@ -25,8 +25,7 @@ namespace AnimalEvolution
         public UISpeedControls speedControlsUI;
         private GameObject currentInfoEntity;
         private float waitTime;
-        public static float speed { get { return speedField / 10f; } set { } }
-        public static int speedField = 10;
+        public static float speed = 1f;
         public static bool paused = false;
 
         RaycastHit hit;
@@ -59,7 +58,7 @@ namespace AnimalEvolution
                 mouse = Input.mousePosition;
                 ray = mainCamera.ScreenPointToRay(mouse);
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, 1 << 10))
                 {
                     if (entityCreationUI.isPlant)
                     {
@@ -81,7 +80,7 @@ namespace AnimalEvolution
                 mouse = Input.mousePosition;
                 ray = mainCamera.ScreenPointToRay(mouse);
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit, ((1 << 8) | (1 << 9))))
                 {
                     currentInfoEntity = hit.collider.gameObject;
                     UpdateEntityInfoPanel();
