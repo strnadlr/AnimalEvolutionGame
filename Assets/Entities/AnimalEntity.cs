@@ -168,6 +168,8 @@ namespace AnimalEvolution {
                 else if (wentStraightfor > 5)
                 {
                     targetposORrandDir = gObject.transform.position + 200*(new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f));
+                    targetposORrandDir.x = Mathf.Clamp(targetposORrandDir.x, 1, xBoundary-1);
+                    targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, zBoundary-1);
                     wentStraightfor = 0;
                     //recalculate = true;
                     gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
@@ -312,11 +314,39 @@ namespace AnimalEvolution {
             return result;
         }
 
+        
+
         public override string ToString()
         {
             return $"Name: {name}\nLife remaining: {(lifeCurrent / lifeMax).ToString("P")}\nFood Status:" +
                 $" {(foodCurrent / foodMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
                 $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
+        }
+
+        public void ChangeMyProperties(int property)
+        {
+            switch (property)
+            {
+                case 0:
+                    lifeCurrent = Mathf.Min(lifeCurrent + lifeMax / 10, lifeMax);
+                    break;
+                case 1:
+                    foodCurrent = Mathf.Min(foodCurrent + foodMax / 10, foodMax);
+                    break;
+                case 2:
+                    foodCurrent = Mathf.Max(foodCurrent - foodMax / 10, 0);
+                    break;
+                case 3:
+                    Destroy(gObject);
+                    Destroy(this);
+                    return;
+                case 4:
+                    timeToBreedCurrent = timeToBreedMin;
+                    requestOffspring(gObject);
+                    break;
+                default:
+                    return;
+            }
         }
     }
 

@@ -17,6 +17,8 @@ namespace AnimalEvolution
         Color color { get; set; }
 
         void SetFrom(Entity parentEntity, GameObject targetGObject);
+
+        void ChangeMyProperties(int property);
     }
     
 }

@@ -12,6 +12,9 @@ namespace AnimalEvolution
     public delegate void requestOffspringDelegate(GameObject parent);
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
     public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator);
+    public delegate void ChangeMyProperties(int property);
+
+
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
@@ -83,6 +86,7 @@ namespace AnimalEvolution
                 if (Physics.Raycast(ray, out hit, ((1 << 8) | (1 << 9))))
                 {
                     currentInfoEntity = hit.collider.gameObject;
+                    SetEntityInfoPanel();
                     UpdateEntityInfoPanel();
 
                 }
@@ -92,6 +96,29 @@ namespace AnimalEvolution
                 UpdateEntityInfoPanel();
             }
 
+        }
+
+        private void SetEntityInfoPanel()
+        {
+            if (currentInfoEntity != null)
+            {
+                Entity e = currentInfoEntity.GetComponent<Entity>();
+                if (e != null)
+                {
+                    PlantEntity comp;
+                    entityInfoUI.changeTarget = currentInfoEntity.GetComponent<Entity>().ChangeMyProperties;
+                    if (currentInfoEntity.TryGetComponent<PlantEntity>(out comp))
+                    {
+                        entityInfoUI.feedButton.interactable = false;
+                        entityInfoUI.starveButton.interactable = false;
+                    }
+                    else
+                    {
+                        entityInfoUI.feedButton.interactable = true;
+                        entityInfoUI.starveButton.interactable = true;
+                    }
+                }
+            }
         }
 
         private void UpdateEntityInfoPanel()

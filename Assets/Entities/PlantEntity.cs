@@ -105,5 +105,24 @@ namespace AnimalEvolution
                 $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
 
+        public void ChangeMyProperties(int property)
+        {
+            switch (property)
+            {
+                case 0:
+                    lifeCurrent = Mathf.Min(lifeCurrent + lifeMax / 10, lifeMax);
+                    break;
+                case 3:
+                    Destroy(gObject);
+                    Destroy(this);
+                    return;
+                case 4:
+                    timeToBreedCurrent = timeToBreedMin;
+                    requestOffspring(gObject);
+                    break;
+                default:
+                    return;
+            }
+        }
     }
 }
