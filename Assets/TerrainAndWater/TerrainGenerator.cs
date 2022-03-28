@@ -29,7 +29,7 @@ namespace AnimalEvolution
         {
             if (xsize < 0 || xsize > 250) return false;
             if (zsize < 0 || zsize > 250) return false;
-            if (yheight < 0 || yheight > 200) return false;
+            if (yheight < 0 || yheight > 150) return false;
             if (waterheight < 0 || waterheight > 100) return false;
 
             this.xsize = xsize;
@@ -64,7 +64,10 @@ namespace AnimalEvolution
         public void Regenerate()
         {
             mesh = GetComponent<MeshFilter>().mesh;
-
+            Destroy(mesh);
+            GetComponent<MeshFilter>().mesh = new Mesh();
+            mesh = GetComponent<MeshFilter>().mesh;
+            ;
             heightMap = Noise.GenerateNoiseMap(xsize, zsize, seed, scale, octaves, persistence, lacunarity, new Vector2(0, 0));
 
             for (int i = 0; i < xsize; i++)

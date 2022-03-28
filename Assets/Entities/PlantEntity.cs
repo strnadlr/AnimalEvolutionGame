@@ -8,9 +8,9 @@ namespace AnimalEvolution
     {
         public float nutritionalValue { get; set; }
         public float lifeMax { get; set; }
-        public float lifeRemaining { get; set; }
-        public float timeWithoutChildren { get; set; }
-        public float currentTimeWithoutChild { get; set; }
+        public float lifeCurrent { get; set; }
+        public float timeToBreedMin { get; set; }
+        public float timeToBreedCurrent { get; set; }
         public float size { get; set; }
         public int mutationStrength { get; set; }
         public GameObject gObject;
@@ -18,7 +18,7 @@ namespace AnimalEvolution
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
-        public static bool populate { get; set; }
+        public static bool populate;
         public bool valid;
 
         public void SetFrom(Entity parentEntity, GameObject targetGObject)
@@ -29,10 +29,10 @@ namespace AnimalEvolution
                 gObject = targetGObject;
                 name = parent.name;
                 nutritionalValue = Mathf.Max(1f, parent.nutritionalValue * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
-                timeWithoutChildren = Mathf.Max(0.5f, (parent.timeWithoutChildren * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
-                currentTimeWithoutChild = timeWithoutChildren;
+                timeToBreedMin = Mathf.Max(0.5f, (parent.timeToBreedMin * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
+                timeToBreedCurrent = timeToBreedMin;
                 lifeMax = parent.lifeMax;
-                lifeRemaining = lifeMax;
+                lifeCurrent = lifeMax;
                 size = Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
                 mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 color = new Color(
@@ -53,10 +53,10 @@ namespace AnimalEvolution
         {
             name = _name;
             nutritionalValue = _nutritionalValue;
-            timeWithoutChildren = _timeWithoutChildren;
-            currentTimeWithoutChild = timeWithoutChildren;
+            timeToBreedMin = _timeWithoutChildren;
+            timeToBreedCurrent = timeToBreedMin;
             lifeMax = _lifeMax;
-            lifeRemaining = _lifeMax;
+            lifeCurrent = _lifeMax;
             size = _size;
             mutationStrength = _mutationStrength;
             color = _color;
@@ -72,17 +72,19 @@ namespace AnimalEvolution
         // Update is called once per frame
         void Update()
         {
+            if (Controller.paused) return;
+
             Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
-            lifeRemaining -= Time.deltaTime * ((nearbyPlants.Length) + 1);
-            currentTimeWithoutChild -= Time.deltaTime;
-            if (lifeRemaining < 0)
+            lifeCurrent -= Time.deltaTime * ((nearbyPlants.Length) + 1) * Controller.speed;
+            timeToBreedCurrent -= Time.deltaTime * Controller.speed;
+            if (lifeCurrent < 0)
             {
                 Destroy(this);
                 Destroy(gObject);
             }
-            else if (populate && valid && nearbyPlants.Length < 5 && currentTimeWithoutChild < 0)
+            else if (populate && valid && nearbyPlants.Length < 5 && timeToBreedCurrent < 0)
             {
-                currentTimeWithoutChild = timeWithoutChildren;
+                timeToBreedCurrent = timeToBreedMin;
                 requestOffspring(gObject);
             }
         }
@@ -99,8 +101,8 @@ namespace AnimalEvolution
 
         public override string ToString()
         {
-            return $"Name: {name}\nLife remaining: {(lifeRemaining / lifeMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
-                $" {(currentTimeWithoutChild / timeWithoutChildren).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
+            return $"Name: {name}\nLife remaining: {(lifeCurrent / lifeMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
+                $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
 
     }

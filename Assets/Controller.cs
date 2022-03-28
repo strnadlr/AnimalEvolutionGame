@@ -22,8 +22,12 @@ namespace AnimalEvolution
         public CameraController cameraController;
         public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
+        public UISpeedControls speedControlsUI;
         private GameObject currentInfoEntity;
         private float waitTime;
+        public static float speed { get { return speedField / 10f; } set { } }
+        public static int speedField = 10;
+        public static bool paused = false;
 
         RaycastHit hit;
         Vector3 mouse;
@@ -38,6 +42,8 @@ namespace AnimalEvolution
             entityCreationUI.plantPlacer = entityScript.PlacePlantAt;
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
+            terrainAndWateUI.entityCreationSwitch = speedControlsUI.EnableEntityCreationSwitch;
+            entityCreationUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
             AnimalEntity.xBoundary = (terrainGenerator.xsize - 1) * 4;
@@ -78,42 +84,32 @@ namespace AnimalEvolution
                 if (Physics.Raycast(ray, out hit))
                 {
                     currentInfoEntity = hit.collider.gameObject;
-                    if (currentInfoEntity != null)
-                    {
-                        entityInfoUI.displayText(currentInfoEntity.ToString());
-                    }
-                    else
-                    {
-                        currentInfoEntity = hit.collider.gameObject;
-                        if (currentInfoEntity != null)
-                        {
-                            entityInfoUI.displayText(currentInfoEntity.ToString());
-                        }
-                        else
-                        {
-                            entityInfoUI.EntityInfoUIXButtonClicked();
-                        }
-                    }
+                    UpdateEntityInfoPanel();
 
                 }
             }
             if (entityInfoUI.isActiveAndEnabled && waitTime > 0.2)
             {
-                if (currentInfoEntity != null)
-                {
-                    Entity e = currentInfoEntity.GetComponent<Entity>();
-                    if (e != null)
-                    {
-                        entityInfoUI.displayText(e.ToString());
-                        waitTime = 0;
-                    }
-                }
-                else
-                {
-                    entityInfoUI.EntityInfoUIXButtonClicked();
-                }
+                UpdateEntityInfoPanel();
             }
 
+        }
+
+        private void UpdateEntityInfoPanel()
+        {
+            if (currentInfoEntity != null)
+            {
+                Entity e = currentInfoEntity.GetComponent<Entity>();
+                if (e != null)
+                {
+                    entityInfoUI.displayText(e.ToString());
+                    waitTime = 0;
+                    return;
+                }
+            }
+            
+            entityInfoUI.EntityInfoUIXButtonClicked();
+            
         }
     }
 }

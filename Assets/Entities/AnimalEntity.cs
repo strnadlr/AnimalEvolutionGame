@@ -7,15 +7,15 @@ namespace AnimalEvolution {
     {
         public float nutritionalValue { get; set; }
         public float lifeMax { get; set; }
-        public float lifeRemaining { get; set; }
-        public float timeWithoutChildren { get; set; }
-        public float currentTimeWithoutChild { get; set; }
+        public float lifeCurrent { get; set; }
+        public float timeToBreedMin { get; set; }
+        public float timeToBreedCurrent { get; set; }
         public float size { get; set; }
         public int mutationStrength { get; set; }
         public float sences { get; set; }
         public float speed { get; set; }
-        public float food { get; set; }
-        public float foodCapacity { get; set; }
+        public float foodMax { get; set; }
+        public float foodCurrent { get; set; }
         private float foodToBreed { get; set; }
         private bool isPredator { get; set; }
         private Color tastyColor;
@@ -24,7 +24,7 @@ namespace AnimalEvolution {
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
-        public static bool populate { get; set; }
+        public static bool populate;
         public bool valid;
         private Collider target;
         private bool targetSet;
@@ -53,10 +53,10 @@ namespace AnimalEvolution {
         {
             name = _name;
             nutritionalValue = _nutritionalValue;
-            timeWithoutChildren = _timeWithoutChildren;
-            currentTimeWithoutChild = timeWithoutChildren;
+            timeToBreedMin = _timeWithoutChildren;
+            timeToBreedCurrent = timeToBreedMin;
             lifeMax = _lifeMax;
-            lifeRemaining = _lifeMax;
+            lifeCurrent = _lifeMax;
             size = _size;
             mutationStrength = _mutationStrength;
             sences = _sences;
@@ -65,9 +65,9 @@ namespace AnimalEvolution {
             Renderer renderer = GetComponentInChildren<Renderer>();
             mpb.SetColor("_Color", color);
             speed = _speed;
-            foodCapacity = _foodCapacity;
+            foodMax = _foodCapacity;
             foodToBreed = _foodToBreed;
-            food = foodToBreed / 2f;
+            foodCurrent = foodToBreed / 2f;
             isPredator = _isPredator;
             tastyColor = Color.white;
             gObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
@@ -89,10 +89,10 @@ namespace AnimalEvolution {
                 gObject = targetGObject;
                 name = parent.name;
                 nutritionalValue = Mathf.Max(1f, parent.nutritionalValue * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
-                timeWithoutChildren = Mathf.Max(0.5f, (parent.timeWithoutChildren * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
-                currentTimeWithoutChild = timeWithoutChildren;
+                timeToBreedMin = Mathf.Max(0.5f, (parent.timeToBreedMin * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
+                timeToBreedCurrent = timeToBreedMin;
                 lifeMax = parent.lifeMax;
-                lifeRemaining = lifeMax;
+                lifeCurrent = lifeMax;
                 size = Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
                 mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 sences = parent.sences + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
@@ -101,9 +101,9 @@ namespace AnimalEvolution {
                     parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
                     parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
                 speed = Mathf.Max(0.1f, parent.speed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
-                foodCapacity= Mathf.Max(0.1f, parent.foodCapacity + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                foodMax= Mathf.Max(0.1f, parent.foodMax + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
                 foodToBreed = Mathf.Max(0.1f, parent.foodToBreed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
-                food = foodToBreed / 2f;
+                foodCurrent = foodToBreed / 2f;
                 isPredator = parent.isPredator;
                 tastyColor = parent.tastyColor;
                 if (mpb == null) mpb = new MaterialPropertyBlock();
@@ -118,12 +118,14 @@ namespace AnimalEvolution {
         }
         void Update()
         {
-            lifeRemaining -= Time.deltaTime;
-            currentTimeWithoutChild -= Time.deltaTime;
-            allignIn += Time.deltaTime;
-            food -= Time.deltaTime*2;
+            if (Controller.paused) return;
 
-            if (lifeRemaining < 0 || food < 0)
+            lifeCurrent -= Time.deltaTime * Controller.speed;
+            timeToBreedCurrent -= Time.deltaTime * Controller.speed;
+            allignIn += Time.deltaTime * Controller.speed;
+            foodCurrent -= Time.deltaTime* 2 * Controller.speed;
+
+            if (lifeCurrent < 0 || foodCurrent < 0)
             {
                 if (gObject != null)
                 {
@@ -190,7 +192,7 @@ namespace AnimalEvolution {
                     gObject.transform.forward = direction;
                     if (Vector3.Distance(gObject.transform.position, target.transform.position) < size*2)
                     {
-                        food = Mathf.Min(foodCapacity, food + target.GetComponent<Entity>().nutritionalValue);
+                        foodCurrent = Mathf.Min(foodMax, foodCurrent + target.GetComponent<Entity>().nutritionalValue);
                         tastyColor = tastyColor.Average(target.GetComponent<Entity>().color);
                         if (target != null)
                         {
@@ -219,20 +221,21 @@ namespace AnimalEvolution {
             }
             
             // Move forward.
-            gObject.transform.position += gObject.transform.forward * Time.deltaTime * speed;
+            gObject.transform.position += gObject.transform.forward * Time.deltaTime * speed * Controller.speed;
             wentStraightfor += Time.deltaTime;
             if (gObject.transform.position.x < 0 || gObject.transform.position.z < 0 || gObject.transform.position.x > xBoundary || gObject.transform.position.z > zBoundary)
             {
-                gObject.transform.position -= 1.5f * (gObject.transform.forward * Time.deltaTime * speed);
+                Vector3 directionToCenter = (new Vector3(xBoundary / 2, 0, zBoundary / 2) - gameObject.transform.position).normalized;
+                gObject.transform.position += (directionToCenter * Time.deltaTime * speed);
                 direction = (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
                 gObject.transform.forward = direction;
             }
 
-            if (populate && valid && food>foodToBreed && currentTimeWithoutChild < 0)
+            if (populate && valid && foodCurrent>foodToBreed && timeToBreedCurrent < 0)
             {
-                currentTimeWithoutChild = timeWithoutChildren;
+                timeToBreedCurrent = timeToBreedMin;
                 requestOffspring(gObject);
-                food -= foodToBreed / 2f;
+                foodCurrent -= foodToBreed / 2f;
             }
 
         }
@@ -300,9 +303,9 @@ namespace AnimalEvolution {
 
         public override string ToString()
         {
-            return $"Name: {name}\nLife remaining: {(lifeRemaining / lifeMax).ToString("P")}\nFood Status:" +
-                $" {(food / foodCapacity).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
-                $" {(currentTimeWithoutChild / timeWithoutChildren).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
+            return $"Name: {name}\nLife remaining: {(lifeCurrent / lifeMax).ToString("P")}\nFood Status:" +
+                $" {(foodCurrent / foodMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
+                $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
     }
 

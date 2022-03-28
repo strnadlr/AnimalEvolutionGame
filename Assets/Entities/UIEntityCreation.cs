@@ -30,6 +30,7 @@ namespace AnimalEvolution
         public RawImage BWSaturationColorRawImage;
         public plantPlacerDelegate plantPlacer;
         public BoolSwitchDelegate cameraSwitch;
+        public BoolSwitchDelegate speedControlsSwitch;
         public plantSetterDelegate plantSetterDelegate;
         public animalSetterDelegate animalSetterDelegate;
 
@@ -46,7 +47,7 @@ namespace AnimalEvolution
         private Color color;
         private float speed = 10;
         private float foodCapacity = 100;
-        private float foodToBreed = 50;
+        private float foodToBreed = 70;
         private bool isPredator = false;
         public bool placing = false;
         public bool isPlant = true;
@@ -65,6 +66,7 @@ namespace AnimalEvolution
             active = !active;
             panel.SetActive(active);
             cameraSwitch(!active);
+            speedControlsSwitch(!active);
         }
 
         public void plantButtonClicked()

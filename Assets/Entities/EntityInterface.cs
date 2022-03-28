@@ -9,9 +9,9 @@ namespace AnimalEvolution
     {
         float nutritionalValue { get; set; }
         float lifeMax { get; set; }
-        float lifeRemaining { get; set; }
-        float timeWithoutChildren { get; set; }
-        float currentTimeWithoutChild { get; set; }
+        float lifeCurrent { get; set; }
+        float timeToBreedMin { get; set; }
+        float timeToBreedCurrent { get; set; }
         float size { get; set; }
         int mutationStrength { get; set; }
         Color color { get; set; }
