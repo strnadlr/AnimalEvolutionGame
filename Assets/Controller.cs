@@ -26,6 +26,7 @@ namespace AnimalEvolution
         public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
         public UISpeedControls speedControlsUI;
+        public UIExit exitUI;
         private GameObject currentInfoEntity;
         private float waitTime;
         public static float speed = 1f;
@@ -44,8 +45,10 @@ namespace AnimalEvolution
             entityCreationUI.plantPlacer = entityScript.PlacePlantAt;
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
+            exitUI.cameraSwitch= cameraController.MovementSwitch;
             terrainAndWateUI.entityCreationSwitch = speedControlsUI.EnableEntityCreationSwitch;
             entityCreationUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
+            exitUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
             AnimalEntity.xBoundary = (terrainGenerator.xsize - 1) * 4;
@@ -95,6 +98,11 @@ namespace AnimalEvolution
             {
                 UpdateEntityInfoPanel();
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                exitUI.ResumeButtonClicked();
+            }
         }
 
         /// <summary>
@@ -143,5 +151,6 @@ namespace AnimalEvolution
             entityInfoUI.EntityInfoUIXButtonClicked();
             
         }
+
     }
 }
