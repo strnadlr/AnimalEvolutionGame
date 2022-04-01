@@ -9,8 +9,8 @@ namespace AnimalEvolution
     {
         public Button plantButton;
         public Button animalButton;
-        public Button predatorButton;
-        public Button preyButton;
+        public Button carnivoreButton;
+        public Button herbivoreButton;
         public Text nutriValueText;
         public Text timeBeOfText;
         public Text lifeMaxText;
@@ -48,7 +48,7 @@ namespace AnimalEvolution
         private float speed = 10;
         private float foodCapacity = 100;
         private float foodToBreed = 70;
-        private bool isPredator = false;
+        private bool isCarnivore = false;
         public bool placing = false;
         public bool isPlant = true;
 
@@ -78,8 +78,8 @@ namespace AnimalEvolution
             speedSlider.interactable = false;
             foodCapacitySlider.interactable = false;
             foodToBreedSlider.interactable = false;
-            predatorButton.interactable = false;
-            preyButton.interactable = false;
+            carnivoreButton.interactable = false;
+            herbivoreButton.interactable = false;
         }
 
         public void animalButtonClicked()
@@ -91,8 +91,8 @@ namespace AnimalEvolution
             speedSlider.interactable = true;
             foodCapacitySlider.interactable = true;
             foodToBreedSlider.interactable = true;
-            predatorButton.interactable = true;
-            preyButton.interactable = true;
+            carnivoreButton.interactable = true;
+            herbivoreButton.interactable = true;
         }
 
         public void NameFieldChanged(string newname)
@@ -180,18 +180,18 @@ namespace AnimalEvolution
             foodToBreedText.text = foodToBreed.ToString();
         }
 
-        public void predatorButtonClicked()
+        public void CarnivoreButtonClicked()
         {
-            isPredator = true;
-            predatorButton.GetComponent<Image>().color = Color.green;
-            preyButton.GetComponent<Image>().color = Color.red;
+            isCarnivore = true;
+            carnivoreButton.GetComponent<Image>().color = Color.green;
+            herbivoreButton.GetComponent<Image>().color = Color.red;
         }
 
-        public void preyButtonClicked()
+        public void HerbivoreButtonClicked()
         {
-            isPredator = false;
-            preyButton.GetComponent<Image>().color = Color.green;
-            predatorButton.GetComponent<Image>().color = Color.red;
+            isCarnivore = false;
+            herbivoreButton.GetComponent<Image>().color = Color.green;
+            carnivoreButton.GetComponent<Image>().color = Color.red;
         }
 
         public void CreateAncestorButtonClicked()
@@ -209,15 +209,11 @@ namespace AnimalEvolution
             }
             else
             {
-                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, senses, color, speed, foodCapacity,foodToBreed, isPredator);
+                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, senses, color, speed, foodCapacity,foodToBreed, isCarnivore);
             }
             
         }
 
-        private void Update()
-        {
-        
-        }
 
     }
 }

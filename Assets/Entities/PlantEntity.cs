@@ -105,6 +105,10 @@ namespace AnimalEvolution
                 $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
 
+        /// <summary>
+        /// Edit properties by 10% or complete an action.
+        /// </summary>
+        /// <param name="property"> 0 add life, 1-2 left for consistency, inaplicable, 3 kil, 4 make offspring</param>
         public void ChangeMyProperties(int property)
         {
             switch (property)

@@ -95,9 +95,12 @@ namespace AnimalEvolution
             {
                 UpdateEntityInfoPanel();
             }
-
         }
 
+        /// <summary>
+        /// if currentInfoEntity has an Entity attached to it, propagets the entity's ChangeMyProperties and
+        /// if it's a plant, deactivated the predator-specific buttons.
+        /// </summary>
         private void SetEntityInfoPanel()
         {
             if (currentInfoEntity != null)
@@ -121,6 +124,9 @@ namespace AnimalEvolution
             }
         }
 
+        /// <summary>
+        /// Requests a new string from the entity, if it hasn't been destroyed yet.
+        /// </summary>
         private void UpdateEntityInfoPanel()
         {
             if (currentInfoEntity != null)

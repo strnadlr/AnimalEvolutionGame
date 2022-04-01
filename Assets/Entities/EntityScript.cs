@@ -64,21 +64,10 @@ namespace AnimalEvolution
             return nAE;
         }
 
-        /*
-        public void PlacePlantAt(Vector3 where, string name, float nutritionalValue, int ticksWithoutChild, int childrenToLive, float size , int mutationStrength, Color color)
-        {
-            System.Random r = new System.Random();
-            GameObject newPlant = Instantiate(plantPrototype);
-            PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
-
-            nPE.Set(name, nutritionalValue, ticksWithoutChild, childrenToLive, size, mutationStrength, color);
-            nPE.gObject = newPlant;
-
-            newPlant.transform.position = where;
-            newPlant.GetComponent<Renderer>().enabled = true;
-            plants.Add(newPlant);
-        }*/
-
+        /// <summary>
+        /// Create an Entity nearby of parent set from parent.
+        /// </summary>
+        /// <param name="parent">parent Entity</param>
         public static void MakeOffspring(GameObject parent)
         {
             GameObject newEntity = Instantiate(parent);
