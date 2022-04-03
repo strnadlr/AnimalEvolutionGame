@@ -38,7 +38,7 @@ namespace AnimalEvolution
         private int nutriValue = 50;
         private float timeBeOf = 3;
         private float lifeMax = 60;
-        private int size = 10;
+        private float size = 1f;
         private int mutationStr = 25;
         private float senses = 50;
         public float hue = 138 / 360;
@@ -48,7 +48,7 @@ namespace AnimalEvolution
         private float speed = 10;
         private float foodCapacity = 100;
         private float foodToBreed = 70;
-        private bool isCarnivore = false;
+        public bool isCarnivore = false;
         public bool placing = false;
         public bool isPlant = true;
 
@@ -108,7 +108,7 @@ namespace AnimalEvolution
 
         public void TimeBeOfSliderChanged(float newtimeBeOf)
         {
-            timeBeOf = newtimeBeOf/10;
+            timeBeOf = newtimeBeOf/2;
             timeBeOfText.text = timeBeOf.ToString("F");
         }
 
@@ -120,8 +120,8 @@ namespace AnimalEvolution
 
         public void SizeSliderChanged(float newsize)
         {
-            size = (int)newsize;
-            sizeText.text = size.ToString();
+            size = newsize/4;
+            sizeText.text = size.ToString("F");
         }
 
         public void MutationStrSliderChanged(float newmutationStr)
@@ -205,11 +205,11 @@ namespace AnimalEvolution
         {
             if (isPlant)
             {
-                plantSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, color);
+                plantSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size, mutationStr, color);
             }
             else
             {
-                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size / 10, mutationStr, senses, color, speed, foodCapacity,foodToBreed, isCarnivore);
+                animalSetterDelegate(newName, nutriValue, timeBeOf, lifeMax, size, mutationStr, senses, color, speed, foodCapacity,foodToBreed, isCarnivore);
             }
             
         }

@@ -74,7 +74,7 @@ namespace AnimalEvolution
                     }
                     else
                     {
-                        AnimalEntity newAnimal = entityScript.PlaceAnimalAt(hit.point, hit.normal);
+                        AnimalEntity newAnimal = entityScript.PlaceAnimalAt(hit.point, hit.normal, entityCreationUI.isCarnivore);
                         entityCreationUI.animalSetterDelegate = newAnimal.Set;
                         entityCreationUI.propagateEntityInfo();
                     }

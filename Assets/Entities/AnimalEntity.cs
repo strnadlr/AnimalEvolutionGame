@@ -97,7 +97,7 @@ namespace AnimalEvolution {
                 timeToBreedCurrent = timeToBreedMin;
                 lifeMax = parent.lifeMax;
                 lifeCurrent = lifeMax;
-                size = Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
+                size = Mathf.Min(Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f),10);
                 mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 senses = parent.senses + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 color = new Color(
@@ -122,15 +122,16 @@ namespace AnimalEvolution {
         }
         void Update()
         {
+            float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
-            lifeCurrent -= Time.deltaTime * Controller.speed;
-            timeToBreedCurrent -= Time.deltaTime * Controller.speed;
-            allignIn += Time.deltaTime * Controller.speed;
-            timeToHungry-= Time.deltaTime * Controller.speed;
+            lifeCurrent -= timePassed * Controller.speed;
+            timeToBreedCurrent -= timePassed * Controller.speed;
+            allignIn += timePassed * Controller.speed;
+            timeToHungry-= timePassed * Controller.speed;
             if (timeToHungry < 0)
             {
-                foodCurrent -= Time.deltaTime * 2 * Controller.speed;
+                foodCurrent -= timePassed * 2 * Controller.speed;
             }
 
             if (lifeCurrent < 0 || foodCurrent < 0)
@@ -213,12 +214,12 @@ namespace AnimalEvolution {
             if (foodCurrent < 0.8 * foodMax)
             {
                 // Move forward.
-                gObject.transform.position += gObject.transform.forward * Time.deltaTime * speed * Controller.speed;
-                wentStraightfor += Time.deltaTime * Controller.speed;
+                gObject.transform.position += gObject.transform.forward * timePassed * speed * Controller.speed;
+                wentStraightfor += timePassed * Controller.speed;
                 if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
                 {
                     Vector3 directionToCenter = (new Vector3(xBoundary / 2, 0, zBoundary / 2) - gameObject.transform.position).normalized;
-                    gObject.transform.position += (directionToCenter * Time.deltaTime * speed);
+                    gObject.transform.position += (directionToCenter * timePassed * speed);
                     targetposORrandDir = gObject.transform.position + 5 * (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
                     recalculate = true;
                     if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
@@ -349,8 +350,8 @@ namespace AnimalEvolution {
                 result.Append("Herbivore:\n");
             }
 
-            result.Append($"Name: {name}\nLife remaining: {(lifeCurrent / lifeMax).ToString("P")}\nFood Status:");
-            result.Append($" {(foodCurrent / foodMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:");
+            result.Append($"Name: {name}\nLife remaining: {lifeCurrent.ToString("N1")} / {lifeMax.ToString("N1")}\nFood Status:");
+            result.Append($" {foodCurrent.ToString("N1")} / { foodMax.ToString("N1")}\nNutritional Value: {nutritionalValue}\nTime between children:");
 
             if (timeToBreedCurrent < 0)
             {
@@ -358,7 +359,7 @@ namespace AnimalEvolution {
             }
             else
             {
-                result.Append((timeToBreedCurrent / timeToBreedMin).ToString("P"));
+                result.Append($"{ timeToBreedCurrent.ToString("N1")} / { timeToBreedMin.ToString("N1")}");
             }
             
             result.Append($"\nSize: {size}\nMutation Strength: {mutationStrength}");

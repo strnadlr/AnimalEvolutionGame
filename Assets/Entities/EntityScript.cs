@@ -8,7 +8,8 @@ namespace AnimalEvolution
     {
 
         public GameObject plantPrototype;
-        public GameObject animalPrototype;
+        public GameObject animalHerbivorePrototype;
+        public GameObject animalCarnivorePrototype;
         static List<GameObject> entities;
         public static MeshCollider ground;
         static Vector3 down = new Vector3(0, -1, 0);
@@ -25,11 +26,18 @@ namespace AnimalEvolution
             pE.valid = false;
             PlantEntity.requestOffspring = MakeOffspring;
 
-            entities.Add(animalPrototype);
-            AnimalEntity aE = animalPrototype.GetComponent<AnimalEntity>();
+            entities.Add(animalHerbivorePrototype);
+            AnimalEntity aE = animalHerbivorePrototype.GetComponent<AnimalEntity>();
             aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
-            aE.gObject = animalPrototype;
+            aE.gObject = animalHerbivorePrototype;
             aE.valid = false;
+            AnimalEntity.requestOffspring = MakeOffspring;
+
+            entities.Add(animalCarnivorePrototype);
+            AnimalEntity aEC = animalCarnivorePrototype.GetComponent<AnimalEntity>();
+            aEC.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, true);
+            aEC.gObject = animalCarnivorePrototype;
+            aEC.valid = false;
             AnimalEntity.requestOffspring = MakeOffspring;
         }
 
@@ -51,9 +59,18 @@ namespace AnimalEvolution
             return nPE;
         }
 
-        public AnimalEntity PlaceAnimalAt(Vector3 where, Vector3 orientation)
+        public AnimalEntity PlaceAnimalAt(Vector3 where, Vector3 orientation, bool isCarnivore)
         {
-            GameObject newAnimal = Instantiate(animalPrototype);
+            GameObject newAnimal;
+            if (isCarnivore)
+            {
+                newAnimal = Instantiate(animalCarnivorePrototype);
+            }
+            else
+            {
+                newAnimal = Instantiate(animalHerbivorePrototype);
+            }
+             
             AnimalEntity nAE = newAnimal.GetComponent<AnimalEntity>();
 
             newAnimal.transform.position = where;

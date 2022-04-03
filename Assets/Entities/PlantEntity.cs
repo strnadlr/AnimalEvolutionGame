@@ -33,7 +33,7 @@ namespace AnimalEvolution
                 timeToBreedCurrent = timeToBreedMin;
                 lifeMax = parent.lifeMax;
                 lifeCurrent = lifeMax;
-                size = Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100);
+                size = Mathf.Min(Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100), 10);
                 mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 color = new Color(
                     parent.color.r + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100,
@@ -72,11 +72,12 @@ namespace AnimalEvolution
         // Update is called once per frame
         void Update()
         {
+            float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
             Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
-            lifeCurrent -= Time.deltaTime * ((nearbyPlants.Length) + 1) * Controller.speed;
-            timeToBreedCurrent -= Time.deltaTime * Controller.speed;
+            lifeCurrent -= timePassed * (nearbyPlants.Length) * Controller.speed;
+            timeToBreedCurrent -= timePassed * Controller.speed;
             if (lifeCurrent < 0)
             {
                 Destroy(this);
@@ -101,8 +102,8 @@ namespace AnimalEvolution
 
         public override string ToString()
         {
-            return $"Name: {name}\nLife remaining: {(lifeCurrent / lifeMax).ToString("P")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
-                $" {(timeToBreedCurrent / timeToBreedMin).ToString("P")}\nSize: {size}\nMutation Strength: {mutationStrength}";
+            return $"Name: {name}\nLife remaining: {lifeCurrent.ToString("N1")} / {lifeMax.ToString("N1")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
+                $" {timeToBreedCurrent.ToString("N1")} / {timeToBreedMin.ToString("N1")}\nSize: {size}\nMutation Strength: {mutationStrength}";
         }
 
         /// <summary>

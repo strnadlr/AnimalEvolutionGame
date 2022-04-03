@@ -12,6 +12,7 @@ namespace AnimalEvolution
         public Text heightText;
         public Text waterText;
         public Text seedText;
+        public InputField seedField;
         public setupTerrainDelegate setupTerrainDelegate;
         public terrainRegenerateDelegate terrainRegenerate;
         public GameObject panel;
@@ -95,6 +96,12 @@ namespace AnimalEvolution
             {
                 seedset = false;
             }
+        }
+
+        public void CopySeedButtonClicked()
+        {
+            seedset = true;
+            seedField.text = seed.ToString();
         }
     }
 }
