@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -102,6 +103,15 @@ namespace AnimalEvolution
         {
             seedset = true;
             seedField.text = seed.ToString();
+        }
+
+        internal bool EnableSwitch(bool target)
+        {
+
+            bool prev = panel.active;
+                panel.SetActive(target);
+                return prev;
+            
         }
     }
 }

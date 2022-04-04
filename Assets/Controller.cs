@@ -8,7 +8,7 @@ namespace AnimalEvolution
     public delegate bool setupTerrainDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
     public delegate void terrainRegenerateDelegate();
     public delegate PlantEntity plantPlacerDelegate(Vector3 where);
-    public delegate void BoolSwitchDelegate(bool target);
+    public delegate bool BoolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
     public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator);
@@ -27,6 +27,7 @@ namespace AnimalEvolution
         public UIEntityInfo entityInfoUI;
         public UISpeedControls speedControlsUI;
         public UIExit exitUI;
+        public UIGuideText guideTextUI;
         private GameObject currentInfoEntity;
         private float waitTime;
         public static float speed = 1f;
@@ -45,10 +46,15 @@ namespace AnimalEvolution
             entityCreationUI.plantPlacer = entityScript.PlacePlantAt;
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
+            guideTextUI.cameraSwitch = cameraController.MovementSwitch;
             exitUI.cameraSwitch= cameraController.MovementSwitch;
             terrainAndWateUI.entityCreationSwitch = speedControlsUI.EnableEntityCreationSwitch;
             entityCreationUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
             exitUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
+            guideTextUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
+            guideTextUI.entityCreationSwitch = entityCreationUI.EnableSwitch;
+            guideTextUI.entityInfoSwitch = entityInfoUI.EnableSwitch;
+            guideTextUI.terrainCreationSwitch = terrainAndWateUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
             AnimalEntity.xBoundary = (terrainGenerator.xsize - 1) * 4;

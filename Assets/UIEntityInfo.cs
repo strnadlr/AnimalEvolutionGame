@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,20 +7,23 @@ namespace AnimalEvolution
 {
     public class UIEntityInfo : MonoBehaviour
     {
-        public GameObject panel;
         public Text entityInfoText;
         public Button feedButton;
         public Button starveButton;
         public ChangeMyProperties changeTarget;
+
+        public GameObject panel;
+        private bool active=false;
         public void EntityInfoUIXButtonClicked()
         {
-            panel.SetActive(false);
+            panel.SetActive(active);
         }
 
         public void displayText(string text)
         {
             entityInfoText.text = text;
-            panel.SetActive(true);
+            active = true;
+            panel.SetActive(active);
         }
 
         public void RejuvinateButtonClicked()
@@ -40,7 +44,8 @@ namespace AnimalEvolution
         public void KillButtonClicked()
         {
             changeTarget(3);
-            panel.SetActive(false);
+            active = false;
+            panel.SetActive(active);
         }
 
         public void BreedButtonClicked()
@@ -48,5 +53,12 @@ namespace AnimalEvolution
             changeTarget(4);
         }
 
+        internal bool EnableSwitch(bool target)
+        {
+            bool prev = active;
+            active = target;
+            panel.SetActive(active);
+            return prev;
+        }
     }
 }

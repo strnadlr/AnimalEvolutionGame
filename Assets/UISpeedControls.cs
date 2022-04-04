@@ -14,7 +14,7 @@ namespace AnimalEvolution
         public Button entityCreationButton;
 
         public GameObject panel;
-        private bool active;
+        private bool active = true;
         private bool entityCreationActive;
 
         private void Start()
@@ -22,16 +22,20 @@ namespace AnimalEvolution
             entityCreationButton.interactable = entityCreationActive;
         }
 
-        public void EnableSwitch(bool target)
+        public bool EnableSwitch(bool target)
         {
+            bool prev = active;
             active = target;
             panel.SetActive(active);
+            return prev;
         }
 
-        public void EnableEntityCreationSwitch(bool target)
+        public bool EnableEntityCreationSwitch(bool target)
         {
+            bool prev = entityCreationActive;
             entityCreationActive = target;
             entityCreationButton.interactable = entityCreationActive;
+            return prev;
         }
 
         public void SpeedSliderChanged(float speedSliderValue)

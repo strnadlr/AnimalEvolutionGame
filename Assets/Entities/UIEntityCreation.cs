@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -80,6 +81,14 @@ namespace AnimalEvolution
             foodToBreedSlider.interactable = false;
             carnivoreButton.interactable = false;
             herbivoreButton.interactable = false;
+        }
+
+        internal bool EnableSwitch(bool target)
+        {
+            bool prev = active;
+            active = target;
+            panel.SetActive(active);
+            return prev;
         }
 
         public void animalButtonClicked()

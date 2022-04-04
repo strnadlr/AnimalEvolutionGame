@@ -13,9 +13,11 @@ namespace AnimalEvolution
         Quaternion baseRotation = Quaternion.Euler(60, 0, 0);
         private bool movement = false;
 
-        public void MovementSwitch(bool target)
+        public bool MovementSwitch(bool target)
         {
+            bool prev = movement;
             movement = target;
+            return prev;
         }
 
         // Update is called once per frame

@@ -8,6 +8,7 @@ namespace AnimalEvolution
         public BoolSwitchDelegate cameraSwitch;
         public BoolSwitchDelegate speedControlsSwitch;
         public GameObject panel;
+        private bool pausedBefore;
         private bool active = false;
 
         // Start is called before the first frame update
@@ -22,7 +23,15 @@ namespace AnimalEvolution
             panel.SetActive(active);
             cameraSwitch(!active);
             speedControlsSwitch(!active);
-            Controller.paused = active;
+            if (active)
+            {
+                pausedBefore = Controller.paused;
+                Controller.paused = active;
+            }
+            else
+            {
+                Controller.paused = pausedBefore;
+            }
         }
 
         public void QuitButtonClicked()
