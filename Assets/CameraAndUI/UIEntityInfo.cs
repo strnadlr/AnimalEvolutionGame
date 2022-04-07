@@ -16,6 +16,7 @@ namespace AnimalEvolution
         private bool active=false;
         public void EntityInfoUIXButtonClicked()
         {
+            active = !active;
             panel.SetActive(active);
         }
 
