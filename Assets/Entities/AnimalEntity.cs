@@ -34,8 +34,6 @@ namespace AnimalEvolution {
         private float allignIn;
         private float timeToHungry;
         private Vector3 targetposORrandDir;
-        public static float xBoundary;
-        public static float zBoundary;
         private int layerMask = ~((1 << 8) | (1 << 9));
 
         /// <summary>
@@ -117,6 +115,7 @@ namespace AnimalEvolution {
                 renderer.SetPropertyBlock(mpb);
                 valid = true;
                 gObject.SetActive(true);
+                gObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
                 targetSet = false;
             }
         }
@@ -125,8 +124,12 @@ namespace AnimalEvolution {
             float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
-            lifeCurrent -= timePassed * Controller.speed;
-            timeToBreedCurrent -= timePassed * Controller.speed;
+            lifeCurrent -= timePassed * Controller.speed; 
+
+            if (populate)
+            {
+                timeToBreedCurrent -= timePassed * Controller.speed;
+            }
             allignIn += timePassed * Controller.speed;
             timeToHungry-= timePassed * Controller.speed;
             if (timeToHungry < 0)
@@ -175,8 +178,8 @@ namespace AnimalEvolution {
                 else if (wentStraightfor > 5)
                 {
                     targetposORrandDir = gObject.transform.position + 200*(new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f));
-                    targetposORrandDir.x = Mathf.Clamp(targetposORrandDir.x, 1, xBoundary-1);
-                    targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, zBoundary-1);
+                    targetposORrandDir.x = Mathf.Clamp(targetposORrandDir.x, 1, Controller.xBoundary -1);
+                    targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, Controller.zBoundary -1);
                     wentStraightfor = 0;
                     //recalculate = true;
                     gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
@@ -216,13 +219,13 @@ namespace AnimalEvolution {
                 // Move forward.
                 gObject.transform.position += gObject.transform.forward * timePassed * speed * Controller.speed;
                 wentStraightfor += timePassed * Controller.speed;
-                if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
+                if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= Controller.xBoundary || gObject.transform.position.z >= Controller.zBoundary)
                 {
-                    Vector3 directionToCenter = (new Vector3(xBoundary / 2, 0, zBoundary / 2) - gameObject.transform.position).normalized;
+                    Vector3 directionToCenter = (new Vector3(Controller.xBoundary / 2, 0, Controller.zBoundary / 2) - gameObject.transform.position).normalized;
                     gObject.transform.position += (directionToCenter * timePassed * speed);
                     targetposORrandDir = gObject.transform.position + 5 * (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
                     recalculate = true;
-                    if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= xBoundary || gObject.transform.position.z >= zBoundary)
+                    if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= Controller.xBoundary || gObject.transform.position.z >= Controller.zBoundary)
                     {
                         Destroy(gObject);
                         Destroy(this);
@@ -246,7 +249,7 @@ namespace AnimalEvolution {
                 allignIn = 0;
                 if (targetSet) wentStraightfor = 0;
             }
-            if (populate && valid && foodCurrent > foodToBreed && timeToBreedCurrent < 0)
+            if (valid && foodCurrent > foodToBreed && timeToBreedCurrent < 0)
             {
                 timeToBreedCurrent = timeToBreedMin;
                 requestOffspring(gObject);
@@ -353,7 +356,11 @@ namespace AnimalEvolution {
             result.Append($"Name: {name}\nLife remaining: {lifeCurrent.ToString("N1")} / {lifeMax.ToString("N1")}\nFood Status:");
             result.Append($" {foodCurrent.ToString("N1")} / { foodMax.ToString("N1")}\nNutritional Value: {nutritionalValue}\nTime between children:");
 
-            if (timeToBreedCurrent < 0)
+            if (!populate)
+            {
+                result.Append(" NOT BREEDING (press X)");
+            }
+            else if (timeToBreedCurrent < 0)
             {
                 result.Append(" HUNGRY");
             }

@@ -32,6 +32,8 @@ namespace AnimalEvolution
         private float waitTime;
         public static float speed = 1f;
         public static bool paused = false;
+        public static float xBoundary;
+        public static float zBoundary;
 
         RaycastHit hit;
         Vector3 mouse;
@@ -57,8 +59,8 @@ namespace AnimalEvolution
             guideTextUI.terrainCreationSwitch = terrainAndWateUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
-            AnimalEntity.xBoundary = (terrainGenerator.xsize - 1) * 4;
-            AnimalEntity.zBoundary = (terrainGenerator.zsize - 1) * 4;
+            xBoundary = (terrainGenerator.xsize - 1) * 4;
+            zBoundary = (terrainGenerator.zsize - 1) * 4;
         }
 
         // Update is called once per frame
@@ -94,7 +96,13 @@ namespace AnimalEvolution
 
                 if (Physics.Raycast(ray, out hit, ((1 << 8) | (1 << 9))))
                 {
+                    if (currentInfoEntity != null)
+                    {
+                        currentInfoEntity.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                    }
+
                     currentInfoEntity = hit.collider.gameObject;
+                    currentInfoEntity.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
                     SetEntityInfoPanel();
                     UpdateEntityInfoPanel();
 

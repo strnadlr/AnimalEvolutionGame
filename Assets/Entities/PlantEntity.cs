@@ -20,6 +20,7 @@ namespace AnimalEvolution
         public static requestOffspringDelegate requestOffspring;
         public static bool populate;
         public bool valid;
+        private Collider[] nearbyPlants;
 
         public void SetFrom(Entity parentEntity, GameObject targetGObject)
         {
@@ -46,6 +47,7 @@ namespace AnimalEvolution
                 renderer.SetPropertyBlock(mpb);
                 valid = true;
                 gObject.SetActive(true);
+                gObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
             }
         }
 
@@ -75,15 +77,18 @@ namespace AnimalEvolution
             float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
-            Collider[] nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
+            nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
             lifeCurrent -= timePassed * (nearbyPlants.Length) * Controller.speed;
-            timeToBreedCurrent -= timePassed * Controller.speed;
+            if (populate)
+            {
+                timeToBreedCurrent -= timePassed * Controller.speed;
+            }
             if (lifeCurrent < 0)
             {
                 Destroy(this);
                 Destroy(gObject);
             }
-            else if (populate && valid && nearbyPlants.Length < 5 && timeToBreedCurrent < 0)
+            else if (timeToBreedCurrent <= 0 && nearbyPlants.Length < 5 && valid)
             {
                 timeToBreedCurrent = timeToBreedMin;
                 requestOffspring(gObject);
@@ -102,8 +107,21 @@ namespace AnimalEvolution
 
         public override string ToString()
         {
-            return $"Name: {name}\nLife remaining: {lifeCurrent.ToString("N1")} / {lifeMax.ToString("N1")}\nNutritional Value: {nutritionalValue}\nTime between children:" +
-                $" {timeToBreedCurrent.ToString("N1")} / {timeToBreedMin.ToString("N1")}\nSize: {size}\nMutation Strength: {mutationStrength}";
+            System.Text.StringBuilder result = new System.Text.StringBuilder();
+            result.Append($"Name: {name}\nLife remaining: {lifeCurrent.ToString("N1")} / {lifeMax.ToString("N1")}\nNutritional Value: {nutritionalValue}\nTime between children:");
+            if (!populate)
+            {
+                result.Append(" NOT BREEDING (press X)");
+            }
+            else if (nearbyPlants.Length >= 5)
+            {
+                result.Append(" TOO MANY PLANTS NEARBY");
+            }
+            else{
+                result.Append($"{ timeToBreedCurrent.ToString("N1")} / { timeToBreedMin.ToString("N1")}");
+            }
+            result.Append( $"\nSize: {size}\nMutation Strength: {mutationStrength}");
+            return result.ToString();
         }
 
         /// <summary>

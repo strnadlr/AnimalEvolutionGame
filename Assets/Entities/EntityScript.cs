@@ -91,12 +91,12 @@ namespace AnimalEvolution
             Entity pE = parent.GetComponent<Entity>();
             Entity nE = newEntity.GetComponent<Entity>();
             nE.SetFrom(pE, newEntity);
-
-            newEntity.transform.position = new Vector3(parent.transform.position.x + r.Next(-(int)pE.size*50, (int)pE.size * 50), 300, parent.transform.position.z + r.Next(-(int)pE.size * 50, (int)pE.size * 50));
-
-
+            float newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+            float newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+            newEntity.transform.position = new Vector3(newx, 300, newz);
             Ray ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
             RaycastHit hit;
+            bool placed = false;
             for (int i = 0; i < 20; i++)
             {
                 if (Physics.Raycast(ray, out hit))
@@ -107,32 +107,42 @@ namespace AnimalEvolution
                         newEntity.transform.up = hit.normal;
                         newEntity.transform.position += hit.normal * newEntity.transform.localScale.y / 2;
                     }
-                    if (hit.collider.gameObject.tag=="Ground")
+                    if (hit.collider.gameObject.tag == "Ground")
                     {
                         newEntity.GetComponent<Renderer>().enabled = true;
                         entities.Add(newEntity);
+                        placed = true;
                         break;
                     }
                     else
                     {
-                        Destroy(newEntity);
-                        Destroy((Object)nE);
+                        newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                        newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                        newEntity.transform.position = new Vector3(newx, 300, newz);
+                        ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
                     }
                 }
                 else
                 {
+                    newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                    newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                    newEntity.transform.position = new Vector3(newx, 300, newz);
+                    ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
+                }
+                if (!placed)
+                {
                     Destroy(newEntity);
                     Destroy((Object)nE);
                 }
-            }
 
+            }
         }
 
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKey("x"))
+            if (Input.GetKeyDown("x"))
             {
                 PlantEntity.populate = !PlantEntity.populate;
                 AnimalEntity.populate = !AnimalEntity.populate;

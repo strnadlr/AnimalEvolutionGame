@@ -12,6 +12,8 @@ namespace AnimalEvolution
         Vector3 basePosition = new Vector3(200, 400, -20);
         Quaternion baseRotation = Quaternion.Euler(60, 0, 0);
         private bool movement = false;
+        private Vector3 lastMousePosRot;
+
 
         public bool MovementSwitch(bool target)
         {
@@ -54,6 +56,17 @@ namespace AnimalEvolution
                     {
                         position -= transform.right * panSpeed * Time.deltaTime;
                     }
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        lastMousePosRot = Input.mousePosition;
+                    }
+                    if (Input.GetMouseButton(1))
+                    {
+                        int rot = 1;
+                        if ((Input.mousePosition - lastMousePosRot).x>0)rot = -1;
+                        rotation.y += rot* Vector3.Distance(Input.mousePosition, lastMousePosRot) * panSpeed * Time.deltaTime * 0.05f;
+                        lastMousePosRot = Input.mousePosition;
+                    }
                     if (Input.GetKey("q"))
                     {
                         rotation.y += panSpeed * 0.5f * Time.deltaTime;
@@ -61,6 +74,10 @@ namespace AnimalEvolution
                     if (Input.GetKey("e"))
                     {
                         rotation.y -= panSpeed * 0.5f * Time.deltaTime;
+                    }
+                    if (Input.mouseScrollDelta.y != 0)
+                    {
+                        position += transform.forward * panSpeed * Time.deltaTime * Input.mouseScrollDelta.y * 8;
                     }
                     if (Input.GetKey("r"))
                     {
@@ -77,5 +94,7 @@ namespace AnimalEvolution
 
             }
         }
+
+
     }
 }
