@@ -77,8 +77,8 @@ namespace AnimalEvolution
                     heightMap[i, j] *= yheight;
                 }
             }
-            mesh.vertices = prepareVertices(xsize, heightMap, zsize);
-            mesh.triangles = prepareTriangles(xsize, zsize);
+            mesh.vertices = PrepareVertices(xsize, heightMap, zsize);
+            mesh.triangles = PrepareTriangles(xsize, zsize);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
             mesh.RecalculateTangents();
@@ -97,7 +97,7 @@ namespace AnimalEvolution
             
         }
 
-        Vector3[] prepareVertices(int xSize, float[,] heightMap, int zSize)
+        Vector3[] PrepareVertices(int xSize, float[,] heightMap, int zSize)
         {
             Vector3[] result = new Vector3[(xSize * zSize) + 2 * (xSize + zSize)];
             int currentVertice = 0;
@@ -129,7 +129,7 @@ namespace AnimalEvolution
             return result;
         }
 
-        int[] prepareTriangles(int xSize, int zSize)
+        int[] PrepareTriangles(int xSize, int zSize)
         {
             int planetriangles = 6 * (xSize - 1) * (zSize - 1);
             int sidestriangles = 24 * (xSize + zSize - 2);

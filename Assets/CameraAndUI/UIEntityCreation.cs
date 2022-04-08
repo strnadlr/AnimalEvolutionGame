@@ -30,8 +30,8 @@ namespace AnimalEvolution
         public RawImage valueColorRawImage;
         public RawImage BWSaturationColorRawImage;
         public plantPlacerDelegate plantPlacer;
-        public BoolSwitchDelegate cameraSwitch;
-        public BoolSwitchDelegate speedControlsSwitch;
+        public boolSwitchDelegate cameraSwitch;
+        public boolSwitchDelegate speedControlsSwitch;
         public plantSetterDelegate plantSetterDelegate;
         public animalSetterDelegate animalSetterDelegate;
 
@@ -70,7 +70,7 @@ namespace AnimalEvolution
             speedControlsSwitch(!active);
         }
 
-        public void plantButtonClicked()
+        public void PlantButtonClicked()
         {
             isPlant = true;
             plantButton.GetComponent<Image>().color = Color.green;
@@ -91,7 +91,7 @@ namespace AnimalEvolution
             return prev;
         }
 
-        public void animalButtonClicked()
+        public void AnimalButtonClicked()
         {
             isPlant = false;
             animalButton.GetComponent<Image>().color = Color.green;
@@ -210,7 +210,7 @@ namespace AnimalEvolution
             EntityUIButtonClicked();
         }
 
-        public void propagateEntityInfo()
+        public void PropagateEntityInfo()
         {
             if (isPlant)
             {

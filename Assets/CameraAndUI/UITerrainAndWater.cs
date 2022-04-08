@@ -14,11 +14,11 @@ namespace AnimalEvolution
         public Text waterText;
         public Text seedText;
         public InputField seedField;
-        public setupTerrainDelegate setupTerrainDelegate;
+        public terrainSetupDelegate setupTerrainDelegate;
         public terrainRegenerateDelegate terrainRegenerate;
         public GameObject panel;
-        public BoolSwitchDelegate cameraSwitch;
-        public BoolSwitchDelegate entityCreationSwitch;
+        public boolSwitchDelegate cameraSwitch;
+        public boolSwitchDelegate entityCreationSwitch;
 
         public int width = 100;
         public int length = 100;

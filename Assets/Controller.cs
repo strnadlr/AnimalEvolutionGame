@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 namespace AnimalEvolution
 {
-    public delegate bool setupTerrainDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
+    public delegate bool terrainSetupDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
     public delegate void terrainRegenerateDelegate();
     public delegate PlantEntity plantPlacerDelegate(Vector3 where);
-    public delegate bool BoolSwitchDelegate(bool target);
+    public delegate bool boolSwitchDelegate(bool target);
     public delegate void requestOffspringDelegate(GameObject parent);
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
     public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator);
-    public delegate void ChangeMyProperties(int property);
+    public delegate void changeEntityProperties(int property);
 
 
     public class Controller : MonoBehaviour
@@ -78,13 +78,13 @@ namespace AnimalEvolution
                     {
                         PlantEntity newPlant = entityScript.PlacePlantAt(hit.point);
                         entityCreationUI.plantSetterDelegate = newPlant.Set;
-                        entityCreationUI.propagateEntityInfo();
+                        entityCreationUI.PropagateEntityInfo();
                     }
                     else
                     {
                         AnimalEntity newAnimal = entityScript.PlaceAnimalAt(hit.point, hit.normal, entityCreationUI.isCarnivore);
                         entityCreationUI.animalSetterDelegate = newAnimal.Set;
-                        entityCreationUI.propagateEntityInfo();
+                        entityCreationUI.PropagateEntityInfo();
                     }
                 }
                 entityCreationUI.placing = false;
@@ -156,7 +156,7 @@ namespace AnimalEvolution
                 Entity e = currentInfoEntity.GetComponent<Entity>();
                 if (e != null)
                 {
-                    entityInfoUI.displayText(e.ToString());
+                    entityInfoUI.DisplayText(e.ToString());
                     waitTime = 0;
                     return;
                 }

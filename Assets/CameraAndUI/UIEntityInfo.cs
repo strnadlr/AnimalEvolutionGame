@@ -10,17 +10,18 @@ namespace AnimalEvolution
         public Text entityInfoText;
         public Button feedButton;
         public Button starveButton;
-        public ChangeMyProperties changeTarget;
+        public changeEntityProperties changeTarget;
 
         public GameObject panel;
         private bool active=false;
+
         public void EntityInfoUIXButtonClicked()
         {
             active = !active;
             panel.SetActive(active);
         }
 
-        public void displayText(string text)
+        public void DisplayText(string text)
         {
             entityInfoText.text = text;
             active = true;

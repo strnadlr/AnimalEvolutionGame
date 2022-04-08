@@ -14,11 +14,11 @@ namespace AnimalEvolution
         public Sprite[] sprites;
         int currentPage = 0;
 
-        public BoolSwitchDelegate cameraSwitch;
-        public BoolSwitchDelegate terrainCreationSwitch;
-        public BoolSwitchDelegate speedControlsSwitch;
-        public BoolSwitchDelegate entityCreationSwitch;
-        public BoolSwitchDelegate entityInfoSwitch;
+        public boolSwitchDelegate cameraSwitch;
+        public boolSwitchDelegate terrainCreationSwitch;
+        public boolSwitchDelegate speedControlsSwitch;
+        public boolSwitchDelegate entityCreationSwitch;
+        public boolSwitchDelegate entityInfoSwitch;
         private bool cameraBefore;
         private bool terrainCreationBefore;
         private bool speedControlsBefore;
@@ -64,7 +64,7 @@ namespace AnimalEvolution
         public void PreviousButtonClicked()
         {
             currentPage = Mathf.Max(0, currentPage - 1);
-            switchPage();
+            SwitchPage();
             if (currentPage == 0)
             {
                 previousButton.interactable=false;
@@ -75,7 +75,7 @@ namespace AnimalEvolution
         public void NextButtonClicked()
         {
             currentPage = Mathf.Min(4, currentPage + 1);
-            switchPage();
+            SwitchPage();
             if (currentPage == 4)
             {
                 nextButton.interactable = false;
@@ -84,7 +84,7 @@ namespace AnimalEvolution
         }
 
 
-        void switchPage()
+        void SwitchPage()
         {
             System.Text.StringBuilder result = new System.Text.StringBuilder();
             switch (currentPage)

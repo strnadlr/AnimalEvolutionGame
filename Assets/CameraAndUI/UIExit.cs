@@ -5,8 +5,8 @@ namespace AnimalEvolution
 {
     public class UIExit : MonoBehaviour
     {
-        public BoolSwitchDelegate cameraSwitch;
-        public BoolSwitchDelegate speedControlsSwitch;
+        public boolSwitchDelegate cameraSwitch;
+        public boolSwitchDelegate speedControlsSwitch;
         public GameObject panel;
         private bool pausedBefore;
         private bool active = false;

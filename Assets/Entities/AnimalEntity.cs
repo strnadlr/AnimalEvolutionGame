@@ -12,11 +12,30 @@ namespace AnimalEvolution {
         public float timeToBreedCurrent { get; set; }
         public float size { get; set; }
         public int mutationStrength { get; set; }
+        /// <summary>
+        /// How far is the animal able to sense it's prefered food source.
+        /// </summary>
         public float senses { get; set; }
+        /// <summary>
+        /// How fast the animal moves.
+        /// </summary>
         public float speed { get; set; }
+        /// <summary>
+        /// The maximum amount of food the animal can eat.
+        /// </summary>
         public float foodMax { get; set; }
+        /// <summary>
+        /// The current amount of food eaten by the animal.
+        /// </summary>
         public float foodCurrent { get; set; }
+        /// <summary>
+        /// The amount of food the animal needs in order to breed.
+        /// Hlaf of this amount is consumed upon breeding.
+        /// </summary>
         private float foodToBreed { get; set; }
+        /// <summary>
+        /// True when the animal is a Carnivore
+        /// </summary>
         private bool isCarnivore { get; set; }
         public Color color { get; set; }
         private Color tastyColor;
@@ -162,13 +181,13 @@ namespace AnimalEvolution {
                 }
                 if (nearbyEntities.Length > 0)
                 {
-                    target = selectTarget(nearbyEntities);
+                    target = SelectTarget(nearbyEntities);
                     if (target != null)
                     {
                         targetSet = true;
                         targetposORrandDir = target.transform.position;
                         //recalculate = true;
-                        gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
+                        gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, gObject.transform.up);
                     }
 
                 }
@@ -182,7 +201,7 @@ namespace AnimalEvolution {
                     targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, Controller.zBoundary -1);
                     wentStraightfor = 0;
                     //recalculate = true;
-                    gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, gObject.transform.up);
+                    gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, gObject.transform.up);
                 }
             }
             else //I do have a target.
@@ -243,7 +262,7 @@ namespace AnimalEvolution {
                     //Debug.DrawRay(gObject.transform.position + 128 * gObject.transform.up, hit.point-(gObject.transform.position + 128 * gObject.transform.up), Color.green, 1f, false);
                     gObject.transform.up = hit.normal;
                     gObject.transform.position = hit.point + hit.normal * gObject.transform.localScale.y / 2;
-                    gObject.transform.forward = calculateDirection(gObject.transform.position, targetposORrandDir, hit.normal);
+                    gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, hit.normal);
                 }
                 recalculate = false;
                 allignIn = 0;
@@ -273,7 +292,7 @@ namespace AnimalEvolution {
         /// </summary>
         /// <param name="colliders">list of targets in range</param>
         /// <returns>A single target to pursue, if found.</returns>
-        private Collider selectTarget(Collider[] colliders)
+        private Collider SelectTarget(Collider[] colliders)
         {
             Collider res = null;
             float minDistance = float.MaxValue;
@@ -301,45 +320,6 @@ namespace AnimalEvolution {
             }
             return res;
         }
-        /// <summary>
-        /// Select the most threatening collider the entity can sense.
-        /// </summary>
-        /// <param name="colliders">Input array of colliders to check.</param>
-        /// <returns>closest larger collider</returns>
-        private Collider selectThreat(Collider[] colliders)
-        {
-            Collider res = null;
-            float minDistance = float.MaxValue;
-            float distance = 0;
-            foreach (Collider c in colliders)
-            {
-                distance = Vector3.Distance(c.transform.position, gObject.transform.position);
-                if (c.GetComponent<Entity>().size > size && distance < minDistance)
-                {
-                    res = c;
-                    minDistance = distance;
-                }
-            }
-            return res;
-        }
-
-        /// <summary>
-        /// Calculate a direction paralel to the surface aiming towards the target.
-        /// </summary>
-        /// <param name="position">My position</param>
-        /// <param name="target">Target's position</param>
-        /// <param name="normal">Normal of the surface</param>
-        /// <returns></returns>
-        private Vector3 calculateDirection(Vector3 position, Vector3 target, Vector3 normal)
-        {
-            //return target - position;
-            Plane surface = new Plane(normal, position);
-            Vector3 normalOfCrossplane = Vector3.Cross((target - position).normalized, normal);
-            Vector3 result = Vector3.Cross(normal, normalOfCrossplane);
-            return result;
-        }
-
-
 
         public override string ToString()
         {
