@@ -50,7 +50,10 @@ namespace AnimalEvolution
                 gObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
             }
         }
-
+        /// <summary>
+        /// Set used when creating a new species of PlantEntity.
+        /// For info about input arguments, see EntityInterface and PlantEntity
+        /// </summary>
         public void Set(string _name, float _nutritionalValue, float _timeWithoutChildren, float _lifeMax, float _size, int _mutationStrength, Color _color)
         {
             name = _name;

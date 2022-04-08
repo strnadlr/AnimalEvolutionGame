@@ -37,6 +37,11 @@ namespace AnimalEvolution
         int mutationStrength { get; set; }
         Color color { get; set; }
 
+        /// <summary>
+        /// Set used to create mutated child of an existing animalEntity.
+        /// </summary>
+        /// <param name="parentEntity">the Entity to use as parent</param>
+        /// <param name="targetGObject">the game Object to which the code should attach the child Entity</param>
         void SetFrom(Entity parentEntity, GameObject targetGObject);
 
         void ChangeMyProperties(int property);

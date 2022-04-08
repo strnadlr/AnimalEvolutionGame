@@ -57,19 +57,8 @@ namespace AnimalEvolution {
 
         /// <summary>
         /// Set used when creating a new species of AnimalEntity.
+        /// For info about input arguments, see EntityInterface and AnimalEntity
         /// </summary>
-        /// <param name="_name"></param>
-        /// <param name="_nutritionalValue"></param>
-        /// <param name="_timeWithoutChildren"></param>
-        /// <param name="_lifeMax"></param>
-        /// <param name="_size"></param>
-        /// <param name="_mutationStrength"></param>
-        /// <param name="_sences"></param>
-        /// <param name="_color"></param>
-        /// <param name="_speed"></param>
-        /// <param name="_foodCapacity"></param>
-        /// <param name="_foodToBreed"></param>
-        /// <param name="_isCarnivore"></param>
         public void Set(string _name, float _nutritionalValue, float _timeWithoutChildren, float _lifeMax, float _size, int _mutationStrength, float _senses, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isCarnivore)
         {
             name = _name;
@@ -97,11 +86,7 @@ namespace AnimalEvolution {
             gObject.SetActive(true);
             targetSet = false;
         } 
-        /// <summary>
-        /// Set used to create mutated child of an existing animalEntity.
-        /// </summary>
-        /// <param name="parentEntity"></param>
-        /// <param name="targetGObject"></param>
+
         public void SetFrom(Entity parentEntity, GameObject targetGObject)
         {
             if (parentEntity is AnimalEntity)
