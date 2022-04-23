@@ -91,14 +91,16 @@ namespace AnimalEvolution
             Entity pE = parent.GetComponent<Entity>();
             Entity nE = newEntity.GetComponent<Entity>();
             nE.SetFrom(pE, newEntity);
-            float newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-            float newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-            newEntity.transform.position = new Vector3(newx, 300, newz);
-            Ray ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
+            float newx,newz;
+            Ray ray;
             RaycastHit hit;
             bool placed = false;
             for (int i = 0; i < 20; i++)
             {
+                newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
+                newEntity.transform.position = new Vector3(newx, 300, newz);
+                ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
                 if (Physics.Raycast(ray, out hit))
                 {
                     newEntity.transform.position = hit.point;
@@ -107,6 +109,10 @@ namespace AnimalEvolution
                         newEntity.transform.up = hit.normal;
                         newEntity.transform.position += hit.normal * newEntity.transform.localScale.y / 2;
                     }
+                    else if (hit.point.y <= Controller.waterLevel)
+                    {
+                        continue;
+                    }
                     if (hit.collider.gameObject.tag == "Ground")
                     {
                         newEntity.GetComponent<Renderer>().enabled = true;
@@ -114,27 +120,12 @@ namespace AnimalEvolution
                         placed = true;
                         break;
                     }
-                    else
-                    {
-                        newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-                        newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-                        newEntity.transform.position = new Vector3(newx, 300, newz);
-                        ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
-                    }
                 }
-                else
-                {
-                    newx = parent.transform.position.x + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-                    newz = parent.transform.position.z + r.Next(-(int)pE.size * 40, (int)pE.size * 40);
-                    newEntity.transform.position = new Vector3(newx, 300, newz);
-                    ray = new Ray(newEntity.transform.position, -newEntity.transform.up);
-                }
-                if (!placed)
-                {
-                    Destroy(newEntity);
-                    Destroy((Object)nE);
-                }
-
+            }
+            if (!placed)
+            {
+                Destroy(newEntity);
+                Destroy((Object)nE);
             }
         }
 

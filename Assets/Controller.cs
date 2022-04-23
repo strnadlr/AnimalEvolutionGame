@@ -34,6 +34,7 @@ namespace AnimalEvolution
         public static bool paused = false;
         public static float xBoundary;
         public static float zBoundary;
+        public static float waterLevel;
 
         RaycastHit hit;
         Vector3 mouse;
@@ -59,8 +60,6 @@ namespace AnimalEvolution
             guideTextUI.terrainCreationSwitch = terrainAndWateUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
-            xBoundary = (terrainGenerator.xsize - 1) * 4;
-            zBoundary = (terrainGenerator.zsize - 1) * 4;
         }
 
         // Update is called once per frame

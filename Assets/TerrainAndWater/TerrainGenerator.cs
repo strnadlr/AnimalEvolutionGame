@@ -93,8 +93,9 @@ namespace AnimalEvolution
             meshCollider.sharedMesh.RecalculateBounds();
             meshCollider.sharedMesh.RecalculateTangents();*/
             mC.enabled = true;
-
-            
+            Controller.xBoundary = (xsize - 1) * sizeMultiplier;
+            Controller.zBoundary = (zsize - 1) * sizeMultiplier;
+            Controller.waterLevel = yheight * waterheight / 100*sizeMultiplier;
         }
 
         Vector3[] PrepareVertices(int xSize, float[,] heightMap, int zSize)

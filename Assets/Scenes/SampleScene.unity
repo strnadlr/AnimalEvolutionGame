@@ -6960,11 +6960,6 @@ MonoBehaviour:
   guideText: {fileID: 524146143}
   previousButton: {fileID: 121388633}
   nextButton: {fileID: 249604627}
-  page0: {fileID: 21300000, guid: 0bf9a80271593b6489d458148ecf274f, type: 3}
-  page1: {fileID: 21300000, guid: c1e41d12ec2694640806c293614e1bc4, type: 3}
-  page2: {fileID: 21300000, guid: e848be4bf5ca2604dabc54495134df26, type: 3}
-  page3: {fileID: 21300000, guid: 83759ab6e548ff047a2a1f67bd7cf296, type: 3}
-  page4: {fileID: 21300000, guid: 468cc4c869c98554e87a7680ff8add4f, type: 3}
   sprites:
   - {fileID: 21300000, guid: 0bf9a80271593b6489d458148ecf274f, type: 3}
   - {fileID: 21300000, guid: c1e41d12ec2694640806c293614e1bc4, type: 3}
@@ -6988,7 +6983,7 @@ RectTransform:
   - {fileID: 249604630}
   - {fileID: 956056538}
   m_Father: {fileID: 2009401750}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7465,7 +7460,7 @@ RectTransform:
   - {fileID: 2067921169}
   - {fileID: 1145672926}
   m_Father: {fileID: 2009401750}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8092,7 +8087,7 @@ RectTransform:
   m_Children:
   - {fileID: 1182465498}
   m_Father: {fileID: 2009401750}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -11198,7 +11193,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 898410276}
-        m_MethodName: plantButtonClicked
+        m_MethodName: PlantButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15027,7 +15022,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 898410276}
-        m_MethodName: animalButtonClicked
+        m_MethodName: AnimalButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15499,9 +15494,9 @@ RectTransform:
   - {fileID: 898410273}
   - {fileID: 1534832627}
   - {fileID: 771074615}
-  - {fileID: 985192287}
   - {fileID: 948939258}
   - {fileID: 1070665861}
+  - {fileID: 985192287}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
