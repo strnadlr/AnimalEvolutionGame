@@ -53,7 +53,7 @@ namespace AnimalEvolution {
         private float allignIn;
         private float timeToHungry;
         private Vector3 targetposORrandDir;
-        private int layerMask = ~((1 << 8) | (1 << 9));
+        private int layerMask = ~((1 << 2) | (1 << 8) | (1 << 9));
 
         /// <summary>
         /// Set used when creating a new species of AnimalEntity.

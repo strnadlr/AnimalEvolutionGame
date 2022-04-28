@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraAndUI\CameraController.cs" />
+    <Compile Include="Assets\CameraAndUI\EntityMarker.cs" />
     <Compile Include="Assets\CameraAndUI\UIEntityCreation.cs" />
     <Compile Include="Assets\CameraAndUI\UIEntityInfo.cs" />
     <Compile Include="Assets\CameraAndUI\UIExit.cs" />

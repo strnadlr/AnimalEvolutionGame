@@ -29,6 +29,7 @@ namespace AnimalEvolution
         public UIExit exitUI;
         public UIGuideText guideTextUI;
         private GameObject currentInfoEntity;
+        public EntityMarker entityMarker;
         private float waitTime;
         public static float speed = 1f;
         public static bool paused = false;
@@ -50,7 +51,7 @@ namespace AnimalEvolution
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
             guideTextUI.cameraSwitch = cameraController.MovementSwitch;
-            exitUI.cameraSwitch= cameraController.MovementSwitch;
+            exitUI.cameraSwitch = cameraController.MovementSwitch;
             terrainAndWateUI.entityCreationSwitch = speedControlsUI.EnableEntityCreationSwitch;
             entityCreationUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
             exitUI.speedControlsSwitch = speedControlsUI.EnableSwitch;
@@ -66,7 +67,7 @@ namespace AnimalEvolution
         void Update()
         {
             waitTime += Time.deltaTime;
-            if (entityCreationUI.placing && (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)))
+            if (entityCreationUI.placing && (Input.GetMouseButtonDown(0)))
             {
                 mouse = Input.mousePosition;
                 ray = mainCamera.ScreenPointToRay(mouse);
@@ -88,7 +89,7 @@ namespace AnimalEvolution
                 }
                 entityCreationUI.placing = false;
             }
-            else if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
+            else if (Input.GetMouseButtonDown(0))
             {
                 mouse = Input.mousePosition;
                 ray = mainCamera.ScreenPointToRay(mouse);
@@ -97,11 +98,11 @@ namespace AnimalEvolution
                 {
                     if (currentInfoEntity != null)
                     {
-                        currentInfoEntity.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                        //currentInfoEntity.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
                     }
 
                     currentInfoEntity = hit.collider.gameObject;
-                    currentInfoEntity.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
+                    //currentInfoEntity.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
                     SetEntityInfoPanel();
                     UpdateEntityInfoPanel();
 
@@ -131,6 +132,7 @@ namespace AnimalEvolution
                 {
                     PlantEntity comp;
                     entityInfoUI.changeTarget = currentInfoEntity.GetComponent<Entity>().ChangeMyProperties;
+                    entityMarker.EntitySelected(currentInfoEntity);
                     if (currentInfoEntity.TryGetComponent<PlantEntity>(out comp))
                     {
                         entityInfoUI.feedButton.interactable = false;
@@ -141,6 +143,10 @@ namespace AnimalEvolution
                         entityInfoUI.feedButton.interactable = true;
                         entityInfoUI.starveButton.interactable = true;
                     }
+                }
+                else
+                {
+                    entityMarker.EntitySelected(null);
                 }
             }
         }
@@ -157,12 +163,19 @@ namespace AnimalEvolution
                 {
                     entityInfoUI.DisplayText(e.ToString());
                     waitTime = 0;
-                    return;
+                    //return;
                 }
+                else
+                {
+                    entityInfoUI.EntityInfoUIXButtonClicked();
+                }
+
             }
-            
-            entityInfoUI.EntityInfoUIXButtonClicked();
-            
+            else
+            {
+                entityInfoUI.EntityInfoUIXButtonClicked();
+            }
+
         }
 
     }
