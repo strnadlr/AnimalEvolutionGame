@@ -76,7 +76,7 @@
     <Compile Include="Assets\Entities\EntityInterface.cs" />
     <Compile Include="Assets\Entities\EntityScript.cs" />
     <Compile Include="Assets\Entities\PlantEntity.cs" />
-    <Compile Include="Assets\ExtensionMethods.cs" />
+    <Compile Include="Assets\Methods.cs" />
     <Compile Include="Assets\TerrainAndWater\Noise.cs" />
     <Compile Include="Assets\TerrainAndWater\TerrainGenerator.cs" />
     <Compile Include="Assets\TerrainAndWater\WaterGeneration.cs" />

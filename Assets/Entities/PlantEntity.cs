@@ -14,6 +14,8 @@ namespace AnimalEvolution
         public float size { get; set; }
         public int mutationStrength { get; set; }
         public Color color { get; set; }
+        public ulong ID { get; set; }
+
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
@@ -47,6 +49,7 @@ namespace AnimalEvolution
                 gameObject.SetActive(true);
                 //gameObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
                 gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
+                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
             }
         }
         /// <summary>
@@ -71,6 +74,7 @@ namespace AnimalEvolution
             renderer.SetPropertyBlock(mpb);
             valid = true;
             gameObject.SetActive(true);
+            Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
         }
 
         // Update is called once per frame
@@ -87,6 +91,7 @@ namespace AnimalEvolution
             }
             if (lifeCurrent < 0)
             {
+                LogDeath("old age");
                 Destroy(this);
                 Destroy(gameObject);
             }
@@ -122,7 +127,7 @@ namespace AnimalEvolution
             else{
                 result.Append($"{ timeToBreedCurrent.ToString("N1")} / { timeToBreedMin.ToString("N1")}");
             }
-            result.Append( $"\nSize: {size}\nMutation Strength: {mutationStrength}");
+            result.Append( $"\nSize: {size}\nMutation Strength: {mutationStrength}\nID: {ID}");
             return result.ToString();
         }
 
@@ -138,6 +143,7 @@ namespace AnimalEvolution
                     lifeCurrent = Mathf.Min(lifeCurrent + lifeMax / 10, lifeMax);
                     break;
                 case 3:
+                    LogDeath("kill button pressed");
                     Destroy(gameObject);
                     Destroy(this);
                     return;
@@ -148,6 +154,11 @@ namespace AnimalEvolution
                 default:
                     return;
             }
+        }
+
+        public void LogDeath(string cause)
+        {
+            Methods.Log($"EntityID: {ID}\t\t\tStatus: Dead\tCause: {cause}");
         }
     }
 }

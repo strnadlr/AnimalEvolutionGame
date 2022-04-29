@@ -39,6 +39,8 @@ namespace AnimalEvolution {
         /// </summary>
         private bool isCarnivore { get; set; }
         public Color color { get; set; }
+        public ulong ID { get; set; }
+
         private Color tastyColor;
         private float lastMealsNutriValue=0;
         private static System.Random rand = new System.Random();
@@ -85,6 +87,9 @@ namespace AnimalEvolution {
             valid = true;
             gameObject.SetActive(true);
             targetSet = false;
+            Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
+                $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
+                $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
         } 
 
         public void SetFrom(Entity parentEntity, GameObject targetGObject)
@@ -121,6 +126,9 @@ namespace AnimalEvolution {
                 //gameObject.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
                 gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
                 targetSet = false;
+                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
+                $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
+                $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
             }
         }
         void Update()
@@ -145,6 +153,8 @@ namespace AnimalEvolution {
             {
                 if (gameObject != null)
                 {
+                    if (lifeCurrent < 0) LogDeath("old age");
+                    else LogDeath("hunger");
                     Destroy(gameObject);
                     Destroy(this);
                 }
@@ -211,7 +221,9 @@ namespace AnimalEvolution {
                     lastMealsNutriValue = target.GetComponent<Entity>().nutritionalValue;
                     if (target != null)
                     {
+                        target.GetComponent<Entity>().LogDeath("eaten");
                         Destroy(target.gameObject.GetComponent<PlantEntity>());
+                        Destroy(target.gameObject.GetComponent<AnimalEntity>());
                         Destroy(target.gameObject);
                     }
                     targetSet = false;
@@ -235,6 +247,7 @@ namespace AnimalEvolution {
                     recalculate = true;
                     if (gameObject.transform.position.x <= 0 || gameObject.transform.position.z <= 0 || gameObject.transform.position.x >= Controller.xBoundary || gameObject.transform.position.z >= Controller.zBoundary)
                     {
+                        LogDeath("left the map");
                         Destroy(gameObject);
                         Destroy(this);
                     }
@@ -338,7 +351,7 @@ namespace AnimalEvolution {
                 result.Append($"{ timeToBreedCurrent.ToString("N1")} / { timeToBreedMin.ToString("N1")}");
             }
             
-            result.Append($"\nSize: {size}\nMutation Strength: {mutationStrength}");
+            result.Append($"\nSize: {size}\nMutation Strength: {mutationStrength}\nID: {ID}");
             return result.ToString();
         }
 
@@ -360,6 +373,7 @@ namespace AnimalEvolution {
                     foodCurrent = Mathf.Max(foodCurrent - foodMax / 10, 0);
                     break;
                 case 3:
+                    LogDeath("kill button pressed");
                     Destroy(gameObject);
                     Destroy(this);
                     return;
@@ -370,6 +384,12 @@ namespace AnimalEvolution {
                 default:
                     return;
             }
+        }
+
+        public void LogDeath(string cause)
+        {
+            Methods.Log($"EntityID: {ID}\t\t\tStatus: Dead\tCause: {cause} \t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+
         }
     }
 

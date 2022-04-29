@@ -60,6 +60,7 @@ namespace AnimalEvolution
             guideTextUI.terrainCreationSwitch = terrainAndWateUI.EnableSwitch;
             entityScript.Initialize(terrainGenerator.meshCollider);
             entityInfoUI.EntityInfoUIXButtonClicked();
+            Methods.SetUpLog();
         }
 
         // Update is called once per frame

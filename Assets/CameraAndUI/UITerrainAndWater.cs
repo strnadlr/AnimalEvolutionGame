@@ -63,6 +63,7 @@ namespace AnimalEvolution
             panel.SetActive(false);
             cameraSwitch(true);
             entityCreationSwitch(true);
+            Methods.Log($"MAP seed: {seed} width: {width} length: {length} height: {height} water: {water}");
         }
 
         public void WidthSliderChanged(float newwidth)

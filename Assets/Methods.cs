@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Reflection;
 
 namespace AnimalEvolution
 {
 
-    public static class ExtensionMethods {
+    public static class Methods {
+        private static StreamWriter logWriter;
+
         /// <summary>
         /// 
         /// </summary>
@@ -48,6 +52,32 @@ namespace AnimalEvolution
             Vector3 normalOfCrossplane = Vector3.Cross((targetToSetDirectionTo - transform.position).normalized, newNormal);
             Vector3 result = Vector3.Cross(newNormal, normalOfCrossplane);
             return result;
+        }
+
+        public static void SetUpLog()
+        {
+            string path = "gamelog.txt";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                Debug.Log("File deleted.");
+            }
+            FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read);
+            logWriter = new StreamWriter(fs);
+            Debug.Log("File setup.");
+            logWriter.WriteLine($"Start log {System.DateTime.Now.ToLongDateString()}");
+        }
+        public static void Log(string logText)
+        {
+            logWriter.WriteLine($"{System.DateTime.Now.ToLongTimeString()} : {logText}");
+            Debug.Log(logText);
+        }
+
+        public static void FlushLog()
+        {
+            logWriter.Flush();
+            Debug.Log("Log flushed.");
+            logWriter.Dispose();
         }
     }
 }

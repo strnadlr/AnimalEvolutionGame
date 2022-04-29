@@ -36,6 +36,10 @@ namespace AnimalEvolution
         /// </summary>
         int mutationStrength { get; set; }
         Color color { get; set; }
+        /// <summary>
+        /// ID of a selected entity, used for log info.
+        /// </summary>
+        ulong ID { get; set; }
 
         /// <summary>
         /// Set used to create mutated child of an existing animalEntity.
@@ -45,6 +49,8 @@ namespace AnimalEvolution
         void SetFrom(Entity parentEntity, GameObject targetGObject);
 
         void ChangeMyProperties(int property);
+
+        void LogDeath(string cause);
     }
     
 }

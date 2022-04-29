@@ -14,6 +14,7 @@ namespace AnimalEvolution
         public static MeshCollider ground;
         static Vector3 down = new Vector3(0, -1, 0);
         static private System.Random r = new System.Random();
+        static ulong availableID = 0;
 
         // Start is called before the first frame update
         void Start()
@@ -49,6 +50,7 @@ namespace AnimalEvolution
         {
             GameObject newPlant = Instantiate(plantPrototype);
             PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
+            nPE.ID = availableID++;
 
             newPlant.transform.position = where;
             newPlant.GetComponent<Renderer>().enabled = true;
@@ -69,6 +71,7 @@ namespace AnimalEvolution
             }
              
             AnimalEntity nAE = newAnimal.GetComponent<AnimalEntity>();
+            nAE.ID = availableID++;
 
             newAnimal.transform.position = where;
             newAnimal.transform.up = orientation;
@@ -87,6 +90,7 @@ namespace AnimalEvolution
             GameObject newEntity = Instantiate(parent);
             Entity pE = parent.GetComponent<Entity>();
             Entity nE = newEntity.GetComponent<Entity>();
+            nE.ID = availableID++;
             nE.SetFrom(pE, newEntity);
             float newx,newz;
             Ray ray;
