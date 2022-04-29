@@ -13,7 +13,6 @@ namespace AnimalEvolution
         public float timeToBreedCurrent { get; set; }
         public float size { get; set; }
         public int mutationStrength { get; set; }
-        public GameObject gObject;
         public Color color { get; set; }
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
@@ -27,7 +26,6 @@ namespace AnimalEvolution
             if (parentEntity is PlantEntity)
             {
                 PlantEntity parent = (PlantEntity)parentEntity;
-                gObject = targetGObject;
                 name = parent.name;
                 nutritionalValue = Mathf.Max(1f, parent.nutritionalValue * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100));
                 timeToBreedMin = Mathf.Max(0.5f, (parent.timeToBreedMin * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100)));
@@ -43,11 +41,12 @@ namespace AnimalEvolution
                 if (mpb == null) mpb = new MaterialPropertyBlock();
                 Renderer renderer = GetComponentInChildren<Renderer>();
                 mpb.SetColor("_Color", color);
-                gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
+                gameObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
                 renderer.SetPropertyBlock(mpb);
                 valid = true;
-                gObject.SetActive(true);
-                gObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                gameObject.SetActive(true);
+                //gameObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
             }
         }
         /// <summary>
@@ -68,10 +67,10 @@ namespace AnimalEvolution
             if (mpb == null) mpb = new MaterialPropertyBlock();
             Renderer renderer = GetComponentInChildren<Renderer>();
             mpb.SetColor("_Color", color);
-            gObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
+            gameObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
             renderer.SetPropertyBlock(mpb);
             valid = true;
-            gObject.SetActive(true);
+            gameObject.SetActive(true);
         }
 
         // Update is called once per frame
@@ -80,7 +79,7 @@ namespace AnimalEvolution
             float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
-            nearbyPlants = Physics.OverlapSphere(gObject.transform.position, size * 20, 0b100000000);
+            nearbyPlants = Physics.OverlapSphere(gameObject.transform.position, size * 20, 0b100000000);
             lifeCurrent -= timePassed * (nearbyPlants.Length) * Controller.speed;
             if (populate)
             {
@@ -89,12 +88,12 @@ namespace AnimalEvolution
             if (lifeCurrent < 0)
             {
                 Destroy(this);
-                Destroy(gObject);
+                Destroy(gameObject);
             }
             else if (timeToBreedCurrent <= 0 && nearbyPlants.Length < 5 && valid)
             {
                 timeToBreedCurrent = timeToBreedMin;
-                requestOffspring(gObject);
+                requestOffspring(gameObject);
             }
         }
 
@@ -139,12 +138,12 @@ namespace AnimalEvolution
                     lifeCurrent = Mathf.Min(lifeCurrent + lifeMax / 10, lifeMax);
                     break;
                 case 3:
-                    Destroy(gObject);
+                    Destroy(gameObject);
                     Destroy(this);
                     return;
                 case 4:
                     timeToBreedCurrent = timeToBreedMin;
-                    requestOffspring(gObject);
+                    requestOffspring(gameObject);
                     break;
                 default:
                     return;

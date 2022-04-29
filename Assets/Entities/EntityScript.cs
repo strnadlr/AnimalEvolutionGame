@@ -22,21 +22,18 @@ namespace AnimalEvolution
             entities.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
             pE.Set("DefaultPlant", 20f, 3, 60, 1, 25, Color.green);
-            pE.gObject = plantPrototype;
             pE.valid = false;
             PlantEntity.requestOffspring = MakeOffspring;
 
             entities.Add(animalHerbivorePrototype);
             AnimalEntity aE = animalHerbivorePrototype.GetComponent<AnimalEntity>();
             aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
-            aE.gObject = animalHerbivorePrototype;
             aE.valid = false;
             AnimalEntity.requestOffspring = MakeOffspring;
 
             entities.Add(animalCarnivorePrototype);
             AnimalEntity aEC = animalCarnivorePrototype.GetComponent<AnimalEntity>();
             aEC.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, true);
-            aEC.gObject = animalCarnivorePrototype;
             aEC.valid = false;
             AnimalEntity.requestOffspring = MakeOffspring;
         }

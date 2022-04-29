@@ -29,7 +29,6 @@ namespace AnimalEvolution
         public UIExit exitUI;
         public UIGuideText guideTextUI;
         private GameObject currentInfoEntity;
-        public EntityMarker entityMarker;
         private float waitTime;
         public static float speed = 1f;
         public static bool paused = false;
@@ -94,18 +93,29 @@ namespace AnimalEvolution
                 mouse = Input.mousePosition;
                 ray = mainCamera.ScreenPointToRay(mouse);
 
-                if (Physics.Raycast(ray, out hit, ((1 << 8) | (1 << 9))))
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider.tag != "UI")
+                    {
+                        if (currentInfoEntity != null)
+                        {
+                            currentInfoEntity.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
+                        }
+
+                        currentInfoEntity = hit.collider.gameObject;
+                        currentInfoEntity.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.white);
+                        SetEntityInfoPanel();
+                        UpdateEntityInfoPanel();
+                    }
+                }
+                else
                 {
                     if (currentInfoEntity != null)
                     {
-                        //currentInfoEntity.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                        currentInfoEntity.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
                     }
-
-                    currentInfoEntity = hit.collider.gameObject;
-                    //currentInfoEntity.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
-                    SetEntityInfoPanel();
+                    currentInfoEntity = null;
                     UpdateEntityInfoPanel();
-
                 }
             }
             if (entityInfoUI.isActiveAndEnabled && waitTime > 0.2)
@@ -132,7 +142,6 @@ namespace AnimalEvolution
                 {
                     PlantEntity comp;
                     entityInfoUI.changeTarget = currentInfoEntity.GetComponent<Entity>().ChangeMyProperties;
-                    entityMarker.EntitySelected(currentInfoEntity);
                     if (currentInfoEntity.TryGetComponent<PlantEntity>(out comp))
                     {
                         entityInfoUI.feedButton.interactable = false;
@@ -143,10 +152,6 @@ namespace AnimalEvolution
                         entityInfoUI.feedButton.interactable = true;
                         entityInfoUI.starveButton.interactable = true;
                     }
-                }
-                else
-                {
-                    entityMarker.EntitySelected(null);
                 }
             }
         }

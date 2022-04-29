@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace AnimalEvolution {
@@ -40,7 +41,6 @@ namespace AnimalEvolution {
         public Color color { get; set; }
         private Color tastyColor;
         private float lastMealsNutriValue=0;
-        public GameObject gObject;
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
@@ -53,7 +53,7 @@ namespace AnimalEvolution {
         private float allignIn;
         private float timeToHungry;
         private Vector3 targetposORrandDir;
-        private int layerMask = ~((1 << 2) | (1 << 8) | (1 << 9));
+        private int layerMask = ~((1 << 8) | (1 << 9));
 
         /// <summary>
         /// Set used when creating a new species of AnimalEntity.
@@ -80,10 +80,10 @@ namespace AnimalEvolution {
             foodCurrent = foodToBreed / 2f;
             isCarnivore = _isCarnivore;
             tastyColor = Color.white;
-            gObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
+            gameObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
             renderer.SetPropertyBlock(mpb);
             valid = true;
-            gObject.SetActive(true);
+            gameObject.SetActive(true);
             targetSet = false;
         } 
 
@@ -92,7 +92,6 @@ namespace AnimalEvolution {
             if (parentEntity is AnimalEntity)
             {
                 AnimalEntity parent = (AnimalEntity)parentEntity;
-                gObject = targetGObject;
                 name = parent.name;
                 nutritionalValue = Mathf.Max(1f, parent.nutritionalValue * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f));
                 timeToBreedMin = Mathf.Max(0.5f, (parent.timeToBreedMin * (1 + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f)));
@@ -115,11 +114,12 @@ namespace AnimalEvolution {
                 if (mpb == null) mpb = new MaterialPropertyBlock();
                 Renderer renderer = GetComponentInChildren<Renderer>();
                 mpb.SetColor("_Color", color);
-                gObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
+                gameObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
                 renderer.SetPropertyBlock(mpb);
                 valid = true;
-                gObject.SetActive(true);
-                gObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
+                gameObject.SetActive(true);
+                //gameObject.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
+                gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
                 targetSet = false;
             }
         }
@@ -143,9 +143,9 @@ namespace AnimalEvolution {
 
             if (lifeCurrent < 0 || foodCurrent < 0)
             {
-                if (gObject != null)
+                if (gameObject != null)
                 {
-                    Destroy(gObject);
+                    Destroy(gameObject);
                     Destroy(this);
                 }
                 return;
@@ -153,18 +153,22 @@ namespace AnimalEvolution {
 
             if (!targetSet && wentStraightfor > 0.2) //I don't have a target.
             {
-                Collider[] nearbyEntities = null;
+                List<Collider> nearbyEntities = null;
                 if (isCarnivore)
                 {
                     //searches for nearby animals
-                    nearbyEntities = Physics.OverlapSphere(gObject.transform.position, senses, 0b1000000000);
+                    nearbyEntities = (Physics.OverlapSphere(gameObject.transform.position, senses, 0b1000000000)).ToList();
+                    if (nearbyEntities.Contains(gameObject.GetComponent<Collider>()))
+                    {
+                        nearbyEntities.Remove(gameObject.GetComponent<Collider>());
+                    }
                 }
                 else
                 {
                     //searches for nearby plants
-                    nearbyEntities = Physics.OverlapSphere(gObject.transform.position, senses, 0b100000000);
+                    nearbyEntities = (Physics.OverlapSphere(gameObject.transform.position, senses, 0b100000000)).ToList();
                 }
-                if (nearbyEntities.Length > 0)
+                if (nearbyEntities.Count > 0)
                 {
                     target = SelectTarget(nearbyEntities);
                     if (target != null)
@@ -172,7 +176,7 @@ namespace AnimalEvolution {
                         targetSet = true;
                         targetposORrandDir = target.transform.position;
                         //recalculate = true;
-                        gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, gObject.transform.up);
+                        gameObject.transform.forward = gameObject.transform.CalculateDirection(targetposORrandDir, gameObject.transform.up);
                     }
 
                 }
@@ -181,12 +185,12 @@ namespace AnimalEvolution {
                 */
                 else if (wentStraightfor > 5)
                 {
-                    targetposORrandDir = gObject.transform.position + 200*(new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f));
-                    targetposORrandDir.x = Mathf.Clamp(targetposORrandDir.x, 1, Controller.xBoundary -1);
-                    targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, Controller.zBoundary -1);
+                    targetposORrandDir = gameObject.transform.position + 200 * (new Vector3((float)rand.NextDouble() * 2f - 1f, 0, (float)rand.NextDouble() * 2f - 1f));
+                    targetposORrandDir.x = Mathf.Clamp(targetposORrandDir.x, 1, Controller.xBoundary - 1);
+                    targetposORrandDir.z = Mathf.Clamp(targetposORrandDir.z, 1, Controller.zBoundary - 1);
                     wentStraightfor = 0;
                     //recalculate = true;
-                    gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, gObject.transform.up);
+                    gameObject.transform.forward = gameObject.transform.CalculateDirection(targetposORrandDir, gameObject.transform.up);
                 }
             }
             else //I do have a target.
@@ -197,7 +201,7 @@ namespace AnimalEvolution {
                 }
             }
 
-            if (Vector3.Distance(gObject.transform.position, targetposORrandDir) < size * 3)
+            if (Vector3.Distance(gameObject.transform.position, targetposORrandDir) < size * 3)
             {
                 if (targetSet)
                 {
@@ -221,17 +225,17 @@ namespace AnimalEvolution {
             if (foodCurrent < 0.8 * foodMax)
             {
                 // Move forward.
-                gObject.transform.position += gObject.transform.forward * timePassed * speed * Controller.speed;
+                gameObject.transform.position += gameObject.transform.forward * timePassed * speed * Controller.speed;
                 wentStraightfor += timePassed * Controller.speed;
-                if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= Controller.xBoundary || gObject.transform.position.z >= Controller.zBoundary)
+                if (gameObject.transform.position.x <= 0 || gameObject.transform.position.z <= 0 || gameObject.transform.position.x >= Controller.xBoundary || gameObject.transform.position.z >= Controller.zBoundary)
                 {
-                    Vector3 directionToCenter = (new Vector3(Controller.xBoundary / 2, 0, Controller.zBoundary / 2) - gameObject.transform.position).normalized;
-                    gObject.transform.position += (directionToCenter * timePassed * speed);
-                    targetposORrandDir = gObject.transform.position + 5 * (-gObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
+                    Vector3 directionToCenter = (new Vector3(Controller.xBoundary / 2, 0, Controller.zBoundary / 2) - base.gameObject.transform.position).normalized;
+                    gameObject.transform.position += (directionToCenter * timePassed * speed);
+                    targetposORrandDir = gameObject.transform.position + 5 * (-gameObject.transform.forward + new Vector3((float)rand.NextDouble() * 0.5f - 0.25f, 0, (float)rand.NextDouble() * 0.5f - 0.25f)).normalized;
                     recalculate = true;
-                    if (gObject.transform.position.x <= 0 || gObject.transform.position.z <= 0 || gObject.transform.position.x >= Controller.xBoundary || gObject.transform.position.z >= Controller.zBoundary)
+                    if (gameObject.transform.position.x <= 0 || gameObject.transform.position.z <= 0 || gameObject.transform.position.x >= Controller.xBoundary || gameObject.transform.position.z >= Controller.zBoundary)
                     {
-                        Destroy(gObject);
+                        Destroy(gameObject);
                         Destroy(this);
                     }
                 }
@@ -242,12 +246,12 @@ namespace AnimalEvolution {
             if (recalculate || (wentStraightfor > 0.1 && allignIn > 0.3))
             {
                 RaycastHit hit;
-                if (Physics.Raycast(gObject.transform.position + 128 * gObject.transform.up, -gObject.transform.up, out hit, Mathf.Infinity, layerMask))
+                if (Physics.Raycast(gameObject.transform.position + 128 * gameObject.transform.up, -gameObject.transform.up, out hit, Mathf.Infinity, layerMask))
                 {
-                    //Debug.DrawRay(gObject.transform.position + 128 * gObject.transform.up, hit.point-(gObject.transform.position + 128 * gObject.transform.up), Color.green, 1f, false);
-                    gObject.transform.up = hit.normal;
-                    gObject.transform.position = hit.point + hit.normal * gObject.transform.localScale.y / 2;
-                    gObject.transform.forward = gObject.transform.CalculateDirection(targetposORrandDir, hit.normal);
+                    //Debug.DrawRay(gameObject.transform.position + 128 * gameObject.transform.up, hit.point-(gameObject.transform.position + 128 * gameObject.transform.up), Color.green, 1f, false);
+                    gameObject.transform.up = hit.normal;
+                    gameObject.transform.position = hit.point + hit.normal * gameObject.transform.localScale.y / 2;
+                    gameObject.transform.forward = gameObject.transform.CalculateDirection(targetposORrandDir, hit.normal);
                 }
                 recalculate = false;
                 allignIn = 0;
@@ -256,7 +260,7 @@ namespace AnimalEvolution {
             if (valid && foodCurrent > foodToBreed && timeToBreedCurrent < 0)
             {
                 timeToBreedCurrent = timeToBreedMin;
-                requestOffspring(gObject);
+                requestOffspring(gameObject);
                 foodCurrent -= foodToBreed / 2f;
             }
 
@@ -277,7 +281,7 @@ namespace AnimalEvolution {
         /// </summary>
         /// <param name="colliders">list of targets in range</param>
         /// <returns>A single target to pursue, if found.</returns>
-        private Collider SelectTarget(Collider[] colliders)
+        private Collider SelectTarget(List<Collider> colliders)
         {
             Collider res = null;
             float minDistance = float.MaxValue;
@@ -356,12 +360,12 @@ namespace AnimalEvolution {
                     foodCurrent = Mathf.Max(foodCurrent - foodMax / 10, 0);
                     break;
                 case 3:
-                    Destroy(gObject);
+                    Destroy(gameObject);
                     Destroy(this);
                     return;
                 case 4:
                     timeToBreedCurrent = timeToBreedMin;
-                    requestOffspring(gObject);
+                    requestOffspring(gameObject);
                     break;
                 default:
                     return;
