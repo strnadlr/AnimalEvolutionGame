@@ -5,16 +5,45 @@ using UnityEngine.UI;
 
 namespace AnimalEvolution
 {
+    /// <summary>
+    /// Delegate
+    /// Necessary for communication between UITerrainAndWater and TerrainGenerator.
+    /// </summary>
     public delegate bool terrainSetupDelegate(int xsize, int zsize, int yheight, int waterheight, int seed);
+    /// <summary>
+    /// Delegate
+    /// Passes the terrain regeneration function between UITerrainAndWater and TerrainGenerator.
+    /// </summary>
     public delegate void terrainRegenerateDelegate();
-    public delegate PlantEntity plantPlacerDelegate(Vector3 where);
+    /// <summary>
+    /// Delegate
+    /// Used for all scripts that can be disabled by another script.
+    /// </summary>
     public delegate bool boolSwitchDelegate(bool target);
+    /// <summary>
+    /// Delegate
+    /// Used by PlantEntity and AnimalEntity to ask EntityScript to spawn offspring.
+    /// </summary>
     public delegate void requestOffspringDelegate(GameObject parent);
+    /// <summary>
+    /// Delegate
+    /// Necessary for communication between PlantEntity and UIEntityCreation
+    /// </summary>
     public delegate void plantSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, Color _color);
+    /// <summary>
+    /// Delegate
+    /// Necessary for communication between AnimalEntity and UIEntityCreation
+    /// </summary>
     public delegate void animalSetterDelegate(string _name, float _nutritionalValue, float _ticksWithoutChild, float _lifeMax, float _size, int _mutationStrength, float sences, Color _color, float _speed, float _foodCapacity, float _foodToBreed, bool _isPredator);
+    /// <summary>
+    /// Delegate
+    /// Used by UIEntityInfo to edit properties of PlantEntity or AnimalEntity
+    /// </summary>
     public delegate void changeEntityProperties(int property);
 
-
+    /// <summary>
+    /// Main class of the program, sets up correct interactions between all other parts of the code.
+    /// </summary>
     public class Controller : MonoBehaviour
     {
         public TerrainGenerator terrainGenerator;
@@ -29,12 +58,14 @@ namespace AnimalEvolution
         public UIExit exitUI;
         public UIGuideText guideTextUI;
         private GameObject currentInfoEntity;
-        private float waitTime;
-        public static float speed = 1f;
+        private float entityInfoDelayTime;
+        public static float simulationSpeed = 1f;
         public static bool paused = false;
-        public static float xBoundary;
-        public static float zBoundary;
-        public static float waterLevel;
+        /// <summary>
+        /// Used for determining whether animals and plants are within the boundaries of the map
+        /// and above water.
+        /// </summary>
+        public static float xBoundary, zBoundary, yWaterLevel;
 
         RaycastHit hit;
         Vector3 mouse;
@@ -46,7 +77,6 @@ namespace AnimalEvolution
             terrainGenerator.SetWater(waterGeneration);
             terrainAndWateUI.setupTerrainDelegate = terrainGenerator.SetValues;
             terrainAndWateUI.terrainRegenerate = terrainGenerator.Regenerate;
-            entityCreationUI.plantPlacer = entityScript.PlacePlantAt;
             terrainAndWateUI.cameraSwitch = cameraController.MovementSwitch;
             entityCreationUI.cameraSwitch = cameraController.MovementSwitch;
             guideTextUI.cameraSwitch = cameraController.MovementSwitch;
@@ -66,7 +96,7 @@ namespace AnimalEvolution
         // Update is called once per frame
         void Update()
         {
-            waitTime += Time.deltaTime;
+            entityInfoDelayTime += Time.deltaTime;
             if (entityCreationUI.placing && (Input.GetMouseButtonDown(0)))
             {
                 mouse = Input.mousePosition;
@@ -119,7 +149,7 @@ namespace AnimalEvolution
                     UpdateEntityInfoPanel();
                 }
             }
-            if (entityInfoUI.isActiveAndEnabled && waitTime > 0.2)
+            if (entityInfoUI.isActiveAndEnabled && entityInfoDelayTime > 0.2)
             {
                 UpdateEntityInfoPanel();
             }
@@ -158,7 +188,7 @@ namespace AnimalEvolution
         }
 
         /// <summary>
-        /// Requests a new string from the entity, if it hasn't been destroyed yet.
+        /// Requests a new string from the currentInfoEntity, if it hasn't been destroyed yet.
         /// </summary>
         private void UpdateEntityInfoPanel()
         {
@@ -168,8 +198,7 @@ namespace AnimalEvolution
                 if (e != null)
                 {
                     entityInfoUI.DisplayText(e.ToString());
-                    waitTime = 0;
-                    //return;
+                    entityInfoDelayTime = 0;
                 }
                 else
                 {

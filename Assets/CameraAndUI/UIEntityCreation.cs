@@ -29,7 +29,6 @@ namespace AnimalEvolution
         public RawImage saturationColorRawImage;
         public RawImage valueColorRawImage;
         public RawImage BWSaturationColorRawImage;
-        public plantPlacerDelegate plantPlacer;
         public boolSwitchDelegate cameraSwitch;
         public boolSwitchDelegate speedControlsSwitch;
         public plantSetterDelegate plantSetterDelegate;

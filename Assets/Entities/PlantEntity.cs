@@ -84,10 +84,10 @@ namespace AnimalEvolution
             if (Controller.paused) return;
 
             nearbyPlants = Physics.OverlapSphere(gameObject.transform.position, size * 20, 0b100000000);
-            lifeCurrent -= timePassed * (nearbyPlants.Length) * Controller.speed;
+            lifeCurrent -= timePassed * (nearbyPlants.Length) * Controller.simulationSpeed;
             if (populate)
             {
-                timeToBreedCurrent -= timePassed * Controller.speed;
+                timeToBreedCurrent -= timePassed * Controller.simulationSpeed;
             }
             if (lifeCurrent < 0)
             {

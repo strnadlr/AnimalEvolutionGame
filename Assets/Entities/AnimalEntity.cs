@@ -136,17 +136,17 @@ namespace AnimalEvolution {
             float timePassed = Time.deltaTime;
             if (Controller.paused) return;
 
-            lifeCurrent -= timePassed * Controller.speed; 
+            lifeCurrent -= timePassed * Controller.simulationSpeed; 
 
             if (populate)
             {
-                timeToBreedCurrent -= timePassed * Controller.speed;
+                timeToBreedCurrent -= timePassed * Controller.simulationSpeed;
             }
-            allignIn += timePassed * Controller.speed;
-            timeToHungry-= timePassed * Controller.speed;
+            allignIn += timePassed * Controller.simulationSpeed;
+            timeToHungry-= timePassed * Controller.simulationSpeed;
             if (timeToHungry < 0)
             {
-                foodCurrent -= timePassed * 2 * Controller.speed;
+                foodCurrent -= timePassed * 2 * Controller.simulationSpeed;
             }
 
             if (lifeCurrent < 0 || foodCurrent < 0)
@@ -221,7 +221,7 @@ namespace AnimalEvolution {
                     lastMealsNutriValue = target.GetComponent<Entity>().nutritionalValue;
                     if (target != null)
                     {
-                        target.GetComponent<Entity>().LogDeath("eaten");
+                        target.GetComponent<Entity>().LogDeath($"eaten by {ID}");
                         Destroy(target.gameObject.GetComponent<PlantEntity>());
                         Destroy(target.gameObject.GetComponent<AnimalEntity>());
                         Destroy(target.gameObject);
@@ -237,8 +237,8 @@ namespace AnimalEvolution {
             if (foodCurrent < 0.8 * foodMax)
             {
                 // Move forward.
-                gameObject.transform.position += gameObject.transform.forward * timePassed * speed * Controller.speed;
-                wentStraightfor += timePassed * Controller.speed;
+                gameObject.transform.position += gameObject.transform.forward * timePassed * speed * Controller.simulationSpeed;
+                wentStraightfor += timePassed * Controller.simulationSpeed;
                 if (gameObject.transform.position.x <= 0 || gameObject.transform.position.z <= 0 || gameObject.transform.position.x >= Controller.xBoundary || gameObject.transform.position.z >= Controller.zBoundary)
                 {
                     Vector3 directionToCenter = (new Vector3(Controller.xBoundary / 2, 0, Controller.zBoundary / 2) - base.gameObject.transform.position).normalized;

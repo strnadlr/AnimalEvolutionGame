@@ -110,7 +110,7 @@ namespace AnimalEvolution
                         newEntity.transform.up = hit.normal;
                         newEntity.transform.position += hit.normal * newEntity.transform.localScale.y / 2;
                     }
-                    else if (hit.point.y <= Controller.waterLevel)
+                    else if (hit.point.y <= Controller.yWaterLevel)
                     {
                         continue;
                     }

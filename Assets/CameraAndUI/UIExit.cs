@@ -36,7 +36,7 @@ namespace AnimalEvolution
 
         public void QuitButtonClicked()
         {
-            Methods.FlushLog();
+            Methods.FinalizeLog();
             Application.Quit();
         }
     }

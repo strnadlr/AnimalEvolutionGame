@@ -25,11 +25,21 @@ namespace AnimalEvolution
         float persistence = 0.2f;
         float lacunarity = 1.6f;
 
+        /// <summary>
+        /// Checks the provided values against the criteria and if all are accepted
+        /// updates the values in this script.
+        /// </summary>
+        /// <param name="xsize">width of the map</param>
+        /// <param name="zsize">length of the map</param>
+        /// <param name="yheight">height of the map</param>
+        /// <param name="waterheight">percentage of height tha should be submerged in water</param>
+        /// <param name="seed">seed for map generation</param>
+        /// <returns> if the parameters fit the terrain creation criteria</returns>
         public bool SetValues(int xsize, int zsize, int yheight, int waterheight, int seed)
         {
             if (xsize < 0 || xsize > 250) return false;
             if (zsize < 0 || zsize > 250) return false;
-            if (yheight < 0 || yheight > 150) return false;
+            if (yheight < 0 || yheight > 30) return false;
             if (waterheight < 0 || waterheight > 100) return false;
 
             this.xsize = xsize;
@@ -46,19 +56,6 @@ namespace AnimalEvolution
             if (water == null) return false;
             this.water = water;
             return true;
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-             /*mesh = new Mesh();
-             GetComponent<MeshFilter>().mesh = mesh;
-
-             heightMap = newHeightMap(seed, xsize, yheight, zsize, scale, octaves, persistence, lacunarity);
-             mesh.vertices = prepareVertices(xsize, heightMap, zsize);
-             mesh.triangles = prepareTriangles(xsize, zsize);
-             mesh.RecalculateNormals();
-             water.Generate(xsize, yheight*waterheight/100, zsize, sizeMultiplier);*/
         }
 
         public void Regenerate()
@@ -89,13 +86,10 @@ namespace AnimalEvolution
             Destroy(meshCollider);
             MeshCollider mC = this.gameObject.AddComponent<MeshCollider>() as MeshCollider;
             mC.sharedMesh = GetComponent<MeshFilter>().mesh;
-            /*meshCollider.sharedMesh.RecalculateNormals();
-            meshCollider.sharedMesh.RecalculateBounds();
-            meshCollider.sharedMesh.RecalculateTangents();*/
             mC.enabled = true;
             Controller.xBoundary = (xsize - 1) * sizeMultiplier;
             Controller.zBoundary = (zsize - 1) * sizeMultiplier;
-            Controller.waterLevel = yheight * waterheight / 100*sizeMultiplier;
+            Controller.yWaterLevel = yheight * waterheight / 100*sizeMultiplier;
         }
 
         Vector3[] PrepareVertices(int xSize, float[,] heightMap, int zSize)

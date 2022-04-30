@@ -40,8 +40,8 @@ namespace AnimalEvolution
 
         public void SpeedSliderChanged(float speedSliderValue)
         {
-            Controller.speed = speedSliderValue / 10f;
-            currentSpeedText.text = Controller.speed.ToString("F1");
+            Controller.simulationSpeed = speedSliderValue / 10f;
+            currentSpeedText.text = Controller.simulationSpeed.ToString("F1");
         }
 
         public void PauseButtonClicked()

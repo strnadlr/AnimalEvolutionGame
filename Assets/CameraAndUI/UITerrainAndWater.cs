@@ -109,9 +109,9 @@ namespace AnimalEvolution
         internal bool EnableSwitch(bool target)
         {
 
-            bool prev = panel.active;
-                panel.SetActive(target);
-                return prev;
+            bool prev = panel.activeInHierarchy;
+            panel.SetActive(target);
+            return prev;
             
         }
     }
