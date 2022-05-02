@@ -14,7 +14,11 @@ namespace AnimalEvolution
         private bool movement = false;
         private Vector3 lastMousePosRot;
 
-
+        /// <summary>
+        /// This allows all camera movement to be turned on or off.
+        /// </summary>
+        /// <param name="target">True if the camera movement should be on.</param>
+        /// <returns></returns>
         public bool MovementSwitch(bool target)
         {
             bool prev = movement;

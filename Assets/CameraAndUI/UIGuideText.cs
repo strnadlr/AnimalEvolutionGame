@@ -36,6 +36,9 @@ namespace AnimalEvolution
             PreviousButtonClicked();
         }
 
+        /// <summary>
+        /// Used to show and hide the guide and enable/disable all other UI.
+        /// </summary>
         public void GuideButtonClicked()
         {
             active = !active;
@@ -61,6 +64,9 @@ namespace AnimalEvolution
             }
         }
 
+        /// <summary>
+        /// Decreases the page number and updates the page UI if it's within the page count.
+        /// </summary>
         public void PreviousButtonClicked()
         {
             currentPage = Mathf.Max(0, currentPage - 1);
@@ -72,6 +78,9 @@ namespace AnimalEvolution
             nextButton.interactable = true;
         }
 
+        /// <summary>
+        /// Increases the page number and updates the page UI if it's within the page count.
+        /// </summary>
         public void NextButtonClicked()
         {
             currentPage = Mathf.Min(4, currentPage + 1);
@@ -84,6 +93,9 @@ namespace AnimalEvolution
         }
 
 
+        /// <summary>
+        /// The contents of the Guide.
+        /// </summary>
         void SwitchPage()
         {
             System.Text.StringBuilder result = new System.Text.StringBuilder();

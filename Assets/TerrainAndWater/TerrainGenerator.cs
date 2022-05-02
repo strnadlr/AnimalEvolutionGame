@@ -51,6 +51,12 @@ namespace AnimalEvolution
 
             return true;
         }
+
+        /// <summary>
+        /// Connects the waterGeneration script to this terrainGeneration Script.
+        /// </summary>
+        /// <param name="water">The Water Generation Script to be connected</param>
+        /// <returns></returns>
         public bool SetWater(WaterGeneration water)
         {
             if (water == null) return false;
@@ -58,6 +64,9 @@ namespace AnimalEvolution
             return true;
         }
 
+        /// <summary>
+        /// Removes all existing meshes and creates entirely new terrain.
+        /// </summary>
         public void Regenerate()
         {
             mesh = GetComponent<MeshFilter>().mesh;
@@ -92,6 +101,13 @@ namespace AnimalEvolution
             Controller.yWaterLevel = yheight * waterheight / 100*sizeMultiplier;
         }
 
+        /// <summary>
+        /// Sets up the vertices into the correct positions for the terrain.
+        /// </summary>
+        /// <param name="xSize">number of vertices in the x direction.</param>
+        /// <param name="heightMap">the height map to be used for each vertice's y value.</param>
+        /// <param name="zSize">number of vertices in the z direction.</param>
+        /// <returns></returns>
         Vector3[] PrepareVertices(int xSize, float[,] heightMap, int zSize)
         {
             Vector3[] result = new Vector3[(xSize * zSize) + 2 * (xSize + zSize)];
@@ -124,6 +140,12 @@ namespace AnimalEvolution
             return result;
         }
 
+        /// <summary>
+        /// A list that represents the triangles for the mesh collider listing which vertice is where.
+        /// </summary>
+        /// <param name="xSize">number of vertices in the x direction.</param>
+        /// <param name="zSize">number of vertices in the z direction.</param>
+        /// <returns></returns>
         int[] PrepareTriangles(int xSize, int zSize)
         {
             int planetriangles = 6 * (xSize - 1) * (zSize - 1);

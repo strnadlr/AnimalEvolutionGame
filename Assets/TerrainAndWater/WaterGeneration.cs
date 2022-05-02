@@ -7,6 +7,14 @@ using UnityEngine;
 public class WaterGeneration : MonoBehaviour
 {
     Mesh mesh;
+
+    /// <summary>
+    /// Creates a box of water slightly less wide and long than the map to be placed into the world.
+    /// </summary>
+    /// <param name="xsize">Width of the map.</param>
+    /// <param name="waterheight">Height of water.</param>
+    /// <param name="zsize">Length of the map.</param>
+    /// <param name="sizeMultiplier">unit length multiplier.</param>
     public void Generate(float xsize, float waterheight, float zsize, int sizeMultiplier)
     {
         xsize *= sizeMultiplier;

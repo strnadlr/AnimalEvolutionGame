@@ -40,6 +40,7 @@ namespace AnimalEvolution {
         private bool isCarnivore { get; set; }
         public Color color { get; set; }
         public ulong ID { get; set; }
+        public bool valid { get; set; }
 
         private Color tastyColor;
         private float lastMealsNutriValue=0;
@@ -47,7 +48,6 @@ namespace AnimalEvolution {
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
         public static bool populate;
-        public bool valid;
         private Collider target;
         private bool targetSet;
         private bool recalculate;
@@ -84,15 +84,17 @@ namespace AnimalEvolution {
             tastyColor = Color.white;
             gameObject.transform.localScale = new Vector3(1.5f + 1.5f * size, 1.5f + 1.5f * size, 4 + 4 * size);
             renderer.SetPropertyBlock(mpb);
-            valid = true;
             gameObject.SetActive(true);
             targetSet = false;
-            Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
-                $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
-                $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+            if (valid)
+            {
+                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
+                    $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
+                    $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+            }
         } 
 
-        public void SetFrom(Entity parentEntity, GameObject targetGObject)
+        public void SetFrom(Entity parentEntity)
         {
             if (parentEntity is AnimalEntity)
             {
@@ -279,7 +281,6 @@ namespace AnimalEvolution {
 
         }
 
-
         private void OnValidate()
         {
             if (mpb == null) mpb = new MaterialPropertyBlock();
@@ -289,6 +290,7 @@ namespace AnimalEvolution {
             //apply propertyBlock to renderer
             renderer.SetPropertyBlock(mpb);
         }
+
         /// <summary>
         /// select the target that is the closest in color to my tasty Color that is, if requiered, smaller than me.
         /// </summary>

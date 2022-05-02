@@ -22,20 +22,20 @@ namespace AnimalEvolution
             entities = new List<GameObject>();
             entities.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
-            pE.Set("DefaultPlant", 20f, 3, 60, 1, 25, Color.green);
             pE.valid = false;
+            pE.Set("DefaultPlant", 20f, 3, 60, 1, 25, Color.green);
             PlantEntity.requestOffspring = MakeOffspring;
 
             entities.Add(animalHerbivorePrototype);
             AnimalEntity aE = animalHerbivorePrototype.GetComponent<AnimalEntity>();
-            aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
             aE.valid = false;
+            aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
             AnimalEntity.requestOffspring = MakeOffspring;
 
             entities.Add(animalCarnivorePrototype);
             AnimalEntity aEC = animalCarnivorePrototype.GetComponent<AnimalEntity>();
-            aEC.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, true);
             aEC.valid = false;
+            aEC.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, true);
             AnimalEntity.requestOffspring = MakeOffspring;
         }
 
@@ -46,10 +46,16 @@ namespace AnimalEvolution
             AnimalEntity.populate = true;
         }
 
+        /// <summary>
+        /// Creates a new plant gameObject and it's plantEntity and places the game object in the world.
+        /// </summary>
+        /// <param name="where"> Position on the map for the placement</param>
+        /// <returns>The plantEntity script of the placed game object.</returns>
         public PlantEntity PlacePlantAt(Vector3 where)
         {
             GameObject newPlant = Instantiate(plantPrototype);
             PlantEntity nPE = newPlant.GetComponent<PlantEntity>();
+            nPE.valid = true;
             nPE.ID = availableID++;
 
             newPlant.transform.position = where;
@@ -57,7 +63,13 @@ namespace AnimalEvolution
             entities.Add(newPlant);
             return nPE;
         }
-
+        /// <summary>
+        /// Creates a new animal gameObject and it's animalEntity and places the game object in the world.
+        /// </summary>
+        /// <param name="where"> Position on the map for the placement</param>
+        /// <param name="orientation"> The normal of the surface the animal is to be placed on.</param>
+        /// <param name="isCarnivore"> True if the carnivore shape should be used for the game objec. Otherwise false.</param>
+        /// <returns>The animalEntity script of the placed game object.</returns>
         public AnimalEntity PlaceAnimalAt(Vector3 where, Vector3 orientation, bool isCarnivore)
         {
             GameObject newAnimal;
@@ -71,6 +83,7 @@ namespace AnimalEvolution
             }
              
             AnimalEntity nAE = newAnimal.GetComponent<AnimalEntity>();
+            nAE.valid = true;
             nAE.ID = availableID++;
 
             newAnimal.transform.position = where;
@@ -91,7 +104,8 @@ namespace AnimalEvolution
             Entity pE = parent.GetComponent<Entity>();
             Entity nE = newEntity.GetComponent<Entity>();
             nE.ID = availableID++;
-            nE.SetFrom(pE, newEntity);
+            nE.valid = true;
+            nE.SetFrom(pE);
             float newx,newz;
             Ray ray;
             RaycastHit hit;

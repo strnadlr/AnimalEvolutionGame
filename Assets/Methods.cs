@@ -66,7 +66,11 @@ namespace AnimalEvolution
         /// </summary>
         public static void SetUpLog()
         {
-            string path = $"gamelog{DateTime.Now.Day.ToString("00")}{DateTime.Now.Month.ToString("00")}{(DateTime.Now.Year % 100).ToString("00")}{DateTime.Now.Hour.ToString("00")}{DateTime.Now.Minute.ToString("00")}.txt";
+            if (!Directory.Exists("gamelogs"))
+            {
+                Directory.CreateDirectory("gamelogs");
+            }
+            string path = $"gamelogs/gamelog{DateTime.Now.Day.ToString("00")}{DateTime.Now.Month.ToString("00")}{(DateTime.Now.Year % 100).ToString("00")}{DateTime.Now.Hour.ToString("00")}{DateTime.Now.Minute.ToString("00")}.txt";
             if (File.Exists(path))
             {
                 File.Delete(path);

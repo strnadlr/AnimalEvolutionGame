@@ -15,15 +15,15 @@ namespace AnimalEvolution
         public int mutationStrength { get; set; }
         public Color color { get; set; }
         public ulong ID { get; set; }
+        public bool valid { get; set; }
 
         private static System.Random rand = new System.Random();
         private MaterialPropertyBlock mpb;
         public static requestOffspringDelegate requestOffspring;
         public static bool populate;
-        public bool valid;
         private Collider[] nearbyPlants;
 
-        public void SetFrom(Entity parentEntity, GameObject targetGObject)
+        public void SetFrom(Entity parentEntity)
         {
             if (parentEntity is PlantEntity)
             {
@@ -45,11 +45,11 @@ namespace AnimalEvolution
                 mpb.SetColor("_Color", color);
                 gameObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
                 renderer.SetPropertyBlock(mpb);
-                valid = true;
                 gameObject.SetActive(true);
-                //gameObject.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
-                gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
-                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
+                
+                    gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
+                    Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
+                
             }
         }
         /// <summary>
@@ -72,9 +72,11 @@ namespace AnimalEvolution
             mpb.SetColor("_Color", color);
             gameObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
             renderer.SetPropertyBlock(mpb);
-            valid = true;
             gameObject.SetActive(true);
-            Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
+            if (valid)
+            {
+                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
+            }
         }
 
         // Update is called once per frame

@@ -156,7 +156,7 @@ namespace AnimalEvolution
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                exitUI.ResumeButtonClicked();
+                exitUI.showUIExit();
             }
         }
 

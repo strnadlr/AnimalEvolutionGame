@@ -12,7 +12,6 @@ namespace AnimalEvolution
         public Slider speedSlider;
         public Button pauseButton;
         public Button entityCreationButton;
-
         public GameObject panel;
         private bool active = true;
         private bool entityCreationActive;
@@ -22,6 +21,11 @@ namespace AnimalEvolution
             entityCreationButton.interactable = entityCreationActive;
         }
 
+        /// <summary>
+        /// Used to allow the UI to be showed (such us when other UI, hiding this one, should be displayed).
+        /// </summary>
+        /// <param name="target">True if UI should be allowed.</param>
+        /// <returns></returns>
         public bool EnableSwitch(bool target)
         {
             bool prev = active;
@@ -30,6 +34,11 @@ namespace AnimalEvolution
             return prev;
         }
 
+        /// <summary>
+        /// Used to enable/disable the Entity Creation opening button.
+        /// </summary>
+        /// <param name="target">True if interactions should be allowed.</param>
+        /// <returns></returns>
         public bool EnableEntityCreationSwitch(bool target)
         {
             bool prev = entityCreationActive;
@@ -38,12 +47,19 @@ namespace AnimalEvolution
             return prev;
         }
 
+        /// <summary>
+        /// Allows to control the speed of the simulation.
+        /// </summary>
+        /// <param name="speedSliderValue">Speed of the simulation.</param>
         public void SpeedSliderChanged(float speedSliderValue)
         {
             Controller.simulationSpeed = speedSliderValue / 10f;
             currentSpeedText.text = Controller.simulationSpeed.ToString("F1");
         }
 
+        /// <summary>
+        /// Pauses/resumes the game and updates the text of the button to show the current status.
+        /// </summary>
         public void PauseButtonClicked()
         {
             Controller.paused = !Controller.paused;

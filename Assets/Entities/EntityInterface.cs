@@ -42,14 +42,26 @@ namespace AnimalEvolution
         ulong ID { get; set; }
 
         /// <summary>
+        /// Used to determin if the Update function should be called.
+        /// </summary>
+        bool valid { get; set; }
+
+        /// <summary>
         /// Set used to create mutated child of an existing animalEntity.
         /// </summary>
         /// <param name="parentEntity">the Entity to use as parent</param>
-        /// <param name="targetGObject">the game Object to which the code should attach the child Entity</param>
-        void SetFrom(Entity parentEntity, GameObject targetGObject);
+        void SetFrom(Entity parentEntity);
 
+        /// <summary>
+        /// Edit properties by 10% or complete an action.
+        /// </summary>
+        /// <param name="property"> 0 add life, 1 add food, 2 remove food, 3 kil, 4 make offspring</param>
         void ChangeMyProperties(int property);
 
+        /// <summary>
+        /// Creates a log of the Entity's death and adds it to the log file.s
+        /// </summary>
+        /// <param name="cause">Describe the cause (and causer) of death</param>
         void LogDeath(string cause);
     }
     

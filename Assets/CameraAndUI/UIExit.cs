@@ -17,9 +17,26 @@ namespace AnimalEvolution
             panel.SetActive(active);
         }
 
+        /// <summary>
+        /// Used to hide this UI and show/enable all other UI and camera.
+        /// </summary>
         public void ResumeButtonClicked()
         {
-            active = !active;
+            active = false;
+            ActivitySwitch();
+        }
+
+        /// <summary>
+        /// Used to show this UI and hide/diable all other UI and camera.
+        /// </summary>
+        public void showUIExit()
+        {
+            active = true;
+            ActivitySwitch();
+        }
+
+        private void ActivitySwitch()
+        {
             panel.SetActive(active);
             cameraSwitch(!active);
             speedControlsSwitch(!active);
@@ -34,6 +51,9 @@ namespace AnimalEvolution
             }
         }
 
+        /// <summary>
+        /// Finalizes the lof and closes the game.
+        /// </summary>
         public void QuitButtonClicked()
         {
             Methods.FinalizeLog();
