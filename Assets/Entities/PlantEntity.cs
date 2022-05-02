@@ -46,10 +46,8 @@ namespace AnimalEvolution
                 gameObject.transform.localScale = new Vector3(1 + 1 * size, 5 + 5 * size, 1 + 1 * size);
                 renderer.SetPropertyBlock(mpb);
                 gameObject.SetActive(true);
-                
-                    gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
-                    Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
-                
+                gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
+                Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; {mutationStrength}; #{ColorUtility.ToHtmlStringRGB(color)}");
             }
         }
         /// <summary>
@@ -75,7 +73,7 @@ namespace AnimalEvolution
             gameObject.SetActive(true);
             if (valid)
             {
-                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: {timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}");
+                Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; {mutationStrength}; #{ColorUtility.ToHtmlStringRGB(color)}");
             }
         }
 
@@ -93,7 +91,7 @@ namespace AnimalEvolution
             }
             if (lifeCurrent < 0)
             {
-                LogDeath("old age");
+                LogDeath("O");
                 Destroy(this);
                 Destroy(gameObject);
             }
@@ -145,7 +143,7 @@ namespace AnimalEvolution
                     lifeCurrent = Mathf.Min(lifeCurrent + lifeMax / 10, lifeMax);
                     break;
                 case 3:
-                    LogDeath("kill button pressed");
+                    LogDeath("K");
                     Destroy(gameObject);
                     Destroy(this);
                     return;
@@ -160,7 +158,7 @@ namespace AnimalEvolution
 
         public void LogDeath(string cause)
         {
-            Methods.Log($"EntityID: {ID}\t\t\tStatus: Dead\tCause: {cause}");
+            Methods.Log($"{ID}; D; {cause}");
         }
     }
 }

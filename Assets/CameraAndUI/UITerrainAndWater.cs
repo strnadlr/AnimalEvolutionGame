@@ -72,6 +72,7 @@ namespace AnimalEvolution
             cameraSwitch(true);
             entityCreationSwitch(true);
             Methods.Log($"MAP seed: {seed} width: {width} length: {length} height: {height} water: {water}");
+            Methods.LogLegend();
         }
 
         /// <summary>

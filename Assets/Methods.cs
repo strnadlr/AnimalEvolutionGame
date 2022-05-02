@@ -66,11 +66,11 @@ namespace AnimalEvolution
         /// </summary>
         public static void SetUpLog()
         {
-            if (!Directory.Exists("gamelogs"))
+            if (!Directory.Exists($"{Application.dataPath}/gamelogs"))
             {
-                Directory.CreateDirectory("gamelogs");
+                Directory.CreateDirectory($"{ Application.dataPath}/gamelogs");
             }
-            string path = $"gamelogs/gamelog{DateTime.Now.Day.ToString("00")}{DateTime.Now.Month.ToString("00")}{(DateTime.Now.Year % 100).ToString("00")}{DateTime.Now.Hour.ToString("00")}{DateTime.Now.Minute.ToString("00")}.txt";
+            string path = $"{ Application.dataPath}/gamelogs/gamelog{DateTime.Now.Day.ToString("00")}{DateTime.Now.Month.ToString("00")}{(DateTime.Now.Year % 100).ToString("00")}{DateTime.Now.Hour.ToString("00")}{DateTime.Now.Minute.ToString("00")}.txt";
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -79,7 +79,6 @@ namespace AnimalEvolution
             FileStream fs = new FileStream(path, FileMode.Append, FileAccess.Write, FileShare.Read);
             logWriter = new StreamWriter(fs);
             Debug.Log("File setup.");
-            logWriter.WriteLine($"Start log {DateTime.Now.ToLongDateString()}");
         }
 
         /// <summary>
@@ -93,6 +92,16 @@ namespace AnimalEvolution
         }
 
         /// <summary>
+        /// Writing the legend to the log.
+        /// </summary>
+        public static void LogLegend()
+        {
+            logWriter.WriteLine("Time : EntityID; Status(C for created, D for died)");
+            logWriter.WriteLine("Time : EntityID; C; name; nutritionalValue; timeToBreed; lifeMax; size; mutation Strength; color; senses; speed; foodMax; foodToBreed; isCarnivore; tastyColor");
+            logWriter.WriteLine("Time : EntityID; D; Cause (O for old age, H for hunger, K for killed, L for left map E <ID> for eaten by <ID>); tastyColor");
+        }
+
+        /// <summary>
         /// Flushes and closes the log file.
         /// </summary>
         public static void FinalizeLog()
@@ -102,5 +111,6 @@ namespace AnimalEvolution
             logWriter.Close();
             logWriter.Dispose();
         }
+
     }
 }

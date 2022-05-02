@@ -88,11 +88,18 @@ namespace AnimalEvolution {
             targetSet = false;
             if (valid)
             {
-                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
-                    $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
-                    $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+                if (isCarnivore)
+                {
+                    Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; #{mutationStrength}; {ColorUtility.ToHtmlStringRGB(color)}; " +
+                                    $"{senses}; {speed}; {foodMax}; {foodToBreed}; T; #{ColorUtility.ToHtmlStringRGB(tastyColor)}");
+                }
+                else
+                {
+                    Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; {mutationStrength}; #{ColorUtility.ToHtmlStringRGB(color)}; " +
+                $"{senses}; {speed}; {foodMax}; {foodToBreed}; F; #{ColorUtility.ToHtmlStringRGB(tastyColor)}");
+                }
             }
-        } 
+        }
 
         public void SetFrom(Entity parentEntity)
         {
@@ -105,7 +112,7 @@ namespace AnimalEvolution {
                 timeToBreedCurrent = timeToBreedMin;
                 lifeMax = parent.lifeMax;
                 lifeCurrent = lifeMax;
-                size = Mathf.Min(Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f),10);
+                size = Mathf.Min(Mathf.Max(0.1f, parent.size + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f), 10);
                 mutationStrength = parent.mutationStrength + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 senses = parent.senses + rand.Next(-parent.mutationStrength, parent.mutationStrength) / 5;
                 color = new Color(
@@ -113,7 +120,7 @@ namespace AnimalEvolution {
                     parent.color.g + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f,
                     parent.color.b + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
                 speed = Mathf.Max(0.1f, parent.speed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
-                foodMax= Mathf.Max(0.1f, parent.foodMax + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
+                foodMax = Mathf.Max(0.1f, parent.foodMax + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
                 foodToBreed = Mathf.Max(0.1f, parent.foodToBreed + (float)rand.Next(-parent.mutationStrength, parent.mutationStrength) / 100f);
                 foodCurrent = foodToBreed / 2f;
                 isCarnivore = parent.isCarnivore;
@@ -128,9 +135,16 @@ namespace AnimalEvolution {
                 //gameObject.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
                 gameObject.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", Color.black);
                 targetSet = false;
-                Methods.Log($"EntityID: {ID}\t\t\tStatus: Created\tName: {name}\tnutriValue: {nutritionalValue}\ttimeToBreedMin: " +
-                $"{timeToBreedMin}\tlifeMax: {lifeMax}\tsize: {size}\tmutationStrength: {mutationStrength}\tcolor: {color.r} {color.g} {color.b}" +
-                $"\t senses: {senses}\tspeed: {speed}\tfoodMax: {foodMax}\tfoodToBreed: {foodToBreed}\tisCarnivore: {isCarnivore}\t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+                if (isCarnivore)
+                {
+                    Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; {mutationStrength}; #{ColorUtility.ToHtmlStringRGB(color)}; " +
+                                    $"{senses}; {speed}; {foodMax}; {foodToBreed}; T; #{ColorUtility.ToHtmlStringRGB(tastyColor)}");
+                }
+                else
+                {
+                    Methods.Log($"{ID}; C; {name}; {nutritionalValue}; {timeToBreedMin}; {lifeMax}; {size}; {mutationStrength}; #{ColorUtility.ToHtmlStringRGB(color)}; " +
+                $"{senses}; {speed}; {foodMax}; {foodToBreed}; F; #{ColorUtility.ToHtmlStringRGB(tastyColor)}");
+                }
             }
         }
         void Update()
@@ -155,8 +169,8 @@ namespace AnimalEvolution {
             {
                 if (gameObject != null)
                 {
-                    if (lifeCurrent < 0) LogDeath("old age");
-                    else LogDeath("hunger");
+                    if (lifeCurrent < 0) LogDeath("O");
+                    else LogDeath("H");
                     Destroy(gameObject);
                     Destroy(this);
                 }
@@ -223,7 +237,7 @@ namespace AnimalEvolution {
                     lastMealsNutriValue = target.GetComponent<Entity>().nutritionalValue;
                     if (target != null)
                     {
-                        target.GetComponent<Entity>().LogDeath($"eaten by {ID}");
+                        target.GetComponent<Entity>().LogDeath($"E {ID}");
                         Destroy(target.gameObject.GetComponent<PlantEntity>());
                         Destroy(target.gameObject.GetComponent<AnimalEntity>());
                         Destroy(target.gameObject);
@@ -249,7 +263,7 @@ namespace AnimalEvolution {
                     recalculate = true;
                     if (gameObject.transform.position.x <= 0 || gameObject.transform.position.z <= 0 || gameObject.transform.position.x >= Controller.xBoundary || gameObject.transform.position.z >= Controller.zBoundary)
                     {
-                        LogDeath("left the map");
+                        LogDeath("L");
                         Destroy(gameObject);
                         Destroy(this);
                     }
@@ -375,7 +389,7 @@ namespace AnimalEvolution {
                     foodCurrent = Mathf.Max(foodCurrent - foodMax / 10, 0);
                     break;
                 case 3:
-                    LogDeath("kill button pressed");
+                    LogDeath("K");
                     Destroy(gameObject);
                     Destroy(this);
                     return;
@@ -390,7 +404,7 @@ namespace AnimalEvolution {
 
         public void LogDeath(string cause)
         {
-            Methods.Log($"EntityID: {ID}\t\t\tStatus: Dead\tCause: {cause} \t tastycolor: {tastyColor.r} {tastyColor.g} {tastyColor.b}");
+            Methods.Log($"{ID}; D; {cause} ; #{ColorUtility.ToHtmlStringRGB(tastyColor)}");
 
         }
     }
