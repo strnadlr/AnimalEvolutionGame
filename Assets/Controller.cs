@@ -50,13 +50,13 @@ namespace AnimalEvolution
         public WaterGeneration waterGeneration;
         public UITerrainAndWater terrainAndWateUI;
         public UIEntityCreation entityCreationUI;
-        public EntityScript entityScript;
-        public CameraController cameraController;
-        public Camera mainCamera;
         public UIEntityInfo entityInfoUI;
         public UISpeedControls speedControlsUI;
         public UIExit exitUI;
         public UIGuideText guideTextUI;
+        public EntityScript entityScript;
+        public CameraController cameraController;
+        public Camera mainCamera;
         private GameObject currentInfoEntity;
         private float entityInfoDelayTime;
         public static float simulationSpeed = 1f;

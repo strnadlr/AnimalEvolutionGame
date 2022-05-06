@@ -78,7 +78,7 @@ namespace AnimalEvolution {
             mpb.SetColor("_Color", color);
             speed = _speed;
             foodMax = _foodCapacity;
-            foodToBreed = _foodToBreed;
+            foodToBreed = _foodToBreed*_foodCapacity;
             foodCurrent = foodToBreed / 2f;
             isCarnivore = _isCarnivore;
             tastyColor = Color.white;

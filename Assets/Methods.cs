@@ -82,16 +82,6 @@ namespace AnimalEvolution
         }
 
         /// <summary>
-        /// Writes a log into the log file.
-        /// </summary>
-        /// <param name="logText"></param>
-        public static void Log(string logText)
-        {
-            logWriter.WriteLine($"{DateTime.Now.ToLongTimeString()} : {logText}");
-            Debug.Log(logText);
-        }
-
-        /// <summary>
         /// Writing the legend to the log.
         /// </summary>
         public static void LogLegend()
@@ -99,6 +89,16 @@ namespace AnimalEvolution
             logWriter.WriteLine("Time : EntityID; Status(C for created, D for died)");
             logWriter.WriteLine("Time : EntityID; C; name; nutritionalValue; timeToBreed; lifeMax; size; mutation Strength; color; senses; speed; foodMax; foodToBreed; isCarnivore; tastyColor");
             logWriter.WriteLine("Time : EntityID; D; Cause (O for old age, H for hunger, K for killed, L for left map E <ID> for eaten by <ID>); tastyColor");
+        }
+
+        /// <summary>
+        /// Writes a log into the log file.
+        /// </summary>
+        /// <param name="logText"></param>
+        public static void Log(string logText)
+        {
+            logWriter.WriteLine($"{DateTime.Now.ToLongTimeString()} : {logText}");
+            Debug.Log(logText);
         }
 
         /// <summary>
