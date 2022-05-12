@@ -80,7 +80,13 @@
     <Compile Include="Assets\TerrainAndWater\Noise.cs" />
     <Compile Include="Assets\TerrainAndWater\TerrainGenerator.cs" />
     <Compile Include="Assets\TerrainAndWater\WaterGeneration.cs" />
+    <None Include="Assets\gamelogs\gamelog1005220013.txt" />
+    <None Include="Assets\gamelogs\gamelog1005220028.txt" />
+    <None Include="Assets\gamelogs\gamelog0805220217.txt" />
+    <None Include="Assets\gamelogs\gamelog0805220117.txt" />
+    <None Include="Assets\gamelogs\gamelog0705222111.txt" />
     <None Include="Assets\gamelogs\gamelog0205221911.txt" />
+    <None Include="Assets\gamelogs\gamelog0805220119.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.8f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

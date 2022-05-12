@@ -12,31 +12,27 @@ namespace AnimalEvolution
         public GameObject animalCarnivorePrototype;
         static List<GameObject> entities;
         public static MeshCollider ground;
-        static Vector3 down = new Vector3(0, -1, 0);
         static private System.Random r = new System.Random();
         static ulong availableID = 0;
 
         // Start is called before the first frame update
         void Start()
         {
-            entities = new List<GameObject>();
-            entities.Add(plantPrototype);
             PlantEntity pE = plantPrototype.GetComponent<PlantEntity>();
             pE.valid = false;
             pE.Set("DefaultPlant", 20f, 3, 60, 1, 25, Color.green);
             PlantEntity.requestOffspring = MakeOffspring;
 
-            entities.Add(animalHerbivorePrototype);
             AnimalEntity aE = animalHerbivorePrototype.GetComponent<AnimalEntity>();
             aE.valid = false;
             aE.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, false);
             AnimalEntity.requestOffspring = MakeOffspring;
 
-            entities.Add(animalCarnivorePrototype);
             AnimalEntity aEC = animalCarnivorePrototype.GetComponent<AnimalEntity>();
             aEC.valid = false;
             aEC.Set("DefaultAnimal", 40f, 3, 60, 1, 25, 50, Color.red, 10, 100, 50, true);
             AnimalEntity.requestOffspring = MakeOffspring;
+            entities = new List<GameObject>();
         }
 
         public void Initialize(MeshCollider setground)
